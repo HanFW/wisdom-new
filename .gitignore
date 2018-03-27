@@ -32,6 +32,7 @@ nbproject/*
 /Wisdom-ejb/nbproject/ant-deploy.xml
 /Wisdom-ejb/nbproject/build-impl.xml
 /Wisdom-ejb/nbproject/genfiles.properties
+/Wisdom-war/nbproject/private/
 /Wisdom-war/nbproject/ant-deploy.xml
 /Wisdom-war/nbproject/build-impl.xml
 /Wisdom-war/nbproject/genfiles.properties
