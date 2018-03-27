@@ -55,4 +55,25 @@ public class AuthorSessionBean implements AuthorSessionBeanLocal {
         entityManager.flush();
         return author.getId();
     }
+    
+    @Override
+    public AuthorEntity authorLogin(String email, String password) {
+        AuthorEntity author = null;
+        
+        Query query = entityManager.createQuery("Select a From AuthorEntity a Where a.email=:email");
+        query.setParameter("email", email);
+        
+        if (query.getResultList().isEmpty()) {
+            System.out.println("Author login failed: invalid user.");
+            return null;
+        } else {
+            author = (AuthorEntity) query.getSingleResult();
+            if(author.getPwd().equals(password)) {
+                return author;
+            } else {
+                return null;
+            }
+        }
+    }
+    
 }

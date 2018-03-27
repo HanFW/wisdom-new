@@ -1,12 +1,32 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://xmlns.jcp.org/jsf/html">
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
-        <title>Facelet Title</title>
+        <title>Wisdom</title>
     </h:head>
     <h:body>
-        Hello from Facelets
+        <h:form id="loginForm">
+            <h3>Login</h3>
+            <div>
+                <p:messages globalOnly="true"/>
+                <h:panelGrid columns="3">
+                    <p:outputLabel for="email" value="Email: "/>
+                    <p:inputText id="email" value="#{loginManagedBean.email}" required="true" requiredMessage="Please enter your registered email." >
+                        <f:validateRegex pattern="^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$" />
+                    </p:inputText>
+                    <p:message for="email"/>
+                    
+                    <p:outputLabel for="password" value="Password: "/>
+                    <p:inputText id="password" type="password" value="#{loginManagedBean.password}" required="true" requiredMessage="Please enter your password." />
+                    <p:message for="password"/>
+                    
+                    <p:commandButton value="Login" type="submit" actionListener="#{loginManagedBean.doLogin}" update="@form"/>
+                </h:panelGrid>
+            </div>
+        </h:form>
     </h:body>
 </html>
 
