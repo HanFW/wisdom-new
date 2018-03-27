@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./templates/menuTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">
+        Wisdom
+    </ui:define>
+
+    <ui:define name="top">
+        top
+    </ui:define>
+
+    <ui:define name="content">
+        <p:messages id="message" globalOnly="true"/>
+
+        <h:form id="newArticleForm">
+            <h:panelGrid id="newArticlePanel1" columns="3" cellpadding="4">
+
+                <p:outputLabel value="New Article" style="font-weight: bold;font-size: 22px"/>
+                <p:outputLabel value=""/>
+                <p:outputLabel value=""/>
+
+                <p:outputLabel for="articleTitle" style="font-weight: bold" value="Title" />
+                <p:inputText label="Title" id="articleTitle" value="#{addNewArticleManagedBean.artilceTitle}"
+                             required="true" requiredMessage="Required Field">
+                </p:inputText>
+                <p:message for="articleTitle" />
+
+                <p:outputLabel for="articleTopic" style="font-weight: bold" value="Topic " />
+                <p:selectOneMenu id="articleTopic" value="#{addNewArticleManagedBean.articleTopic}" 
+                                 required="true" requiredMessage="Required Field">
+                    <f:selectItem itemLabel="Please Select" itemValue="" noSelectionOption="true"/>
+                    <f:selectItem itemLabel="Arts" itemValue="Arts" />
+                    <f:selectItem itemLabel="Fashion" itemValue="Fashion" />
+                    <f:selectItem itemLabel="Food" itemValue="Food" />
+                    <f:selectItem itemLabel="Lifestyle" itemValue="Lifestyle" />
+                    <f:selectItem itemLabel="Music" itemValue="Music" />
+                    <f:selectItem itemLabel="Photography" itemValue="Photography" />
+                    <f:selectItem itemLabel="Politics" itemValue="Politics" />
+                    <f:selectItem itemLabel="Sports" itemValue="Sports" />
+                    <f:selectItem itemLabel="Technology" itemValue="Technology" />
+                    <f:selectItem itemLabel="Travel" itemValue="Travel" />
+                </p:selectOneMenu>
+                <p:message for="articleTopic" />
+            </h:panelGrid>
+
+            <h:panelGrid id="newArticlePanel2" columns="3" cellpadding="4">
+
+                <p:outputLabel for="imageUpload" value="Image" style="font-weight: bold"/>
+                <p:fileUpload id="imageUpload" required="true" requiredMessage="Required Field" update="messagesFileupload"
+                              value="#{addNewArticleManagedBean.imageFile}" mode="advanced" skinSimple="true"
+                              sizeLimit="10000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" 
+                              fileUploadListener="#{addNewArticleManagedBean.upload}" multiple="true" 
+                              style="width:100%"/>
+                <p:messages for="imageUpload" globalOnly="true" id="messagesFileupload" />
+
+                <p:outputLabel for="articleDescription" value="Description" style="font-weight: bold"/>
+                <p:inputTextarea id="articleDescription" rows="6" cols="45" required="true" requiredMessage="Required Field"
+                                 value="#{addNewArticleManagedBean.articleDescription}"/>
+                <p:message for="articleDescription" />
+
+            </h:panelGrid>
+
+            <h:panelGrid id="newArticlePanel3" columns="3" cellpadding="4">
+                <p:outputLabel for="articleContent" value="Description" style="font-weight: bold"/>
+                <p:editor id="articleContent" widgetVar="editorWidget" required="true" requiredMessage="Required Field"
+                          value="#{addNewArticleManagedBean.articleContent}" width="600" />
+                <p:message for="articleContent" />
+            </h:panelGrid>
+
+            <h:panelGrid columns="2">     
+                <p:commandButton id="backBtn" value="Back" />
+
+                <p:commandButton id="submitBtn" value="Submit" 
+                                 actionListener="#{addNewArticleManagedBean.addNewArticle()}" 
+                                 ajax="true" update="newArticleForm"/>
+            </h:panelGrid> 
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>

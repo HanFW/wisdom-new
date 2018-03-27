@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./templates/menuTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">
+        Wisdom
+    </ui:define>
+
+    <ui:define name="top">
+        top
+    </ui:define>
+
+    <ui:define name="content">
+        <p:outputLabel value="My Articles" style="font-weight: bold;font-size: 22px"/>
+
+        <p:dataTable var="article" value="#{myArticlesAuthorManagedBean.article}" style="margin-bottom:40px">
+
+            <p:column headerText="Id" sortBy="#{article.articleId}">
+                <h:outputText value="#{article.articleId}" />
+            </p:column>
+
+        </p:dataTable>
+    </ui:define>
+
+</ui:composition>
