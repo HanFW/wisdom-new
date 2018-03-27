@@ -5,18 +5,16 @@
  */
 package managedBean;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import javax.ejb.EJB;
-import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
+import javax.inject.Named;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 import sessionBean.AuthorSessionBeanLocal;
@@ -31,22 +29,18 @@ public class SignupManagedBean {
     @EJB
     private AuthorSessionBeanLocal authorSessionBeanLocal;
     
-    private String username;
+    private String firstName;
+    private String lastName;
     private String email;
     private String selfIntroduction;
     private String password;
-    private String confirmPassword;
     private UploadedFile profileImage;
-    private boolean invalidUsername = true;
+    private Long authorId;
 
     /**
      * Creates a new instance of SignupManagedBean
      */
     public SignupManagedBean() {
-    }
-    
-    public void validateUsername () {
-        System.out.println("### validate username: " + username);
     }
     
     public void profileImageUpload (FileUploadEvent event) throws FileNotFoundException, IOException {
@@ -55,19 +49,28 @@ public class SignupManagedBean {
     }
     
     public void signup(ActionEvent event) {
-        Long authorId = authorSessionBeanLocal.createNewAuthor(username, selfIntroduction, email, password);
+        authorId = authorSessionBeanLocal.createNewAuthor(firstName + " " + lastName, selfIntroduction, email, password);
+        if (authorId == null) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "You have registered already, please login directly.", " "));
+        } else {
+            System.out.println("### sign up: author ID " + authorId);
+            ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+            ec.getSessionMap().put("authorId", authorId);
+            RequestContext rc = RequestContext.getCurrentInstance();
+            rc.execute("PF('redirectDialog').show();");
+        }
+    }
+    
+    public void directLogin(ActionEvent event) throws IOException {
+        System.out.println("Author " + authorId + " - " + firstName + " " + lastName + " logged in.");
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-        ec.getSessionMap().put("authorId", authorId);
-
-        System.out.println("### sign up: author ID " + authorId + " saved to session map");
+        ec.redirect(ec.getRequestContextPath() + "/web/overview.xhtml?faces-redirect=true");
     }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
+    
+    public void backToHomepage (ActionEvent event) throws IOException {
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        ec.getSessionMap().remove("authodId");
+        ec.redirect(ec.getRequestContextPath() + "/web/index.xhtml?faces-redirect=true");
     }
 
     public String getEmail() {
@@ -94,14 +97,6 @@ public class SignupManagedBean {
         this.password = password;
     }
 
-    public String getConfirmPassword() {
-        return confirmPassword;
-    }
-
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
-    }
-
     public UploadedFile getProfileImage() {
         return profileImage;
     }
@@ -110,12 +105,21 @@ public class SignupManagedBean {
         this.profileImage = profileImage;
     }
 
-    public boolean isInvalidUsername() {
-        return invalidUsername;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setInvalidUsername(boolean invalidUsername) {
-        this.invalidUsername = invalidUsername;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
     
 }

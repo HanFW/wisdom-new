@@ -22,9 +22,12 @@
                     <p:outputLabel for="password" value="Password: "/>
                     <p:inputText id="password" type="password" value="#{loginManagedBean.password}" required="true" requiredMessage="Please enter your password." />
                     <p:message for="password"/>
-                    
+                                        
                     <p:commandButton value="Login" type="submit" actionListener="#{loginManagedBean.doLogin}" update="@form"/>
                 </h:panelGrid>
+                
+                New user? 
+                <p:commandLink value="Register here. " type="submit" action="signup?faces-redirect=true" immediate="true"/>
             </div>
         </h:form>
     </h:body>

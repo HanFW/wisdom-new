@@ -8,9 +8,13 @@ package sessionBean;
 import entity.ArticleEntity;
 import entity.QuestionEntity;
 import entity.ReaderEntity;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -251,5 +255,15 @@ public class UtilSessionBean implements UtilSessionBeanLocal {
         }
         
         return articles;
+    }
+    
+    public String md5Hashing(String stringToHash) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        return Arrays.toString(md.digest(stringToHash.getBytes()));
+    }
+    
+    public String resourceNameGenerator(){
+        UUID uuid=UUID.randomUUID();
+        return uuid.toString().replace("-", "");
     }
 }

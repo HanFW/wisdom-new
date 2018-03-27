@@ -12,16 +12,22 @@
             <h3>Sign up</h3>
             <div>                
                 <h:panelGrid columns="3">
-                    <p:outputLabel for="username" value="Username: "/>
-                    <p:inputText type="text" id="username" value="#{signupManagedBean.username}" required="true" requiredMessage="Please enter a username." />
-                    <p:message id="usernameMessage" for="username"/>
+                    <p:outputLabel for="firstName" value="First name: "/>
+                    <p:inputText type="text" id="firstName" value="#{signupManagedBean.firstName}" required="true" requiredMessage="Please enter your first name." />
+                    <p:message for="firstName"/>
+                    
+                    <p:outputLabel for="lastName" value="Last name: "/>
+                    <p:inputText type="text" id="lastName" value="#{signupManagedBean.lastName}" required="true" requiredMessage="Please enter your last name." />
+                    <p:message for="lastName"/>
                     
                     <p:outputLabel for="email" value="Email: "/>
-                    <p:inputText type="text" id="email" value="#{signupManagedBean.email}" required="true" requiredMessage="Please enter your email."/>
+                    <p:inputText type="text" id="email" value="#{signupManagedBean.email}" required="true" requiredMessage="Please enter your email.">
+                        <f:validateRegex pattern="^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$" />
+                    </p:inputText>
                     <p:message for="email"/>
                     
                     <p:outputLabel for="profileImage" value="Profile image: "/>
-                    <p:fileUpload disabled="#{signupManagedBean.invalidUsername}" id="profileImage" fileUploadListener="#{signupManagedBean.profileImageUpload}" mode="advanced" skinSimple="true" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" sizeLimit="1000000" multiple="false"/>
+                    <p:fileUpload id="profileImage" fileUploadListener="#{signupManagedBean.profileImageUpload}" mode="advanced" skinSimple="true" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" sizeLimit="1000000" multiple="false"/>
                     <p:message for="profileImage"/>
                     
                     <p:outputLabel for="selfIntro" value="Self introduction: "/>
@@ -29,7 +35,7 @@
                     <p:message for="selfIntro"/>
                     
                     <p:outputLabel for="pwd1" value="Password: "/>
-                    <p:password id="pwd1" value="#{signupManagedBean.password}" match="pwd2" required="true" label="Password 1" requiredMessage="Please create a password."/>
+                    <p:password id="pwd1" value="#{signupManagedBean.password}" feedback="true" match="pwd2" required="true" label="Password 1" requiredMessage="Please create a password."/>
                     <p:message for="pwd1"/>
                     
                     <p:outputLabel for="pwd2" value="Confirm password: "/>
@@ -39,6 +45,13 @@
                     <p:commandButton value="Submit" type="submit" actionListener="#{signupManagedBean.signup}" update="@form"/>
                 </h:panelGrid>
             </div>
+        </h:form>
+        
+        <h:form id="redirectionForm">
+            <p:dialog header="Signup successful!" widgetVar="redirectDialog" responsive="true">
+                <p:commandButton value="Back to homepage" actionListener="#{signupManagedBean.backToHomepage}"/>
+                <p:commandButton value="Login directly" actionListener="#{signupManagedBean.directLogin}"/>
+            </p:dialog>
         </h:form>
     </h:body>
 </html>
