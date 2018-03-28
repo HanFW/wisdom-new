@@ -8,11 +8,12 @@ package managedBean;
 import entity.ArticleEntity;
 import entity.AuthorEntity;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.enterprise.context.RequestScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
-import javax.enterprise.context.SessionScoped;
 import sessionBean.ArticleSessionBeanLocal;
 import sessionBean.AuthorSessionBeanLocal;
 
@@ -21,7 +22,7 @@ import sessionBean.AuthorSessionBeanLocal;
  * @author Yongxue
  */
 @Named(value = "authorViewArticleManagedBean")
-@SessionScoped
+@RequestScoped
 public class AuthorViewArticleManagedBean implements Serializable {
 
     /**
@@ -33,76 +34,47 @@ public class AuthorViewArticleManagedBean implements Serializable {
     @EJB(name = "ArticleSessionBeanLocal")
     private ArticleSessionBeanLocal articleSessionBeanLocal;
 
-    private String articleTitle;
-    private String articleTopic;
-    private String questionPrice;
-    private LocalDateTime created;
-    private String articleDescription;
-    private String articleContent;
     private Long articleId;
+    private Long authorId;
+    private String picPath;
+    private String filename;
 
     private ArticleEntity article;
     private AuthorEntity author;
 
+    private ExternalContext ec;
+
     public AuthorViewArticleManagedBean() {
-
     }
 
-    public String getArticleTitle() {
-        return articleTitle;
-    }
+    @PostConstruct
+    public void init() {
+        ec = FacesContext.getCurrentInstance().getExternalContext();
 
-    public void setArticleTitle(String articleTitle) {
-        this.articleTitle = articleTitle;
-    }
+        articleId = Long.valueOf(ec.getFlash().get("articleId").toString());
+        authorId = Long.valueOf(ec.getSessionMap().get("authorId").toString());
 
-    public String getArticleTopic() {
-        return articleTopic;
-    }
+        article = articleSessionBeanLocal.getArticleById(articleId);
+        author = authorSessionBeanLocal.retrieveAuthorById(authorId);
 
-    public void setArticleTopic(String articleTopic) {
-        this.articleTopic = articleTopic;
-    }
-
-    public String getQuestionPrice() {
-        return questionPrice;
-    }
-
-    public void setQuestionPrice(String questionPrice) {
-        this.questionPrice = questionPrice;
-    }
-
-    public LocalDateTime getCreated() {
-        return created;
-    }
-
-    public void setCreated(LocalDateTime created) {
-        this.created = created;
-    }
-
-    public String getArticleDescription() {
-        return articleDescription;
-    }
-
-    public void setArticleDescription(String articleDescription) {
-        this.articleDescription = articleDescription;
-    }
-
-    public String getArticleContent() {
-        return articleContent;
-    }
-
-    public void setArticleContent(String articleContent) {
-        this.articleContent = articleContent;
+        filename = "author_" + authorId + ".png";
+        picPath = System.getProperty("user.dir").replace("config", "docroot") + System.getProperty("file.separator") + filename;
     }
 
     public Long getArticleId() {
-        System.out.println("get article id: " + articleId);
         return articleId;
     }
 
     public void setArticleId(Long articleId) {
         this.articleId = articleId;
+    }
+
+    public String getPicPath() {
+        return picPath;
+    }
+
+    public void setPicPath(String picPath) {
+        this.picPath = picPath;
     }
 
     public ArticleEntity getArticle() {

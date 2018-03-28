@@ -25,13 +25,13 @@
                 <p:outputLabel value=""/>
 
                 <p:outputLabel for="articleTitle" style="font-weight: bold" value="Title" />
-                <p:inputText label="Title" id="articleTitle" value="#{addNewArticleManagedBean.artilceTitle}"
+                <p:inputText label="Title" id="articleTitle" value="#{authorAddNewArticleManagedBean.artilceTitle}"
                              required="true" requiredMessage="Required Field">
                 </p:inputText>
                 <p:message for="articleTitle" />
 
                 <p:outputLabel for="articleTopic" style="font-weight: bold" value="Topic " />
-                <p:selectOneMenu id="articleTopic" value="#{addNewArticleManagedBean.articleTopic}" 
+                <p:selectOneMenu id="articleTopic" value="#{authorAddNewArticleManagedBean.articleTopic}" 
                                  required="true" requiredMessage="Required Field">
                     <f:selectItem itemLabel="Please Select" itemValue="" noSelectionOption="true"/>
                     <f:selectItem itemLabel="Arts" itemValue="Arts" />
@@ -52,15 +52,15 @@
 
                 <p:outputLabel for="imageUpload" value="Image" style="font-weight: bold"/>
                 <p:fileUpload id="imageUpload" required="true" requiredMessage="Required Field" update="messagesFileupload"
-                              value="#{addNewArticleManagedBean.imageFile}" mode="advanced" skinSimple="true"
+                              value="#{authorAddNewArticleManagedBean.imageFile}" mode="advanced" skinSimple="true"
                               sizeLimit="10000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" 
-                              fileUploadListener="#{addNewArticleManagedBean.upload}" multiple="true" 
+                              fileUploadListener="#{authorAddNewArticleManagedBean.upload}" multiple="true" 
                               style="width:100%"/>
                 <p:messages for="imageUpload" globalOnly="true" id="messagesFileupload" />
 
                 <p:outputLabel for="articleDescription" value="Description" style="font-weight: bold"/>
                 <p:inputTextarea id="articleDescription" rows="6" cols="45" required="true" requiredMessage="Required Field"
-                                 value="#{addNewArticleManagedBean.articleDescription}"/>
+                                 value="#{authorAddNewArticleManagedBean.articleDescription}"/>
                 <p:message for="articleDescription" />
 
             </h:panelGrid>
@@ -68,7 +68,7 @@
             <h:panelGrid id="newArticlePanel3" columns="3" cellpadding="4">
                 <p:outputLabel for="articleContent" value="Description" style="font-weight: bold"/>
                 <p:editor id="articleContent" widgetVar="editorWidget" required="true" requiredMessage="Required Field"
-                          value="#{addNewArticleManagedBean.articleContent}" width="600" />
+                          value="#{authorAddNewArticleManagedBean.articleContent}" width="600" />
                 <p:message for="articleContent" />
             </h:panelGrid>
 
@@ -76,7 +76,7 @@
                 <p:commandButton id="backBtn" value="Back" />
 
                 <p:commandButton id="submitBtn" value="Submit" 
-                                 actionListener="#{addNewArticleManagedBean.addNewArticle()}" 
+                                 actionListener="#{authorAddNewArticleManagedBean.addNewArticle()}" 
                                  ajax="true" update="newArticleForm"/>
             </h:panelGrid> 
 

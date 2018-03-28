@@ -17,7 +17,22 @@
     <ui:define name="content">
         <h:form>
             <p:panel>
-                <p:outputLabel value="#{authorViewArticleManagedBean.article.title}"/>
+                <p:outputLabel value="#{authorViewArticleManagedBean.article.title}" 
+                               style="font-weight: bold;font-size: 22px"/>
+                <br/><br/>
+                <p:outputLabel value="#{authorViewArticleManagedBean.article.topic}" 
+                               style="font-size: 16px"/>
+                <h:outputText value="&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;" />
+
+                <p:outputLabel value="#{authorViewArticleManagedBean.author.qtnPrice}$ per question" 
+                               style="font-size: 16px"/>
+                <h:outputText value="&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;" />
+
+                <p:outputLabel value="#{authorViewArticleManagedBean.article.created}" 
+                               style="font-size: 16px"/>
+                
+                <br/><br/>
+                <h:graphicImage url="#{authorViewArticleManagedBean.picPath}" />
             </p:panel>
         </h:form>
     </ui:define>

@@ -24,14 +24,13 @@ import sessionBean.ArticleSessionBeanLocal;
  *
  * @author Yongxue
  */
-@Named(value = "addNewArticleManagedBean")
+@Named(value = "authorAddNewArticleManagedBean")
 @RequestScoped
 public class AuthorAddNewArticleManagedBean {
 
     /**
      * Creates a new instance of AddNewArticleManagedBean
      */
-    
     @EJB
     private ArticleSessionBeanLocal articleSessionBeanLocal;
 
@@ -91,6 +90,7 @@ public class AuthorAddNewArticleManagedBean {
     }
 
     public void addNewArticle() {
+
         ec = FacesContext.getCurrentInstance().getExternalContext();
 
         authorId = Long.valueOf(ec.getSessionMap().get("authorId").toString());
@@ -101,11 +101,14 @@ public class AuthorAddNewArticleManagedBean {
     }
 
     public void upload(FileUploadEvent event) throws IOException {
+
+        ec = FacesContext.getCurrentInstance().getExternalContext();
+
         imageFile = event.getFile();
         authorId = Long.valueOf(ec.getSessionMap().get("authorId").toString());
 
         if (imageFile != null) {
-            String filename = authorId + ".png";
+            String filename = "author_" + authorId + ".png";
 
             String newFilePath = System.getProperty("user.dir").replace("config", "docroot") + System.getProperty("file.separator");
             OutputStream output = new FileOutputStream(new File(newFilePath, filename));
