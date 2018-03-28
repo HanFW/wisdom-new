@@ -37,3 +37,4 @@ nbproject/*
 /Wisdom-war/nbproject/build-impl.xml
 /Wisdom-war/nbproject/genfiles.properties
 /Wisdom-ejb/setup/glassfish-resources.xml
+/setup/sun-resources.xml

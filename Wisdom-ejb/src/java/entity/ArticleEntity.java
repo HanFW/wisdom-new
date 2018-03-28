@@ -45,12 +45,13 @@ public class ArticleEntity implements Serializable {
     }
 
     public ArticleEntity(String topic, String title, String description,
-            String content) {
+            String content, LocalDateTime created) {
         this();
         this.topic = topic;
         this.title = title;
         this.description = description;
         this.content = content;
+        this.created = created;
         // relationship fields are set using setters
     }
 
@@ -144,7 +145,4 @@ public class ArticleEntity implements Serializable {
     public String toString() {
         return "ArticleEntity{" + "id=" + id + ", topic=" + topic + ", title=" + title + ", description=" + description + ", picPath=" + picPath + ", content=" + content + ", numOfUpvotes=" + numOfUpvotes + ", created=" + created + ", author=" + author + '}';
     }
-    
-    
-    
 }

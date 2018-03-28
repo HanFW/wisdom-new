@@ -7,12 +7,14 @@ package sessionBean;
 
 import entity.ArticleEntity;
 import entity.AuthorEntity;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -31,13 +33,13 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
 
     @Override
     public Long addNewArticle(String topic, String title, String description,
-            String context, Long authorId) {
+            String context, LocalDateTime created, Long authorId) {
 
         AuthorEntity author = authorSessionBeanLocal.retrieveAuthorById(authorId);
 
-        ArticleEntity article = new ArticleEntity(topic, title, description, context);
+        ArticleEntity article = new ArticleEntity(topic, title, description, context, created);
         article.setAuthor(author);
-        
+
         entityManager.persist(article);
         entityManager.flush();
 
@@ -46,11 +48,10 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
 
     @Override
     public List<ArticleEntity> retrieveArticlesByAuthorId(Long authorId) {
-        
+
         AuthorEntity author = authorSessionBeanLocal.retrieveAuthorById(authorId);
 
-        if (author.getId()== null) {
-            // TODO: author not found throw exception instead? 
+        if (author.getId() == null) {
             return new ArrayList<ArticleEntity>();
         }
         try {
@@ -60,5 +61,28 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
         } catch (EntityNotFoundException e) {
             return new ArrayList<ArticleEntity>();
         }
+    }
+
+    @Override
+    public ArticleEntity retrieveArticleById(Long articleId) {
+        ArticleEntity article = new ArticleEntity();
+
+        try {
+            Query query = entityManager.createQuery("Select a From ArticleEntity a Where a.id=:articleId");
+            query.setParameter("articleId", articleId);
+
+            if (query.getResultList().isEmpty()) {
+                return new ArticleEntity();
+            } else {
+                article = (ArticleEntity) query.getSingleResult();
+            }
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("Entity not found error: " + enfe.getMessage());
+            return new ArticleEntity();
+        } catch (NonUniqueResultException nure) {
+            System.out.println("Non unique result error: " + nure.getMessage());
+        }
+
+        return article;
     }
 }

@@ -10,6 +10,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.time.LocalDateTime;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
@@ -25,11 +26,12 @@ import sessionBean.ArticleSessionBeanLocal;
  */
 @Named(value = "addNewArticleManagedBean")
 @RequestScoped
-public class AddNewArticleManagedBean {
+public class AuthorAddNewArticleManagedBean {
 
     /**
      * Creates a new instance of AddNewArticleManagedBean
      */
+    
     @EJB
     private ArticleSessionBeanLocal articleSessionBeanLocal;
 
@@ -37,6 +39,7 @@ public class AddNewArticleManagedBean {
     private String artilceTitle;
     private String articleDescription;
     private String articleContent;
+    private LocalDateTime created;
 
     private UploadedFile imageFile;
     private Long newArticleId;
@@ -44,7 +47,7 @@ public class AddNewArticleManagedBean {
 
     private ExternalContext ec;
 
-    public AddNewArticleManagedBean() {
+    public AuthorAddNewArticleManagedBean() {
     }
 
     public String getArticleTopic() {
@@ -91,9 +94,10 @@ public class AddNewArticleManagedBean {
         ec = FacesContext.getCurrentInstance().getExternalContext();
 
         authorId = Long.valueOf(ec.getSessionMap().get("authorId").toString());
+        created = LocalDateTime.now();
 
         newArticleId = articleSessionBeanLocal.addNewArticle(articleTopic,
-                artilceTitle, articleDescription, articleContent, authorId);
+                artilceTitle, articleDescription, articleContent, created, authorId);
     }
 
     public void upload(FileUploadEvent event) throws IOException {
