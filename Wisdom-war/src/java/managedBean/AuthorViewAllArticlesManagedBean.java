@@ -33,7 +33,7 @@ public class AuthorViewAllArticlesManagedBean {
 
     public List<ArticleEntity> getArticle() throws IOException {
         
-        List<ArticleEntity> article = articleSessionBeanLocal.retrieveArticlesByAuthorId(Long.valueOf(1));
+        List<ArticleEntity> article = articleSessionBeanLocal.getArticlesByAuthorId(Long.valueOf(1));
 
         return article;
     }
