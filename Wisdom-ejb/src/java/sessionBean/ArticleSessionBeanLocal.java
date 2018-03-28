@@ -6,6 +6,7 @@
 package sessionBean;
 
 import entity.ArticleEntity;
+import entity.ReaderEntity;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.ejb.Local;
@@ -27,5 +28,11 @@ public interface ArticleSessionBeanLocal {
     public List<ArticleEntity> getNewestArticlesOfFollowedAuthors(Long readerId);
 
     public List<ArticleEntity> getMostLikedArticlesOfTopic(final String topic);
+
+    public List<ArticleEntity> getAllSavedArticles(Long readerId);
+
+    public ReaderEntity saveArticle(Long readerId, Long articleId) throws Exception;
+
+    public ArticleEntity likeArticle(Long articleId);
 
 }

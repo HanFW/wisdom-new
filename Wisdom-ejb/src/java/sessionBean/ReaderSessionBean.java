@@ -41,19 +41,75 @@ public class ReaderSessionBean implements ReaderSessionBeanLocal {
         LOGGER.setLevel(Level.ALL);
         LOGGER.addHandler(handler);
     }
-
-    public void setEm(EntityManager em) {
-        this.em = em;
-    }
-
-    //Testing Version - TBC..
+    
+     /**
+     *
+     * @param reader
+     * @return the newly created ReaderEntity (inc. id)
+     */
     @Override
-    public ReaderEntity readerSignUp(String name, String email, String pwd) {
-        ReaderEntity newReader = new ReaderEntity(name, email, pwd);
+    public ReaderEntity createReader(ReaderEntity reader) {
+        if (reader.getName() == null || reader.getEmail() == null
+                || reader.getPwd() == null) {
+            return null; // missing fields
+        }
+
+        ReaderEntity newReader
+                = new ReaderEntity(reader.getName(), reader.getEmail(), reader.getPwd());
+
         em.persist(newReader);
         em.flush();
-        em.refresh(newReader);
+        em.refresh(newReader); // retrieve id
+
         return newReader;
+    }
+
+    /**
+     *
+     * @param email
+     * @return false ONLY if email is valid and no duplicate is found
+     */
+    @Override
+    public boolean readerHasEmailConflict(String email) {
+        if (email == null || email.isEmpty()) {
+            return true; // invalid email as conflict exists
+        }
+
+        Query q = em.createQuery("select r from ReaderEntity r "
+                + "where r.email = :email")
+                .setParameter("email", email);
+        try {
+            q.getSingleResult();
+        } catch (Exception e) {
+            if (e instanceof NoResultException) {
+                return false; // no conflict
+            }
+        }
+
+        return true;
+    }
+
+
+    /**
+     *
+     * @param topics
+     * @param readerId
+     * @return ReaderEntity w updated interested topics list
+     */
+    @Override
+    public ReaderEntity setInterestedTopics(ArrayList<String> topics, Long readerId) {
+        if (topics == null || readerId == null) {
+            return null;
+        }
+
+        ReaderEntity reader = em.find(ReaderEntity.class, readerId);
+        if (reader == null) { // reader id not found
+            throw new EntityNotFoundException();
+        }
+        reader.setTopics(topics);
+        em.merge(reader);
+
+        return reader;
     }
     
         
@@ -85,7 +141,7 @@ public class ReaderSessionBean implements ReaderSessionBeanLocal {
     }
 
     @Override
-    public List<AuthorEntity> getAllFollowedAuthors(Long readerId) {
+    public List<AuthorEntity> getAllFollowingAuthors(Long readerId) {
         ReaderEntity reader = em.find(ReaderEntity.class, readerId);
         if (reader == null) {
             return null;
@@ -116,53 +172,5 @@ public class ReaderSessionBean implements ReaderSessionBeanLocal {
         em.merge(reader);
         return reader;
     }
-
-    @Override
-    public ArticleEntity likeArticle(Long articleId) {
-        ArticleEntity article = em.find(ArticleEntity.class, articleId);
-        if (article == null ) {
-            return null;
-        }
-
-        article.setNumOfUpvotes(article.getNumOfUpvotes()+1);
-        return article;
-    }
-
-    @Override
-    public ReaderEntity saveArticle(Long readerId, Long articleId) throws Exception{
-        ReaderEntity reader = em.find(ReaderEntity.class, readerId);
-        ArticleEntity article = em.find(ArticleEntity.class, articleId);
-        if (reader == null || article == null) {
-            return null;
-        }
-
-        if (reader.getSaved().contains(article)) {
-            throw new Exception("Error! Author is already followed by this reader");
-        }
-        
-        reader.getSaved().add(article);
-        em.merge(reader);
-        
-        return reader;
-    }
-
-    @Override
-    public List<ArticleEntity> getAllSavedArticles(Long readerId) {
-        ReaderEntity reader = em.find(ReaderEntity.class, readerId);
-        if (reader == null) {
-            return null;
-        }
-        
-        return reader.getSaved();
-    }
-    
-    
-    
-    
-    
-    
-
-
-
     
 }

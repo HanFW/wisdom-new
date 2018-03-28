@@ -150,4 +150,43 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
 
         return articles;
     }
+    
+    @Override
+    public ArticleEntity likeArticle(Long articleId) {
+        ArticleEntity article = entityManager.find(ArticleEntity.class, articleId);
+        if (article == null ) {
+            return null;
+        }
+
+        article.setNumOfUpvotes(article.getNumOfUpvotes()+1);
+        return article;
+    }
+
+    @Override
+    public ReaderEntity saveArticle(Long readerId, Long articleId) throws Exception{
+        ReaderEntity reader = entityManager.find(ReaderEntity.class, readerId);
+        ArticleEntity article = entityManager.find(ArticleEntity.class, articleId);
+        if (reader == null || article == null) {
+            return null;
+        }
+
+        if (reader.getSaved().contains(article)) {
+            throw new Exception("Error! Author is already followed by this reader");
+        }
+        
+        reader.getSaved().add(article);
+        entityManager.merge(reader);
+        
+        return reader;
+    }
+
+    @Override
+    public List<ArticleEntity> getAllSavedArticles(Long readerId) {
+        ReaderEntity reader = entityManager.find(ReaderEntity.class, readerId);
+        if (reader == null) {
+            return null;
+        }
+        
+        return reader.getSaved();
+    }
 }

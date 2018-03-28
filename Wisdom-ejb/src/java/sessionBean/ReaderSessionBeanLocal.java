@@ -9,6 +9,7 @@ import entity.ArticleEntity;
 import entity.AuthorEntity;
 import entity.ReaderEntity;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -19,20 +20,18 @@ import javax.ejb.Local;
 @Local
 public interface ReaderSessionBeanLocal {
     
-    
-    ReaderEntity readerSignUp(String name, String email, String pwd);
 
     ReaderEntity followAuthor(Long authorId, Long readerId) throws Exception;
 
-    List<AuthorEntity> getAllFollowedAuthors(Long readerId);
+    List<AuthorEntity> getAllFollowingAuthors(Long readerId);
 
     ReaderEntity topUpWallet(Long readerId, Double amount);
 
-    ArticleEntity likeArticle(Long articleId);
+    ReaderEntity createReader(ReaderEntity reader);
 
-    ReaderEntity saveArticle(Long readerId, Long articleId) throws Exception;
+    boolean readerHasEmailConflict(String email);
 
-    List<ArticleEntity> getAllSavedArticles(Long readerId);
+    ReaderEntity setInterestedTopics(ArrayList<String> topics, Long readerId);
 
     
 }

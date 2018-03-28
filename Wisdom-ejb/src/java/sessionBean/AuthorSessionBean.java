@@ -9,6 +9,7 @@ import entity.AuthorEntity;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -75,5 +76,31 @@ public class AuthorSessionBean implements AuthorSessionBeanLocal {
             }
         }
     }
+    
+    /**
+     *
+     * @param email
+     * @return false ONLY if email is valid and no duplicate is found
+     */
+    @Override
+    public boolean authorHasEmailConflict(String email) {
+        if (email == null || email.isEmpty()) {
+            return true; // invalid email as conflict exists
+        }
+
+        Query q = entityManager.createQuery("select a from AuthorEntity a "
+                + "where a.email = :email")
+                .setParameter("email", email);
+        try {
+            q.getSingleResult();
+        } catch (Exception e) {
+            if (e instanceof NoResultException) {
+                return false; // no conflict
+            }
+        }
+
+        return true;
+    }
+
     
 }

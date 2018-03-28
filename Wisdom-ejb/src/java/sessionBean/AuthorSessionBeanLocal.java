@@ -15,9 +15,11 @@ import javax.ejb.Local;
 @Local
 public interface AuthorSessionBeanLocal {
 
-    public AuthorEntity retrieveAuthorById(Long authorId);
+    AuthorEntity retrieveAuthorById(Long authorId);
 
-    public Long createNewAuthor(String username, String description, String email, String password);
+    Long createNewAuthor(String username, String description, String email, String password);
 
-    public AuthorEntity authorLogin(String email, String password);
+    AuthorEntity authorLogin(String email, String password);
+
+    boolean authorHasEmailConflict(String email);
 }
