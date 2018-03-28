@@ -20,8 +20,12 @@ public interface ArticleSessionBeanLocal {
     public Long addNewArticle(String topic, String title, String description,
             String context, LocalDateTime created, Long authorId);
 
-    public List<ArticleEntity> retrieveArticlesByAuthorId(Long authorId);
+    public List<ArticleEntity> getArticlesByAuthorId(Long authorId);
 
-    public ArticleEntity retrieveArticleById(Long articleId);
+    public ArticleEntity getArticleById(Long articleId);
+
+    public List<ArticleEntity> getNewestArticlesOfFollowedAuthors(Long readerId);
+
+    public List<ArticleEntity> getMostLikedArticlesOfTopic(final String topic);
 
 }

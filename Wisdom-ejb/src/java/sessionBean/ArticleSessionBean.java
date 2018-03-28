@@ -7,14 +7,17 @@ package sessionBean;
 
 import entity.ArticleEntity;
 import entity.AuthorEntity;
+import entity.ReaderEntity;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
-import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -30,6 +33,17 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    private static final Logger LOGGER
+            = Logger.getLogger(UtilSessionBean.class.getName());
+    private static ConsoleHandler handler = null;
+
+    public ArticleSessionBean() {
+        handler = new ConsoleHandler();
+        handler.setLevel(Level.FINE);
+        LOGGER.setLevel(Level.FINEST);
+        LOGGER.addHandler(handler);
+    }
 
     @Override
     public Long addNewArticle(String topic, String title, String description,
@@ -47,7 +61,7 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
     }
 
     @Override
-    public List<ArticleEntity> retrieveArticlesByAuthorId(Long authorId) {
+    public List<ArticleEntity> getArticlesByAuthorId(Long authorId) {
 
         AuthorEntity author = authorSessionBeanLocal.retrieveAuthorById(authorId);
 
@@ -64,25 +78,76 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
     }
 
     @Override
-    public ArticleEntity retrieveArticleById(Long articleId) {
-        ArticleEntity article = new ArticleEntity();
+    public ArticleEntity getArticleById(Long articleId) {
+        if (articleId == null) {
+            return null;
+        }
 
-        try {
-            Query query = entityManager.createQuery("Select a From ArticleEntity a Where a.id=:articleId");
-            query.setParameter("articleId", articleId);
-
-            if (query.getResultList().isEmpty()) {
-                return new ArticleEntity();
-            } else {
-                article = (ArticleEntity) query.getSingleResult();
-            }
-        } catch (EntityNotFoundException enfe) {
-            System.out.println("Entity not found error: " + enfe.getMessage());
-            return new ArticleEntity();
-        } catch (NonUniqueResultException nure) {
-            System.out.println("Non unique result error: " + nure.getMessage());
+        ArticleEntity article = entityManager.find(ArticleEntity.class, articleId);
+        if (article == null) {
+            throw new EntityNotFoundException();
         }
 
         return article;
+    }
+
+    /**
+     *
+     * @param readerId
+     * @return list of articles created by authors followed by the reader in
+     * DESC order (newest articles to oldest)
+     */
+    @Override
+    public List<ArticleEntity> getNewestArticlesOfFollowedAuthors(Long readerId) {
+        if (readerId == null) {
+            return null;
+        }
+
+        ReaderEntity reader = entityManager.find(ReaderEntity.class, readerId);
+        if (reader == null) { // reader id not found
+            throw new EntityNotFoundException();
+        }
+
+        Query q = entityManager.createQuery("select a from ArticleEntity a, FollowEntity f "
+                + "where f.reader.id = :readerId "
+                + "and f.author.id = a.author.id "
+                + "order by a.created DESC") // TODO: newest articles to oldest
+                .setParameter("readerId", readerId);
+        List<ArticleEntity> articles = null;
+        try {
+            articles = q.getResultList();
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, e.getMessage());
+        }
+
+        return articles;
+    }
+
+    /**
+     *
+     * @param topic
+     * @return list of articles of a certain topic, created in the past 3 days,
+     * from most upvotes to fewest
+     */
+    @Override
+    public List<ArticleEntity> getMostLikedArticlesOfTopic(final String topic) {
+        if (topic == null || topic.isEmpty()) {
+            return null;
+        }
+
+        Query q = entityManager.createQuery("select a from ArticleEntity a "
+                + "where a.topic = :topic "
+                + "and a.created > :threeDaysAgo "
+                + "order by a.numOfUpvotes DESC") // most upvotes to fewest
+                .setParameter("topic", topic)
+                .setParameter("threeDaysAgo", LocalDateTime.now().minusDays(3));
+        List<ArticleEntity> articles = null;
+        try {
+            articles = q.getResultList();
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, e.getMessage());
+        }
+
+        return articles;
     }
 }
