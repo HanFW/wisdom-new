@@ -35,7 +35,7 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
     private EntityManager entityManager;
 
     private static final Logger LOGGER
-            = Logger.getLogger(UtilSessionBean.class.getName());
+            = Logger.getLogger(ArticleSessionBean.class.getName());
     private static ConsoleHandler handler = null;
 
     public ArticleSessionBean() {

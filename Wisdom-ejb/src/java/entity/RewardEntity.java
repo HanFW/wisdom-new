@@ -7,7 +7,7 @@ package entity;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -16,7 +16,7 @@ import javax.persistence.OneToOne;
 @Entity
 public class RewardEntity extends TransactionEntity {
 
-    @OneToOne(cascade = {CascadeType.DETACH})
+    @ManyToOne(cascade = {CascadeType.DETACH})
     private ArticleEntity article;
 
     public RewardEntity() {

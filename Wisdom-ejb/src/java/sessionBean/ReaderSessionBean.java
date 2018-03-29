@@ -5,7 +5,6 @@
  */
 package sessionBean;
 
-import entity.ArticleEntity;
 import entity.AuthorEntity;
 import entity.FollowEntity;
 import entity.ReaderEntity;
@@ -19,6 +18,7 @@ import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -50,10 +50,14 @@ public class ReaderSessionBean implements ReaderSessionBeanLocal {
     @Override
     public ReaderEntity createReader(ReaderEntity reader) {
         if (reader.getName() == null || reader.getEmail() == null
-                || reader.getPwd() == null) {
+                || reader.getPwd() == null) { // necessary fields for constructor
             return null; // missing fields
         }
 
+        if (readerHasEmailConflict(reader.getEmail())) {
+            throw new NonUniqueResultException();
+        }
+        
         ReaderEntity newReader
                 = new ReaderEntity(reader.getName(), reader.getEmail(), reader.getPwd());
 
@@ -62,6 +66,32 @@ public class ReaderSessionBean implements ReaderSessionBeanLocal {
         em.refresh(newReader); // retrieve id
 
         return newReader;
+    }
+
+    @Override
+    public ReaderEntity authenticateReader(String email, String pwd) {
+        if (email == null || pwd == null 
+                || email.isEmpty() || pwd.isEmpty())
+        return null;
+        
+        Query q = em.createQuery("select r from ReaderEntity r "
+                + "where r.email = :email")
+                .setParameter("email", email);
+        ReaderEntity reader = null;
+        try {
+            reader = (ReaderEntity) q.getSingleResult();
+            
+            if (pwd.equals(reader.getPwd())) { // pwd match
+                return reader;
+            } else 
+                return null;
+        } catch (Exception e) {
+            if (e instanceof NoResultException) { // email not found
+                throw new EntityNotFoundException();
+            }
+            LOGGER.log(Level.SEVERE, e.getMessage());
+            return null;
+        }
     }
 
     /**
@@ -86,7 +116,7 @@ public class ReaderSessionBean implements ReaderSessionBeanLocal {
             }
         }
 
-        return true;
+        return true; // has conflict OR unexpected exceptions 
     }
 
 

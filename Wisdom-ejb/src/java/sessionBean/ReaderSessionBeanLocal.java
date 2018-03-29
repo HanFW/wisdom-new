@@ -5,10 +5,8 @@
  */
 package sessionBean;
 
-import entity.ArticleEntity;
 import entity.AuthorEntity;
 import entity.ReaderEntity;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Local;
@@ -28,6 +26,8 @@ public interface ReaderSessionBeanLocal {
     ReaderEntity topUpWallet(Long readerId, Double amount);
 
     ReaderEntity createReader(ReaderEntity reader);
+    
+    ReaderEntity authenticateReader(String email, String pwd);
 
     boolean readerHasEmailConflict(String email);
 

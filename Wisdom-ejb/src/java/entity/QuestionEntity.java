@@ -38,7 +38,7 @@ public class QuestionEntity implements Serializable {
     private ReaderEntity reader; // raised the qtn
     @OneToOne(cascade = {CascadeType.DETACH})
     private AuthorEntity author; // asked to answer
-    @OneToOne(cascade = {CascadeType.DETACH})
+    @OneToOne(cascade = {CascadeType.DETACH}, mappedBy = "question")
     private CompensationEntity compensation; 
 
     public QuestionEntity() {
