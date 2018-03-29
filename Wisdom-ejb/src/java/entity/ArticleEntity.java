@@ -11,6 +11,7 @@ import java.util.Objects;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -34,6 +35,7 @@ public class ArticleEntity implements Serializable {
     private String title;
     private String description; // short intro text
     private String picPath; // path to article picture
+    @Column(columnDefinition = "LONGTEXT")
     private String content;
     private Integer numOfUpvotes;
     private LocalDateTime created; // time of creation

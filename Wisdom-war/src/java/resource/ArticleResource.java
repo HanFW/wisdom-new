@@ -6,6 +6,8 @@
 package resource;
 
 import entity.ArticleEntity;
+import static entity.RewardEntity_.article;
+import java.util.List;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,6 +20,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -32,11 +36,10 @@ import sessionBean.ArticleSessionBeanLocal;
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class ArticleResource {
-    
-    private static final Logger LOGGER 
+
+    private static final Logger LOGGER
             = Logger.getLogger(ArticleResource.class.getName());
     private static ConsoleHandler handler = null;
-
 
     @Context
     private UriInfo context;
@@ -52,7 +55,7 @@ public class ArticleResource {
         LOGGER.setLevel(Level.ALL);
         LOGGER.addHandler(handler);
     }
-    
+
     @Path("{id}")
     @GET
     public Response getArticleById(@PathParam("id") final Long articleId) {
@@ -67,11 +70,41 @@ public class ArticleResource {
             return Response.status(Status.NOT_FOUND).entity(e.getMessage()).build();
         }
     }
-    
-    // TODO: get newest articles from followed authors
-    
-    
-    // TODO: get most liked articles in past 3 days of a topic
 
+    // TODO: get newest articles from followed authors
+    @Path("newest")
+    @GET
+    public Response getNewestArticlesFromFollowedAuthors(
+            @QueryParam("readerId") final Long readerId) {
+        try {
+            List<ArticleEntity> articles
+                    = articleSessionBean.getNewestArticlesOfFollowedAuthors(readerId);
+            if (articles != null) { // success
+                GenericEntity<List<ArticleEntity>> response = new GenericEntity<List<ArticleEntity>>(articles) {
+                };
+                return Response.ok().entity(articles).build();
+            } else {
+                return Response.status(Status.BAD_REQUEST).entity("missing data").build();
+            }
+        } catch (EntityNotFoundException e) { // reader not found
+            return Response.status(Status.NOT_FOUND).entity(e.getMessage()).build();
+        }
+    }
+
+    // TODO: get most liked articles in past 3 days of a topic
+    @Path("mostLiked")
+    @GET
+    public Response getMostLikedArticlesOfTopic(
+            @QueryParam("topic") final String topic) {
+        List<ArticleEntity> articles
+                = articleSessionBean.getMostLikedArticlesOfTopic(topic);
+        if (articles != null) { // success
+            GenericEntity<List<ArticleEntity>> response = new GenericEntity<List<ArticleEntity>>(articles) {
+            };
+            return Response.ok().entity(articles).build();
+        } else {
+            return Response.status(Status.BAD_REQUEST).entity("missing data").build();
+        }
+    }
 
 }
