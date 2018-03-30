@@ -21,9 +21,8 @@ import javax.persistence.OneToOne;
  *
  * @author Yongxue
  */
-
 @Entity
-@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class TransactionEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -33,6 +32,7 @@ public abstract class TransactionEntity implements Serializable {
 
     private Double amount;
     private LocalDateTime created; // initialised to .now() upon construction
+    private String transactionType;
 
     @OneToOne(cascade = {CascadeType.DETACH})
     private ReaderEntity from;
@@ -58,6 +58,14 @@ public abstract class TransactionEntity implements Serializable {
 
     public LocalDateTime getCreated() {
         return created;
+    }
+
+    public String getTransactionType() {
+        return transactionType;
+    }
+
+    public void setTransactionType(String transactionType) {
+        this.transactionType = transactionType;
     }
 
     public ReaderEntity getFrom() {
@@ -98,6 +106,5 @@ public abstract class TransactionEntity implements Serializable {
         }
         return true;
     }
-    
-   
+
 }

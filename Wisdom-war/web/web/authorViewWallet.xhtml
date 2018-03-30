@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+                template="./templates/menuTemplate.xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="title">
+        title
+    </ui:define>
+
+    <ui:define name="top">
+        top
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form>
+            <p:panel>
+                <p:outputLabel value="My Wallet" style="font-weight: bold;font-size: 22px"/>
+                <br/><br/><br/>
+                <p:outputLabel value="Total Balance: " style="font-size: 18px"/>
+                <p:outputLabel value="#{authorViewWalletManagedBean.authorBalance}" style="font-size: 18px"/>
+            </p:panel>
+
+            <p:dataTable var="transaction" value="#{authorViewWalletManagedBean.transaction}" 
+                         reflow="true" paginator="true" rows="10" emptyMessage="No Transaction Found" 
+                         paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+
+                <p:column headerText="Time"> 
+                    <h:outputText value="#{transaction.created}" />
+                </p:column>
+
+                <p:column headerText="Reader"> 
+                    <h:outputText value="#{transaction.from.name}" />
+                </p:column>
+
+                <p:column headerText="Type"> 
+                    <h:outputText value="#{transaction.transactionType}" />
+                </p:column>
+
+                <p:column headerText="Amount"> 
+                    <h:outputText value="#{transaction.amount}" />
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
