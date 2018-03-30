@@ -46,7 +46,7 @@
                     <h:outputText value="#{article.title}" />
                 </p:column>
 
-                <p:column filterBy="#{article.topic}" headerText="Topic" filterMatchMode="exact">
+                <p:column filterBy="#{article.topic}" headerText="Topic" filterMatchMode="exact" style="width: 18%">
                     <f:facet name="filter">
                         <p:selectOneMenu onchange="PF('articleTable').filter()" >
                             <f:selectItem itemLabel="Please Select" itemValue="#{null}" noSelectionOption="true" />
@@ -65,15 +65,16 @@
                     <h:outputText value="#{article.topic}" />
                 </p:column>
 
-                <p:column filterBy="#{article.created}" headerText="Time" filterMatchMode="contains">
+                <p:column filterBy="#{article.created}" headerText="Time" filterMatchMode="contains" style="width: 22%">
                     <h:outputText value="#{article.created}" />
                 </p:column>
 
-                <p:column headerText="Likes" sortBy="#{article.numOfUpvotes}" filterBy="#{article.numOfUpvotes}">
+                <p:column headerText="Likes" sortBy="#{article.numOfUpvotes}" style="width: 12%"
+                          filterBy="#{article.numOfUpvotes}">
                     <h:outputText value="#{article.numOfUpvotes}" />
                 </p:column>
 
-                <p:column headerText="View"> 
+                <p:column headerText="View" style="width: 8%"> 
                     <center>
                         <p:commandButton process="@this" action="#{authorViewAllArticlesManagedBean.viewArticle()}"
                                          icon="ui-icon-document" ajax="false">
@@ -82,7 +83,7 @@
                     </center>
                 </p:column>
 
-                <p:column headerText="Delete"> 
+                <p:column headerText="Delete" style="width: 8%"> 
                     <center>
                         <p:commandButton icon="ui-icon-trash">
                         </p:commandButton>

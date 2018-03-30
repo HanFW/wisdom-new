@@ -89,7 +89,7 @@ public class AuthorAddNewArticleManagedBean {
         this.imageFile = imageFile;
     }
 
-    public void addNewArticle() {
+    public void addNewArticle() throws IOException {
 
         ec = FacesContext.getCurrentInstance().getExternalContext();
 
@@ -98,6 +98,8 @@ public class AuthorAddNewArticleManagedBean {
 
         newArticleId = articleSessionBeanLocal.addNewArticle(articleTopic,
                 artilceTitle, articleDescription, articleContent, created, authorId);
+
+        ec.redirect(ec.getRequestContextPath() + "/web/authorViewAllArticles.xhtml?faces-redirect=true");
     }
 
     public void upload(FileUploadEvent event) throws IOException {
