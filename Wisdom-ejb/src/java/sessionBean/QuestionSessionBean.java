@@ -5,6 +5,7 @@
  */
 package sessionBean;
 
+import entity.AuthorEntity;
 import entity.QuestionEntity;
 import entity.ReaderEntity;
 import exception.NoSuchEntityException;
@@ -16,6 +17,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import utility.Constants;
 
 /**
  *
@@ -79,5 +81,61 @@ public class QuestionSessionBean implements QuestionSessionBeanLocal {
             LOGGER.log(Level.SEVERE, e.getMessage());
         }
         return questions;
+    }
+    
+    @Override
+    public List<QuestionEntity> getQuestionsByAuthorId(Long authorId, String status) {
+        if (authorId == null) {
+            return null;
+        }
+        
+        AuthorEntity author = em.find(AuthorEntity.class, authorId);
+        if (author == null) {
+            throw new EntityNotFoundException();
+        }
+        
+        Query q = em.createQuery("select q from QuestionEntity q "
+                + "where q.author.id = :authorId and q.status = :status "
+                + "order by q.created DESC");
+        q.setParameter("authorId", authorId);
+        q.setParameter("status", status);
+        
+        List<QuestionEntity> questions = null;
+        try {
+            questions = q.getResultList();
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, e.getMessage());
+        }
+        
+        return questions;
+    }
+    
+    @Override
+    public void rejectQuestion (Long questionId) {
+        if (questionId == null) {
+            LOGGER.log(Level.SEVERE, "invalid question id");
+        }
+        
+        QuestionEntity question = em.find(QuestionEntity.class, questionId);
+        if (question == null) {
+            LOGGER.log(Level.SEVERE, "question entity not found");
+        } else {
+            question.setStatus(Constants.STATUS_REJECTED);
+        }
+    }
+    
+    @Override
+    public void replyToQuestion (Long questionId, String reply) {
+        if (questionId == null) {
+            LOGGER.log(Level.SEVERE, "invalid question id");
+        }
+        
+        QuestionEntity question = em.find(QuestionEntity.class, questionId);
+        if (question == null) {
+            LOGGER.log(Level.SEVERE, "question entity not found");
+        } else {
+            question.setReply(reply);
+            question.setStatus(Constants.STATUS_ANSWERED);
+        }
     }
 }
