@@ -7,7 +7,9 @@ package sessionBean;
 
 import entity.ArticleEntity;
 import entity.ReaderEntity;
+import exception.InsufficientBalanceException;
 import exception.NoSuchEntityException;
+import exception.RepeatActionException;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.ejb.Local;
@@ -32,8 +34,14 @@ public interface ArticleSessionBeanLocal {
 
     public List<ArticleEntity> getAllSavedArticles(Long readerId);
 
-    public ReaderEntity saveArticle(Long readerId, Long articleId) throws Exception;
+    public ReaderEntity saveArticle(Long readerId, Long articleId) throws RepeatActionException;
 
     public ArticleEntity likeArticle(Long articleId);
+
+    public ReaderEntity unsaveArticle(Long readerId, Long articleId) throws RepeatActionException;
+
+    public Boolean checkArticleSaved(Long readerId, Long articleId);
+
+    public ReaderEntity tipArticle(Long readerId, Long articleId, Double amount) throws InsufficientBalanceException;
 
 }

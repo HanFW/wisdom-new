@@ -41,8 +41,8 @@ public class ReaderSessionBean implements ReaderSessionBeanLocal {
         LOGGER.setLevel(Level.ALL);
         LOGGER.addHandler(handler);
     }
-    
-     /**
+
+    /**
      *
      * @param reader
      * @return the newly created ReaderEntity (inc. id)
@@ -57,7 +57,7 @@ public class ReaderSessionBean implements ReaderSessionBeanLocal {
         if (readerHasEmailConflict(reader.getEmail())) {
             throw new DuplicateEntityException("reader " + reader.getEmail() + " exists.");
         }
-        
+
         ReaderEntity newReader
                 = new ReaderEntity(reader.getName(), reader.getEmail(), reader.getPwd());
 
@@ -70,21 +70,23 @@ public class ReaderSessionBean implements ReaderSessionBeanLocal {
 
     @Override
     public ReaderEntity authenticateReader(String email, String pwd) throws NoSuchEntityException {
-        if (email == null || pwd == null 
-                || email.isEmpty() || pwd.isEmpty())
-        return null;
-        
+        if (email == null || pwd == null
+                || email.isEmpty() || pwd.isEmpty()) {
+            return null;
+        }
+
         Query q = em.createQuery("select r from ReaderEntity r "
                 + "where r.email = :email")
                 .setParameter("email", email);
         ReaderEntity reader = null;
         try {
             reader = (ReaderEntity) q.getSingleResult();
-            
+
             if (pwd.equals(reader.getPwd())) { // pwd match
                 return reader;
-            } else 
+            } else {
                 return null;
+            }
         } catch (Exception e) {
             if (e instanceof NoResultException) { // email not found
                 throw new NoSuchEntityException("reader " + email + " not found");
@@ -119,7 +121,6 @@ public class ReaderSessionBean implements ReaderSessionBeanLocal {
         return true; // has conflict OR unexpected exceptions 
     }
 
-
     /**
      *
      * @param topics
@@ -127,7 +128,7 @@ public class ReaderSessionBean implements ReaderSessionBeanLocal {
      * @return ReaderEntity w updated interested topics list
      */
     @Override
-    public ReaderEntity setInterestedTopics(ArrayList<String> topics, Long readerId) 
+    public ReaderEntity setInterestedTopics(ArrayList<String> topics, Long readerId)
             throws NoSuchEntityException {
         if (topics == null || readerId == null) {
             return null;
@@ -142,10 +143,9 @@ public class ReaderSessionBean implements ReaderSessionBeanLocal {
 
         return reader;
     }
-    
-        
+
     @Override
-    public ReaderEntity followAuthor(Long authorId, Long readerId) throws Exception{
+    public ReaderEntity followAuthor(Long authorId, Long readerId) throws NoSuchEntityException {
         ReaderEntity reader = em.find(ReaderEntity.class, readerId);
         AuthorEntity author = em.find(AuthorEntity.class, authorId);
         if (reader == null || author == null) {
@@ -167,7 +167,7 @@ public class ReaderSessionBean implements ReaderSessionBeanLocal {
             em.flush();
         } catch (Exception e) {
             // TODO: handle all other unexpected exceptions
-        } 
+        }
         return reader;
     }
 
@@ -177,7 +177,7 @@ public class ReaderSessionBean implements ReaderSessionBeanLocal {
         if (reader == null) {
             return null;
         }
-        
+
         Query q = em.createNamedQuery("AuthorEntity.findFollowedAuthorsByReader")
                 .setParameter("readerId", reader.getId());
         List<AuthorEntity> followedAuthors = null;
@@ -186,7 +186,7 @@ public class ReaderSessionBean implements ReaderSessionBeanLocal {
         } catch (Exception e) {
             //
         }
-        
+
         return followedAuthors;
     }
 
@@ -196,12 +196,64 @@ public class ReaderSessionBean implements ReaderSessionBeanLocal {
         if (reader == null) {
             return null;
         }
-        
+
         Double newBalance = reader.getBalance() + amount;
         LOGGER.log(Level.FINEST, "the new balance is calculated as {0}", newBalance);
         reader.setBalance(newBalance);
         em.merge(reader);
         return reader;
     }
-    
+
+    @Override
+    public ReaderEntity unfollowAuthor(Long authorId, Long readerId) throws NoSuchEntityException {
+        ReaderEntity reader = em.find(ReaderEntity.class, readerId);
+        AuthorEntity author = em.find(AuthorEntity.class, authorId);
+        if (reader == null || author == null) {
+            throw new NoSuchEntityException("author " + authorId + " or reader " + readerId + " not found");
+        }
+
+        Query q = em.createNamedQuery("FollowEntity.findByAuthorAndReader")
+                .setParameter("authorId", authorId)
+                .setParameter("readerId", readerId);
+        FollowEntity relationship;
+        try {
+            relationship = (FollowEntity) q.getSingleResult();
+            relationship.setStatus("DELETED");
+            em.merge(relationship);
+            em.flush();
+        } catch (NoResultException e) {
+            throw new EntityExistsException("Error! Author is not followed by this reader");
+
+        } catch (Exception e) {
+            // TODO: handle all other unexpected exceptions
+        }
+        return reader;
+    }
+
+    @Override
+    public Boolean checkFollow(Long authorId, Long readerId) throws NoSuchEntityException {
+        ReaderEntity reader = em.find(ReaderEntity.class, readerId);
+        AuthorEntity author = em.find(AuthorEntity.class, authorId);
+        if (reader == null || author == null) {
+            throw new NoSuchEntityException("author " + authorId + " or reader " + readerId + " not found");
+        }
+
+        Query q = em.createNamedQuery("FollowEntity.findByAuthorAndReader")
+                .setParameter("authorId", authorId)
+                .setParameter("readerId", readerId);
+        FollowEntity relationship;
+        try {
+            relationship = (FollowEntity) q.getSingleResult();
+            if (relationship != null) {
+                return true;
+            }
+        } catch (NoResultException e) {
+            return false;
+
+        } catch (Exception e) {
+            // TODO: handle all other unexpected exceptions
+        }
+        return false;
+    }
+
 }

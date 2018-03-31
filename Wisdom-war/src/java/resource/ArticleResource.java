@@ -6,17 +6,24 @@
 package resource;
 
 import entity.ArticleEntity;
+import entity.AuthorEntity;
+import entity.ReaderEntity;
+import exception.InsufficientBalanceException;
 import exception.NoSuchEntityException;
+import exception.RepeatActionException;
 import java.util.List;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.json.JsonArray;
+import javax.json.JsonObject;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
@@ -105,6 +112,107 @@ public class ArticleResource {
             return Response.ok().entity(articles).build();
         } else {
             return Response.status(Status.BAD_REQUEST).entity("missing data").build();
+        }
+    }
+    
+    
+    @Path("{id}/save/{articleId}")
+    @PUT
+    public Response saveArticle(
+            @PathParam("id") final Long readerId,
+            @PathParam("articleId") final Long articleId) {
+        try {            
+            ReaderEntity reader = articleSessionBean.saveArticle(readerId,articleId);
+            
+            if (reader != null) { // success
+                return Response.ok().entity(reader).build();
+            } else {
+                return Response.status(Status.NOT_FOUND).entity("entity not found").build();
+            }
+        } catch (RepeatActionException e) { // article already saved
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+        } catch (Exception e) { // invalid JsonArray, etc
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+    }
+    
+    @Path("{id}/unsave/{articleId}")
+    @PUT
+    public Response unsaveArticle(
+            @PathParam("id") final Long readerId,
+            @PathParam("articleId") final Long articleId) {
+        try {            
+            ReaderEntity reader = articleSessionBean.unsaveArticle(readerId,articleId);
+            
+            if (reader != null) { // success
+                return Response.ok().entity(reader).build();
+            } else {
+                return Response.status(Status.NOT_FOUND).entity("entity not found").build();
+            }
+        } catch (RepeatActionException e) { // article has not been saved
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+        } catch (Exception e) { // invalid JsonArray, etc
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+    }
+    
+    @Path("{id}/checkSaved/{articleId}")
+    @GET
+    public Response checkSaved(
+            @PathParam("id") final Long readerId,
+            @PathParam("articleId") final Long articleId) {
+        try {            
+            Boolean result = articleSessionBean.checkArticleSaved(readerId,articleId);
+            
+            if (result != null) { // success
+                return Response.ok().build();
+            } else {
+                return Response.status(Status.NOT_FOUND).entity("reader or article not found").build();
+            }
+        } catch (Exception e) { // invalid JsonArray, etc
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+    }
+
+    @Path("{id}/getSavedArticles")
+    @GET
+    public Response getSavedArticles(
+            @PathParam("id") final Long readerId){
+        try {
+            List<ArticleEntity> articles = articleSessionBean.getAllSavedArticles(readerId);
+            if (articles != null) {
+                GenericEntity<List<ArticleEntity>> response 
+                        = new GenericEntity<List<ArticleEntity>>(articles){};
+                
+                return Response.ok().entity(response).build();
+            } else {
+                return Response.status(Status.NOT_FOUND).entity("reader or article not found").build();
+            }
+        } catch (Exception e) { // invalid JsonArray, etc
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+    }
+    
+    @Path("{id}/tip/{articleId}")
+    @PUT
+    public Response tip(
+            @PathParam("id") final Long readerId,
+            @PathParam("articleId") final Long articleId,
+            final JsonObject request) {
+        try {            
+            
+            Double amount = Double.valueOf(request.getString("amount"));
+            ReaderEntity reader = articleSessionBean.tipArticle(readerId, articleId, amount);
+            
+            if (reader != null) { // success
+                return Response.ok().entity(reader).build();
+            } else {
+                return Response.status(Status.BAD_REQUEST).entity("reader entity not found").build();
+            }
+        } catch(InsufficientBalanceException e){// ..should check at front-end
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+        } catch (Exception e) { // invalid JsonArray, etc
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
     }
 

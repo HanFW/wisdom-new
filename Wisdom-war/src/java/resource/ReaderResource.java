@@ -5,11 +5,13 @@
  */
 package resource;
 
+import entity.AuthorEntity;
 import entity.ReaderEntity;
 import exception.DuplicateEntityException;
 import exception.NoSuchEntityException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,6 +28,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -141,7 +144,102 @@ public class ReaderResource {
         }
     }
     
+    @Path("{id}/follow/{authorId}")
+    @PUT
+    public Response followAuthor(
+            @PathParam("id") final Long readerId,
+            @PathParam("authorId") final Long authorId) {
+        try {            
+            ReaderEntity reader = readerSessionBean.followAuthor(readerId,authorId);
+            
+            if (reader != null) { // success
+                return Response.ok().entity(reader).build();
+            } else {
+                return Response.status(Status.BAD_REQUEST).entity("missing data").build();
+            }
+        } catch (NoSuchEntityException e) { // reader not found
+            return Response.status(Status.NOT_FOUND).entity(e.getMessage()).build();
+        } catch (Exception e) { // invalid JsonArray, etc
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+    }
     
+    @Path("{id}/unfollow/{authorId}")
+    @PUT
+    public Response unfollowAuthor(
+            @PathParam("id") final Long readerId,
+            @PathParam("authorId") final Long authorId) {
+        try {            
+            ReaderEntity reader = readerSessionBean.unfollowAuthor(readerId,authorId);
+            
+            if (reader != null) { // success
+                return Response.ok().entity(reader).build();
+            } else {
+                return Response.status(Status.BAD_REQUEST).entity("missing data").build();
+            }
+        } catch (NoSuchEntityException e) { // reader not found
+            return Response.status(Status.NOT_FOUND).entity(e.getMessage()).build();
+        } catch (Exception e) { // invalid JsonArray, etc
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+    }
     
+    @Path("{id}/checkFollow/{authorId}")
+    @GET
+    public Response checkFollow(
+            @PathParam("id") final Long readerId,
+            @PathParam("authorId") final Long authorId) {
+        try {            
+            Boolean result = readerSessionBean.checkFollow(readerId,authorId);
+            
+            if (result != null) { // success
+                return Response.ok().build();
+            } else {
+                return Response.status(Status.BAD_REQUEST).entity("missing data").build();
+            }
+        } catch (NoSuchEntityException e) { // reader not found
+            return Response.status(Status.NOT_FOUND).entity(e.getMessage()).build();
+        } catch (Exception e) { // invalid JsonArray, etc
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+    }
 
+    @Path("{id}/getFollowingAuthors")
+    @GET
+    public Response getFollowingAuthors(
+            @PathParam("id") final Long readerId){
+        try {
+            List<AuthorEntity> authors = readerSessionBean.getAllFollowingAuthors(readerId);
+            if (authors != null) {
+                GenericEntity<List<AuthorEntity>> response 
+                        = new GenericEntity<List<AuthorEntity>>(authors){};
+                
+                return Response.ok().entity(response).build();
+            } else {
+                return Response.status(Status.BAD_REQUEST).entity("missing data").build();
+            }
+        } catch (Exception e) { // invalid JsonArray, etc
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+    }
+    
+    @Path("{id}/topUp")
+    @PUT
+    public Response topUp(
+            @PathParam("id") final Long readerId,
+            final JsonObject request) {
+        try {            
+            
+            Double amount = Double.valueOf(request.getString("amount"));
+            ReaderEntity reader = readerSessionBean.topUpWallet(readerId,amount);
+            
+            if (reader != null) { // success
+                return Response.ok().entity(reader).build();
+            } else {
+                return Response.status(Status.BAD_REQUEST).entity("reader entity not found").build();
+            }
+        } catch (Exception e) { // invalid JsonArray, etc
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+    }
 }

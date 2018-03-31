@@ -21,7 +21,7 @@ import javax.ejb.Local;
 public interface ReaderSessionBeanLocal {
     
 
-    ReaderEntity followAuthor(Long authorId, Long readerId) throws Exception;
+    ReaderEntity followAuthor(Long authorId, Long readerId) throws NoSuchEntityException;
 
     List<AuthorEntity> getAllFollowingAuthors(Long readerId);
 
@@ -34,6 +34,10 @@ public interface ReaderSessionBeanLocal {
     boolean readerHasEmailConflict(String email);
 
     ReaderEntity setInterestedTopics(ArrayList<String> topics, Long readerId) throws NoSuchEntityException;
+
+    ReaderEntity unfollowAuthor(Long authorId, Long readerId)throws NoSuchEntityException;
+
+    Boolean checkFollow(Long authorId, Long readerId) throws NoSuchEntityException;
 
     
 }

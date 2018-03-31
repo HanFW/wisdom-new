@@ -8,7 +8,10 @@ package sessionBean;
 import entity.ArticleEntity;
 import entity.AuthorEntity;
 import entity.ReaderEntity;
+import entity.RewardEntity;
+import exception.InsufficientBalanceException;
 import exception.NoSuchEntityException;
+import exception.RepeatActionException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -168,7 +171,7 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
     }
 
     @Override
-    public ReaderEntity saveArticle(Long readerId, Long articleId) throws Exception {
+    public ReaderEntity saveArticle(Long readerId, Long articleId) throws RepeatActionException {
         ReaderEntity reader = entityManager.find(ReaderEntity.class, readerId);
         ArticleEntity article = entityManager.find(ArticleEntity.class, articleId);
         if (reader == null || article == null) {
@@ -176,7 +179,7 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
         }
 
         if (reader.getSaved().contains(article)) {
-            throw new Exception("Error! Author is already followed by this reader");
+            throw new RepeatActionException("Error! Article is already saved by this reader");
         }
 
         reader.getSaved().add(article);
@@ -191,7 +194,67 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
         if (reader == null) {
             return null;
         }
-
         return reader.getSaved();
+    }
+    
+    @Override
+    public ReaderEntity unsaveArticle(Long readerId, Long articleId) throws RepeatActionException {
+        ReaderEntity reader = entityManager.find(ReaderEntity.class, readerId);
+        ArticleEntity article = entityManager.find(ArticleEntity.class, articleId);
+        if (reader == null || article == null) {
+            return null;
+        }
+
+        if (!reader.getSaved().contains(article)) {
+            throw new RepeatActionException("Error! Article has not been saved by this reader");
+        }
+
+        for(int i = 0; i< reader.getSaved().size(); i++){
+            if(reader.getSaved().get(i).equals(article)){
+                reader.getSaved().remove(i);
+            }
+        }
+        entityManager.merge(reader);
+
+        return reader;
+    }
+    
+    @Override
+    public Boolean checkArticleSaved(Long readerId, Long articleId) {
+        ReaderEntity reader = entityManager.find(ReaderEntity.class, readerId);
+        ArticleEntity article = entityManager.find(ArticleEntity.class, articleId);
+        if (reader == null || article == null) {
+            return null;
+        }
+
+        if (reader.getSaved().contains(article)) {
+            return true;
+        }
+        return false;
+    }
+    
+    @Override
+    public ReaderEntity tipArticle(Long readerId, Long articleId, Double amount) throws InsufficientBalanceException {
+        ReaderEntity reader = entityManager.find(ReaderEntity.class, readerId);
+        ArticleEntity article = entityManager.find(ArticleEntity.class, articleId);
+        if (reader == null || article == null) {
+            return null;
+        }
+
+        if(amount > reader.getBalance()){
+            throw new InsufficientBalanceException("Insufficient Balance!");
+        }
+        reader.setBalance(reader.getBalance() - amount);
+        AuthorEntity author = article.getAuthor();
+        author.setBalance(author.getBalance() + amount);
+        
+        //record the transaction
+        RewardEntity reward = new RewardEntity(amount);
+        reward.setArticle(article);
+        
+        entityManager.persist(reward);
+        entityManager.merge(reader);
+        entityManager.flush();
+        return reader;
     }
 }

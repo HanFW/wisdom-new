@@ -23,15 +23,15 @@ import javax.persistence.OneToOne;
     @NamedQuery(name = "FollowEntity.findByAuthorAndReader",
             query = "SELECT f FROM FollowEntity f "
                     + "WHERE f.author.id = :authorId "
-                    + "AND f.reader.id = :readerId"),
+                    + "AND f.reader.id = :readerId" + " AND f.status != 'DELETED'"),
     @NamedQuery(name = "FollowEntity.findFollowedAuthorsByReader",
             query = "SELECT a FROM FollowEntity f, AuthorEntity a "
                     + "WHERE f.author.id = a.id "
-                    + "AND f.reader.id = :readerId"),
+                    + "AND f.reader.id = :readerId" + " AND f.status != 'DELETED'"),
     @NamedQuery(name = "FollowEntity.findFollowersByAuthor",
             query = "SELECT f FROM FollowEntity f, ReaderEntity r "
                     + "WHERE f.reader.id = r.id "
-                    + "AND f.author.id = :authorId ")
+                    + "AND f.author.id = :authorId " + " AND f.status != 'DELETED'")
 })
 @Entity
 public class FollowEntity implements Serializable {
@@ -40,6 +40,7 @@ public class FollowEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String status;
     
     @OneToOne
     private AuthorEntity author;
@@ -69,6 +70,14 @@ public class FollowEntity implements Serializable {
 
     public void setReader(ReaderEntity reader) {
         this.reader = reader;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
     
 
