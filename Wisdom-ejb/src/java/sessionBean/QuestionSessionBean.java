@@ -9,6 +9,7 @@ import entity.AuthorEntity;
 import entity.QuestionEntity;
 import entity.ReaderEntity;
 import exception.NoSuchEntityException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
@@ -150,6 +151,27 @@ public class QuestionSessionBean implements QuestionSessionBeanLocal {
             LOGGER.log(Level.SEVERE, "question entity not found");
         } else {
             author.setQtnPrice(newPrice);
+        }
+    }
+    
+    @Override
+    public void checkExpiredQuestions () {
+        Query q = em.createQuery("select q from QuestionEntity q where q.status = :status order by q.created ASC");
+        q.setParameter("status", Constants.STATUS_PENDING);
+        List<QuestionEntity> questions = null;
+        try {
+            questions = q.getResultList();
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, e.getMessage());
+        }
+        
+        for(QuestionEntity question : questions) {
+            if(question.getCreated().isBefore(LocalDateTime.now().minusMinutes(1))) {
+                question.setStatus(Constants.STATUS_EXPIRED);
+                System.out.println("question expired");
+            } else {
+                break;
+            }
         }
     }
 }
