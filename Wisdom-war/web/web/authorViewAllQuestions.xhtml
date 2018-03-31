@@ -12,6 +12,21 @@
 
     <ui:define name="content">
         <h:form>
+            <p:panel>
+                <p:outputLabel id="price" value="Current price per question: " />
+                <p:outputLabel value="#{authorViewAllQuestionsManagedBean.questionPrice}" />
+                <p:tooltip for="price" value="Default price is 5.0 per question" position="bottom"/>
+                <p:commandButton value="Update Price" onclick="PF('updatePriceDialog').show();"/>
+            </p:panel>
+            
+            <p:dialog header="Update Question Price" widgetVar="updatePriceDialog" resizable="false" responsive="true">
+                <p:outputLabel value="New price: " for="newPrice"/>
+                <p:inputText type="number" id="newPrice" value="#{authorViewAllQuestionsManagedBean.questionPrice}"/>
+                <br/>
+                <p:commandButton update="@form" value="Update" oncomplete="PF('updatePriceDialog').hide();" actionListener="#{authorViewAllQuestionsManagedBean.updateQuestionPrice}"/>
+            </p:dialog>
+        </h:form>
+        <h:form>
             <p:tabView>
                 <p:tab title="Pending">
                     <p:dataTable var="pQuestion" value="#{authorViewAllQuestionsManagedBean.pendingQuestions}" reflow="true"

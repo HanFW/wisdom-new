@@ -14,6 +14,7 @@ import javax.enterprise.context.RequestScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import sessionBean.AuthorSessionBeanLocal;
 import sessionBean.QuestionSessionBeanLocal;
 import utility.Constants;
 
@@ -27,7 +28,10 @@ public class AuthorViewAllQuestionsManagedBean {
     
     @EJB
     private QuestionSessionBeanLocal questionSessionBeanLocal;
+    @EJB
+    private AuthorSessionBeanLocal authorSessionBeanLocal;
     
+    private Double questionPrice = 0.0;
     private Long authorId = null;
     private QuestionEntity question;
     private String reply;
@@ -43,6 +47,13 @@ public class AuthorViewAllQuestionsManagedBean {
     public void init() {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         authorId = (Long) ec.getSessionMap().get("authorId");
+        questionPrice = authorSessionBeanLocal.retrieveAuthorById(authorId).getQtnPrice();
+    }
+    
+    public void updateQuestionPrice (ActionEvent event) {
+        ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        authorId = (Long) ec.getSessionMap().get("authorId");
+        questionSessionBeanLocal.updateQuestionPrice(authorId, questionPrice);
     }
     
     public void rejectQuestion () {
@@ -96,5 +107,13 @@ public class AuthorViewAllQuestionsManagedBean {
     public void setQuestionId(Long questionId) {
         System.out.println("set question id " + questionId);
         this.questionId = questionId;
+    }
+
+    public Double getQuestionPrice() {
+        return questionPrice;
+    }
+
+    public void setQuestionPrice(Double questionPrice) {
+        this.questionPrice = questionPrice;
     }
 }

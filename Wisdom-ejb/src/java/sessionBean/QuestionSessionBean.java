@@ -137,4 +137,18 @@ public class QuestionSessionBean implements QuestionSessionBeanLocal {
             question.setStatus(Constants.STATUS_ANSWERED);
         }
     }
+    
+    @Override
+    public void updateQuestionPrice (Long authorId, Double newPrice) {
+        if (authorId == null) {
+            LOGGER.log(Level.SEVERE, "invalid question id");
+        }
+        
+        AuthorEntity author = em.find(AuthorEntity.class, authorId);
+        if (author == null) {
+            LOGGER.log(Level.SEVERE, "question entity not found");
+        } else {
+            author.setQtnPrice(newPrice);
+        }
+    }
 }

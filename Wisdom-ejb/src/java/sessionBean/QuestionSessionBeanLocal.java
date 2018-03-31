@@ -26,4 +26,6 @@ public interface QuestionSessionBeanLocal {
     void rejectQuestion (Long questionId);
     
     void replyToQuestion (Long questionId, String reply);
+    
+    void updateQuestionPrice (Long authorId, Double newPrice);
 }
