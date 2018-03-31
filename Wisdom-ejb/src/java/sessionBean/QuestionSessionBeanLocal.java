@@ -8,6 +8,7 @@ package sessionBean;
 import entity.QuestionEntity;
 import java.util.List;
 import javax.ejb.Local;
+import javax.persistence.EntityNotFoundException;
 
 /**
  *
@@ -16,9 +17,9 @@ import javax.ejb.Local;
 @Local
 public interface QuestionSessionBeanLocal {
 
-    QuestionEntity getQuestionById(Long questionId);
+    QuestionEntity getQuestionById(Long questionId) throws EntityNotFoundException;
 
-    List<QuestionEntity> getQuestionsByReader(Long readerId);
+    List<QuestionEntity> getQuestionsByReader(Long readerId) throws EntityNotFoundException;
     
     List<QuestionEntity> getQuestionsByAuthorId(Long authorId, String status);
     

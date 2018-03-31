@@ -48,7 +48,7 @@ public class ReaderSessionBean implements ReaderSessionBeanLocal {
      * @return the newly created ReaderEntity (inc. id)
      */
     @Override
-    public ReaderEntity createReader(ReaderEntity reader) {
+    public ReaderEntity createReader(ReaderEntity reader) throws NonUniqueResultException {
         if (reader.getName() == null || reader.getEmail() == null
                 || reader.getPwd() == null) { // necessary fields for constructor
             return null; // missing fields
@@ -69,7 +69,7 @@ public class ReaderSessionBean implements ReaderSessionBeanLocal {
     }
 
     @Override
-    public ReaderEntity authenticateReader(String email, String pwd) {
+    public ReaderEntity authenticateReader(String email, String pwd) throws EntityNotFoundException {
         if (email == null || pwd == null 
                 || email.isEmpty() || pwd.isEmpty())
         return null;
@@ -127,7 +127,8 @@ public class ReaderSessionBean implements ReaderSessionBeanLocal {
      * @return ReaderEntity w updated interested topics list
      */
     @Override
-    public ReaderEntity setInterestedTopics(ArrayList<String> topics, Long readerId) {
+    public ReaderEntity setInterestedTopics(ArrayList<String> topics, Long readerId) 
+            throws EntityNotFoundException {
         if (topics == null || readerId == null) {
             return null;
         }

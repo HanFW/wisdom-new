@@ -25,6 +25,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -80,7 +81,6 @@ public class ReaderResource {
         }
     }
     
-    @Path("")
     @POST
     public Response registerNewReader(final ReaderEntity reader) {
         try {    
@@ -101,12 +101,10 @@ public class ReaderResource {
         }
     }
     
-    @Path("emailConflict")
+    @Path("conflict")
     @GET
-    public Response checkEmailConflict(final JsonObject credentials) {
-        try {
-            final String email = credentials.getString("email");
-            
+    public Response checkEmailConflict(@QueryParam("email") final String email) {
+        try {            
             if (!readerSessionBean.readerHasEmailConflict(email)) { // no conflict
                 return Response.ok().build();
             } else { // email conflict OR unexpected exception

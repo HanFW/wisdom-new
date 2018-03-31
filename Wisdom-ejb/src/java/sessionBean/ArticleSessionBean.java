@@ -79,14 +79,16 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
     }
 
     @Override
-    public ArticleEntity getArticleById(Long articleId) {
+    public ArticleEntity getArticleById(Long articleId) 
+            throws EntityNotFoundException {
         if (articleId == null) {
             return null;
         }
 
         ArticleEntity article = entityManager.find(ArticleEntity.class, articleId);
         if (article == null) {
-            throw new EntityNotFoundException();
+            LOGGER.log(Level.SEVERE, "0. article w ID: {0} not found.", articleId);
+            throw new EntityNotFoundException("article " + articleId + " not found.");
         }
 
         return article;
@@ -99,7 +101,8 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
      * DESC order (newest articles to oldest)
      */
     @Override
-    public List<ArticleEntity> getNewestArticlesOfFollowedAuthors(Long readerId) {
+    public List<ArticleEntity> getNewestArticlesOfFollowedAuthors(Long readerId) 
+            throws EntityNotFoundException {
         if (readerId == null) {
             return null;
         }
@@ -114,7 +117,7 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
                 + "and f.author.id = a.author.id "
                 + "order by a.created DESC") // TODO: newest articles to oldest
                 .setParameter("readerId", readerId);
-        List<ArticleEntity> articles = null;
+        List<ArticleEntity> articles = new ArrayList<>();
         try {
             articles = q.getResultList();
         } catch (Exception e) {
@@ -130,7 +133,7 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
      * @return list of articles of a certain topic, created in the past 3 days,
      * from most upvotes to fewest
      */
-    @Override
+    @Override 
     public List<ArticleEntity> getMostLikedArticlesOfTopic(final String topic) {
         if (topic == null || topic.isEmpty()) {
             return null;
@@ -142,7 +145,7 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
                 + "order by a.numOfUpvotes DESC") // most upvotes to fewest
                 .setParameter("topic", topic)
                 .setParameter("threeDaysAgo", LocalDateTime.now().minusDays(3));
-        List<ArticleEntity> articles = null;
+        List<ArticleEntity> articles = new ArrayList<>();
         try {
             articles = q.getResultList();
         } catch (Exception e) {

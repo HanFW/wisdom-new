@@ -10,6 +10,8 @@ import entity.ReaderEntity;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Local;
+import javax.persistence.EntityNotFoundException;
+import javax.persistence.NonUniqueResultException;
 
 /**
  *
@@ -25,13 +27,13 @@ public interface ReaderSessionBeanLocal {
 
     ReaderEntity topUpWallet(Long readerId, Double amount);
 
-    ReaderEntity createReader(ReaderEntity reader);
+    ReaderEntity createReader(ReaderEntity reader) throws NonUniqueResultException;
     
-    ReaderEntity authenticateReader(String email, String pwd);
+    ReaderEntity authenticateReader(String email, String pwd) throws EntityNotFoundException;
 
     boolean readerHasEmailConflict(String email);
 
-    ReaderEntity setInterestedTopics(ArrayList<String> topics, Long readerId);
+    ReaderEntity setInterestedTopics(ArrayList<String> topics, Long readerId) throws EntityNotFoundException;
 
     
 }
