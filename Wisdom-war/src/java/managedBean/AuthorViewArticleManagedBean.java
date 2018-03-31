@@ -7,6 +7,7 @@ package managedBean;
 
 import entity.ArticleEntity;
 import entity.AuthorEntity;
+import exception.NoSuchEntityException;
 import java.io.Serializable;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -54,7 +55,11 @@ public class AuthorViewArticleManagedBean implements Serializable {
         articleId = Long.valueOf(ec.getFlash().get("articleId").toString());
         authorId = Long.valueOf(ec.getSessionMap().get("authorId").toString());
 
-        article = articleSessionBeanLocal.getArticleById(articleId);
+        try {
+            article = articleSessionBeanLocal.getArticleById(articleId);
+        } catch (NoSuchEntityException e) {
+            // TODO:
+        }
         author = authorSessionBeanLocal.retrieveAuthorById(authorId);
 
         filename = "author_" + authorId + ".png";

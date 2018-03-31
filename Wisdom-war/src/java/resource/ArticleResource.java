@@ -6,12 +6,12 @@
 package resource;
 
 import entity.ArticleEntity;
+import exception.NoSuchEntityException;
 import java.util.List;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.persistence.EntityNotFoundException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
@@ -65,11 +65,11 @@ public class ArticleResource {
             } else {
                 return Response.status(Status.BAD_REQUEST).entity("missing data").build();
             }
-        } catch (EntityNotFoundException e) { // article not found
-            LOGGER.log(Level.WARNING, "1. article w ID: {0} not found - " + e.getMessage(), articleId);
+        } catch (NoSuchEntityException e) { // article not found
+            LOGGER.log(Level.FINEST, "1. article w ID: {0} not found - " + e.getMessage(), articleId);
             return Response.status(Status.NOT_FOUND).entity(e.getMessage()).build();
         } catch (Exception e) {
-            LOGGER.log(Level.WARNING, "2. article w ID: {0} not found - " + e.getMessage(), articleId);
+            LOGGER.log(Level.FINEST, "2. article w ID: {0} not found - " + e.getMessage(), articleId);
             return Response.status(Status.NOT_FOUND).entity(e.getMessage()).build();
         }
     }
@@ -88,7 +88,7 @@ public class ArticleResource {
             } else {
                 return Response.status(Status.BAD_REQUEST).entity("missing data").build();
             }
-        } catch (EntityNotFoundException e) { // reader not found
+        } catch (NoSuchEntityException e) { // reader not found
             return Response.status(Status.NOT_FOUND).entity(e.getMessage()).build();
         }
     }

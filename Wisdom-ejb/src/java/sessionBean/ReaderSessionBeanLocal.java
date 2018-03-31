@@ -7,11 +7,11 @@ package sessionBean;
 
 import entity.AuthorEntity;
 import entity.ReaderEntity;
+import exception.DuplicateEntityException;
+import exception.NoSuchEntityException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Local;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.NonUniqueResultException;
 
 /**
  *
@@ -27,13 +27,13 @@ public interface ReaderSessionBeanLocal {
 
     ReaderEntity topUpWallet(Long readerId, Double amount);
 
-    ReaderEntity createReader(ReaderEntity reader) throws NonUniqueResultException;
+    ReaderEntity createReader(ReaderEntity reader) throws DuplicateEntityException;
     
-    ReaderEntity authenticateReader(String email, String pwd) throws EntityNotFoundException;
+    ReaderEntity authenticateReader(String email, String pwd) throws NoSuchEntityException;
 
     boolean readerHasEmailConflict(String email);
 
-    ReaderEntity setInterestedTopics(ArrayList<String> topics, Long readerId) throws EntityNotFoundException;
+    ReaderEntity setInterestedTopics(ArrayList<String> topics, Long readerId) throws NoSuchEntityException;
 
     
 }
