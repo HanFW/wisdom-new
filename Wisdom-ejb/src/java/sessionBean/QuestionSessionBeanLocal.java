@@ -20,4 +20,9 @@ public interface QuestionSessionBeanLocal {
 
     List<QuestionEntity> getQuestionsByReader(Long readerId);
     
+    List<QuestionEntity> getQuestionsByAuthorId(Long authorId, String status);
+    
+    void rejectQuestion (Long questionId);
+    
+    void replyToQuestion (Long questionId, String reply);
 }

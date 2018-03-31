@@ -33,6 +33,7 @@ public class QuestionEntity implements Serializable {
     private String status; // ANSWERED, REJECTED, PENDING, EXPIRED
     private String reply; // author's reply
     private LocalDateTime created;
+    private Double price;
     
     @OneToOne(cascade = {CascadeType.DETACH})
     private ReaderEntity reader; // raised the qtn
@@ -115,6 +116,14 @@ public class QuestionEntity implements Serializable {
 
     public void setCompensation(CompensationEntity compensation) {
         this.compensation = compensation;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
 
     @Override
