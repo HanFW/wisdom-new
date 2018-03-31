@@ -38,7 +38,7 @@ public class QuestionSessionBean implements QuestionSessionBeanLocal {
     }
     
     @Override
-    public QuestionEntity getQuestionById(Long questionId) {
+    public QuestionEntity getQuestionById(Long questionId) throws EntityNotFoundException {
         if (questionId == null) {
             return null;
         }
@@ -57,7 +57,7 @@ public class QuestionSessionBean implements QuestionSessionBeanLocal {
      * @return list of questions in DESC order (newest question to oldest)
      */
     @Override
-    public List<QuestionEntity> getQuestionsByReader(Long readerId) {
+    public List<QuestionEntity> getQuestionsByReader(Long readerId) throws EntityNotFoundException {
         if (readerId == null) {
             return null;
         }

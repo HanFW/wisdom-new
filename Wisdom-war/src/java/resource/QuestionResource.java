@@ -49,7 +49,6 @@ public class QuestionResource {
         LOGGER.addHandler(handler);
     }
     
-    @Path("")
     @GET
     public Response getQuestionsByReader(@QueryParam("readId") final Long readerId) {
         try {

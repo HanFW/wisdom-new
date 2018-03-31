@@ -6,7 +6,6 @@
 package resource;
 
 import entity.ArticleEntity;
-import static entity.RewardEntity_.article;
 import java.util.List;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
@@ -67,11 +66,14 @@ public class ArticleResource {
                 return Response.status(Status.BAD_REQUEST).entity("missing data").build();
             }
         } catch (EntityNotFoundException e) { // article not found
+            LOGGER.log(Level.WARNING, "1. article w ID: {0} not found - " + e.getMessage(), articleId);
+            return Response.status(Status.NOT_FOUND).entity(e.getMessage()).build();
+        } catch (Exception e) {
+            LOGGER.log(Level.WARNING, "2. article w ID: {0} not found - " + e.getMessage(), articleId);
             return Response.status(Status.NOT_FOUND).entity(e.getMessage()).build();
         }
     }
 
-    // TODO: get newest articles from followed authors
     @Path("newest")
     @GET
     public Response getNewestArticlesFromFollowedAuthors(
@@ -91,7 +93,6 @@ public class ArticleResource {
         }
     }
 
-    // TODO: get most liked articles in past 3 days of a topic
     @Path("mostLiked")
     @GET
     public Response getMostLikedArticlesOfTopic(
