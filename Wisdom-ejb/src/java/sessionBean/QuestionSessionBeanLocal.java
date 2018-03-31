@@ -28,4 +28,6 @@ public interface QuestionSessionBeanLocal {
     void replyToQuestion (Long questionId, String reply);
     
     void updateQuestionPrice (Long authorId, Double newPrice);
+    
+    void checkExpiredQuestions ();
 }
