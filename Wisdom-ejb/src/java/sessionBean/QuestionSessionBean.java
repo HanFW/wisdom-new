@@ -7,13 +7,13 @@ package sessionBean;
 
 import entity.QuestionEntity;
 import entity.ReaderEntity;
+import exception.NoSuchEntityException;
 import java.util.List;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -38,14 +38,14 @@ public class QuestionSessionBean implements QuestionSessionBeanLocal {
     }
     
     @Override
-    public QuestionEntity getQuestionById(Long questionId) throws EntityNotFoundException {
+    public QuestionEntity getQuestionById(Long questionId) throws NoSuchEntityException {
         if (questionId == null) {
             return null;
         }
 
         QuestionEntity question = em.find(QuestionEntity.class, questionId);
         if (question == null) {
-            throw new EntityNotFoundException();
+            throw new NoSuchEntityException("question " + questionId + " not found");
         }
 
         return question;
@@ -57,14 +57,15 @@ public class QuestionSessionBean implements QuestionSessionBeanLocal {
      * @return list of questions in DESC order (newest question to oldest)
      */
     @Override
-    public List<QuestionEntity> getQuestionsByReader(Long readerId) throws EntityNotFoundException {
+    public List<QuestionEntity> getQuestionsByReader(Long readerId) throws NoSuchEntityException {
         if (readerId == null) {
             return null;
         }
 
         ReaderEntity reader = em.find(ReaderEntity.class, readerId);
         if (reader == null) { // reader id not found
-            throw new EntityNotFoundException();
+            LOGGER.log(Level.SEVERE, "0. reader {0} not found", readerId);
+            throw new NoSuchEntityException("reader " + readerId + " not found");
         }
 
         Query q = em.createQuery("select q from QuestionEntity q "

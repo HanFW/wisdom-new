@@ -7,10 +7,10 @@ package sessionBean;
 
 import entity.ArticleEntity;
 import entity.ReaderEntity;
+import exception.NoSuchEntityException;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.ejb.Local;
-import javax.persistence.EntityNotFoundException;
 
 /**
  *
@@ -24,9 +24,9 @@ public interface ArticleSessionBeanLocal {
 
     public List<ArticleEntity> getArticlesByAuthorId(Long authorId);
 
-    public ArticleEntity getArticleById(Long articleId) throws EntityNotFoundException;
+    public ArticleEntity getArticleById(Long articleId) throws NoSuchEntityException;
 
-    public List<ArticleEntity> getNewestArticlesOfFollowedAuthors(Long readerId) throws EntityNotFoundException;
+    public List<ArticleEntity> getNewestArticlesOfFollowedAuthors(Long readerId) throws NoSuchEntityException;
 
     public List<ArticleEntity> getMostLikedArticlesOfTopic(final String topic);
 

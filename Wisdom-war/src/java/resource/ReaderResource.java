@@ -6,6 +6,8 @@
 package resource;
 
 import entity.ReaderEntity;
+import exception.DuplicateEntityException;
+import exception.NoSuchEntityException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.logging.ConsoleHandler;
@@ -14,8 +16,6 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
-import javax.persistence.EntityNotFoundException;
-import javax.persistence.NonUniqueResultException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
@@ -93,11 +93,11 @@ public class ReaderResource {
                         .entity(reader).build();
             } else { // missing fields
                 return Response.status(Status.BAD_REQUEST)
-                        .entity("missing reader attributes.").build();
+                        .entity("missing data.").build();
             }
-        } catch (NonUniqueResultException e) { // email conflict
+        } catch (DuplicateEntityException e) { // email conflict
             return Response.status(Status.CONFLICT)
-                        .entity("email already exists.").build();
+                        .entity(e.getMessage()).build();
         }
     }
     
@@ -134,7 +134,7 @@ public class ReaderResource {
             } else {
                 return Response.status(Status.BAD_REQUEST).entity("missing data").build();
             }
-        } catch (EntityNotFoundException e) { // reader not found
+        } catch (NoSuchEntityException e) { // reader not found
             return Response.status(Status.NOT_FOUND).entity(e.getMessage()).build();
         } catch (Exception e) { // invalid JsonArray, etc
             return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();

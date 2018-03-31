@@ -6,12 +6,12 @@
 package resource;
 
 import entity.QuestionEntity;
+import exception.NoSuchEntityException;
 import java.util.List;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.persistence.EntityNotFoundException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.GET;
@@ -50,7 +50,7 @@ public class QuestionResource {
     }
     
     @GET
-    public Response getQuestionsByReader(@QueryParam("readId") final Long readerId) {
+    public Response getQuestionsByReader(@QueryParam("readerId") final Long readerId) {
         try {
             List<QuestionEntity> questions = questionSessionBean.getQuestionsByReader(readerId);
             if (questions != null) { // success
@@ -60,7 +60,8 @@ public class QuestionResource {
             } else {
                 return Response.status(Status.BAD_REQUEST).entity("missing data").build();
             }
-        } catch (EntityNotFoundException e) { // reader not found
+        } catch (NoSuchEntityException e) { // reader not found
+            LOGGER.log(Level.SEVERE, "1. reader {0} not found", readerId);
             return Response.status(Status.NOT_FOUND).entity(e.getMessage()).build();
         }
     }
@@ -75,7 +76,7 @@ public class QuestionResource {
             } else {
                 return Response.status(Status.BAD_REQUEST).entity("missing data").build();
             }
-        } catch (EntityNotFoundException e) { // question not found
+        } catch (NoSuchEntityException e) { // question not found
             return Response.status(Status.NOT_FOUND).entity(e.getMessage()).build();
         }
     }

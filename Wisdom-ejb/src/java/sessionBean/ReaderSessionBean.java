@@ -8,6 +8,8 @@ package sessionBean;
 import entity.AuthorEntity;
 import entity.FollowEntity;
 import entity.ReaderEntity;
+import exception.DuplicateEntityException;
+import exception.NoSuchEntityException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.ConsoleHandler;
@@ -16,9 +18,7 @@ import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityNotFoundException;
 import javax.persistence.NoResultException;
-import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -48,14 +48,14 @@ public class ReaderSessionBean implements ReaderSessionBeanLocal {
      * @return the newly created ReaderEntity (inc. id)
      */
     @Override
-    public ReaderEntity createReader(ReaderEntity reader) throws NonUniqueResultException {
+    public ReaderEntity createReader(ReaderEntity reader) throws DuplicateEntityException {
         if (reader.getName() == null || reader.getEmail() == null
                 || reader.getPwd() == null) { // necessary fields for constructor
             return null; // missing fields
         }
 
         if (readerHasEmailConflict(reader.getEmail())) {
-            throw new NonUniqueResultException();
+            throw new DuplicateEntityException("reader " + reader.getEmail() + " exists.");
         }
         
         ReaderEntity newReader
@@ -69,7 +69,7 @@ public class ReaderSessionBean implements ReaderSessionBeanLocal {
     }
 
     @Override
-    public ReaderEntity authenticateReader(String email, String pwd) throws EntityNotFoundException {
+    public ReaderEntity authenticateReader(String email, String pwd) throws NoSuchEntityException {
         if (email == null || pwd == null 
                 || email.isEmpty() || pwd.isEmpty())
         return null;
@@ -87,7 +87,7 @@ public class ReaderSessionBean implements ReaderSessionBeanLocal {
                 return null;
         } catch (Exception e) {
             if (e instanceof NoResultException) { // email not found
-                throw new EntityNotFoundException();
+                throw new NoSuchEntityException("reader " + email + " not found");
             }
             LOGGER.log(Level.SEVERE, e.getMessage());
             return null;
@@ -128,14 +128,14 @@ public class ReaderSessionBean implements ReaderSessionBeanLocal {
      */
     @Override
     public ReaderEntity setInterestedTopics(ArrayList<String> topics, Long readerId) 
-            throws EntityNotFoundException {
+            throws NoSuchEntityException {
         if (topics == null || readerId == null) {
             return null;
         }
 
         ReaderEntity reader = em.find(ReaderEntity.class, readerId);
         if (reader == null) { // reader id not found
-            throw new EntityNotFoundException();
+            throw new NoSuchEntityException("reader " + readerId + " not found");
         }
         reader.setTopics(topics);
         em.merge(reader);
@@ -149,7 +149,7 @@ public class ReaderSessionBean implements ReaderSessionBeanLocal {
         ReaderEntity reader = em.find(ReaderEntity.class, readerId);
         AuthorEntity author = em.find(AuthorEntity.class, authorId);
         if (reader == null || author == null) {
-            throw new EntityNotFoundException();
+            throw new NoSuchEntityException("author " + authorId + " or reader " + readerId + " not found");
         }
 
         Query q = em.createNamedQuery("FollowEntity.findByAuthorAndReader")

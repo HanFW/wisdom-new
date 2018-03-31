@@ -8,6 +8,7 @@ package sessionBean;
 import entity.ArticleEntity;
 import entity.AuthorEntity;
 import entity.ReaderEntity;
+import exception.NoSuchEntityException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -80,15 +81,15 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
 
     @Override
     public ArticleEntity getArticleById(Long articleId) 
-            throws EntityNotFoundException {
+            throws NoSuchEntityException {
         if (articleId == null) {
             return null;
         }
 
         ArticleEntity article = entityManager.find(ArticleEntity.class, articleId);
         if (article == null) {
-            LOGGER.log(Level.SEVERE, "0. article w ID: {0} not found.", articleId);
-            throw new EntityNotFoundException("article " + articleId + " not found.");
+            LOGGER.log(Level.FINEST, "0. article w ID: {0} not found.", articleId);
+            throw new NoSuchEntityException("article " + articleId + " not found.");
         }
 
         return article;
@@ -102,14 +103,14 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
      */
     @Override
     public List<ArticleEntity> getNewestArticlesOfFollowedAuthors(Long readerId) 
-            throws EntityNotFoundException {
+            throws NoSuchEntityException {
         if (readerId == null) {
             return null;
         }
 
         ReaderEntity reader = entityManager.find(ReaderEntity.class, readerId);
         if (reader == null) { // reader id not found
-            throw new EntityNotFoundException();
+            throw new NoSuchEntityException("reader " + readerId + " not found");
         }
 
         Query q = entityManager.createQuery("select a from ArticleEntity a, FollowEntity f "
