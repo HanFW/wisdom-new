@@ -84,14 +84,14 @@ public class QuestionSessionBean implements QuestionSessionBeanLocal {
     }
     
     @Override
-    public List<QuestionEntity> getQuestionsByAuthorId(Long authorId, String status) {
+    public List<QuestionEntity> getQuestionsByAuthorId(Long authorId, String status) throws NoSuchEntityException{
         if (authorId == null) {
             return null;
         }
         
         AuthorEntity author = em.find(AuthorEntity.class, authorId);
         if (author == null) {
-            throw new EntityNotFoundException();
+            throw new NoSuchEntityException("author " + authorId + " not found.");
         }
         
         Query q = em.createQuery("select q from QuestionEntity q "

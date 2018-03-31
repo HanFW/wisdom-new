@@ -21,7 +21,7 @@ public interface QuestionSessionBeanLocal {
 
     List<QuestionEntity> getQuestionsByReader(Long readerId) throws NoSuchEntityException;
     
-    List<QuestionEntity> getQuestionsByAuthorId(Long authorId, String status);
+    List<QuestionEntity> getQuestionsByAuthorId(Long authorId, String status) throws NoSuchEntityException;
     
     void rejectQuestion (Long questionId);
     

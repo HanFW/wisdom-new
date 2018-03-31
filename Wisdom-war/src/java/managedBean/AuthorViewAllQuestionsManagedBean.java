@@ -6,7 +6,11 @@
 package managedBean;
 
 import entity.QuestionEntity;
+import exception.NoSuchEntityException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -69,19 +73,39 @@ public class AuthorViewAllQuestionsManagedBean {
     }
     
     public List<QuestionEntity> getPendingQuestions() {
-        return questionSessionBeanLocal.getQuestionsByAuthorId(authorId, Constants.STATUS_PENDING);
+        try {
+            return questionSessionBeanLocal.getQuestionsByAuthorId(Long.parseLong("5"), Constants.STATUS_PENDING);
+        } catch (NoSuchEntityException ex) {
+            Logger.getLogger(AuthorViewAllQuestionsManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     public List<QuestionEntity> getAnsweredQuestions() {
-        return questionSessionBeanLocal.getQuestionsByAuthorId(authorId, Constants.STATUS_ANSWERED);
+        try {
+            return questionSessionBeanLocal.getQuestionsByAuthorId(authorId, Constants.STATUS_ANSWERED);
+        } catch (NoSuchEntityException ex) {
+            Logger.getLogger(AuthorViewAllQuestionsManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     public List<QuestionEntity> getExpiredQuestions() {
-        return questionSessionBeanLocal.getQuestionsByAuthorId(authorId, Constants.STATUS_EXPIRED);
+        try {
+            return questionSessionBeanLocal.getQuestionsByAuthorId(authorId, Constants.STATUS_EXPIRED);
+        } catch (NoSuchEntityException ex) {
+            Logger.getLogger(AuthorViewAllQuestionsManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
     public List<QuestionEntity> getRejectedQuestions() {
-        return questionSessionBeanLocal.getQuestionsByAuthorId(authorId, Constants.STATUS_REJECTED);
+        try {
+            return questionSessionBeanLocal.getQuestionsByAuthorId(authorId, Constants.STATUS_REJECTED);
+        } catch (NoSuchEntityException ex) {
+            Logger.getLogger(AuthorViewAllQuestionsManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     public QuestionEntity getQuestion() {
