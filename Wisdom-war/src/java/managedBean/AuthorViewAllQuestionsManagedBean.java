@@ -74,7 +74,7 @@ public class AuthorViewAllQuestionsManagedBean {
     
     public List<QuestionEntity> getPendingQuestions() {
         try {
-            return questionSessionBeanLocal.getQuestionsByAuthorId(Long.parseLong("5"), Constants.STATUS_PENDING);
+            return questionSessionBeanLocal.getQuestionsByAuthorId(authorId, Constants.STATUS_PENDING);
         } catch (NoSuchEntityException ex) {
             Logger.getLogger(AuthorViewAllQuestionsManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
