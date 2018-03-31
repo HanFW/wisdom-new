@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,8 +30,10 @@ public class QuestionEntity implements Serializable {
     private Long id;
 
     private String title;
+    @Column(columnDefinition = "LONGTEXT")
     private String content; // reader's qtn
     private String status; // ANSWERED, REJECTED, PENDING, EXPIRED
+    @Column(columnDefinition = "LONGTEXT")
     private String reply; // author's reply
     private LocalDateTime created;
     private Double price;
