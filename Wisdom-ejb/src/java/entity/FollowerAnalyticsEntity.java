@@ -43,6 +43,18 @@ public class FollowerAnalyticsEntity implements Serializable {
 
     public FollowerAnalyticsEntity(Integer currentYear) {
         this.currentYear = currentYear;
+        this.jan = 0;
+        this.feb = 0;
+        this.mar = 0;
+        this.apr = 0;
+        this.may = 0;
+        this.jun = 0;
+        this.jul = 0;
+        this.aug = 0;
+        this.sep = 0;
+        this.oct = 0;
+        this.nov = 0;
+        this.december = 0;
     }
 
     public Long getId() {

@@ -76,18 +76,18 @@ public class AuthorViewFollowersAnalyticsManagedBean {
         LineChartSeries series1 = new LineChartSeries();
         series1.setLabel("Number of followers in " + followerAnalytics.getCurrentYear());
 
-        series1.set("Jan", 120);
-        series1.set("Feb", 120);
-        series1.set("Mar", 120);
-        series1.set("Apr", 120);
-        series1.set("May", 120);
-        series1.set("Jun", 120);
-        series1.set("Jul", 120);
-        series1.set("Aug", 120);
-        series1.set("Sep", 120);
-        series1.set("Oct", 120);
-        series1.set("Nov", 120);
-        series1.set("Dec", 120);
+        series1.set("Jan", followerAnalytics.getJan());
+        series1.set("Feb", followerAnalytics.getFeb());
+        series1.set("Mar", followerAnalytics.getMar());
+        series1.set("Apr", followerAnalytics.getApr());
+        series1.set("May", followerAnalytics.getMay());
+        series1.set("Jun", followerAnalytics.getJun());
+        series1.set("Jul", followerAnalytics.getJul());
+        series1.set("Aug", followerAnalytics.getAug());
+        series1.set("Sep", followerAnalytics.getSep());
+        series1.set("Oct", followerAnalytics.getOct());
+        series1.set("Nov", followerAnalytics.getNov());
+        series1.set("Dec", followerAnalytics.getDecember());
 
         model.addSeries(series1);
 

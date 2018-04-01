@@ -61,4 +61,8 @@ public class BISessionBean implements BISessionBeanLocal {
 
         return followerAnalytics;
     }
+
+    public void updateFollowersByMonth() {
+
+    }
 }
