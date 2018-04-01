@@ -61,7 +61,7 @@ public class AuthorSessionBean implements AuthorSessionBeanLocal {
         FollowerAnalyticsEntity followerAnalytics = new FollowerAnalyticsEntity();
 
         LocalDateTime created = LocalDateTime.now();
-        Long followerAnalyticsId = bISessionBeanLocal.addNewFollowerAnalytics(String.valueOf(created.getYear()));
+        Long followerAnalyticsId = bISessionBeanLocal.addNewFollowerAnalytics(Integer.valueOf(created.getYear()));
 
         try {
             followerAnalytics = bISessionBeanLocal.getFollowAnalyticsById(followerAnalyticsId);

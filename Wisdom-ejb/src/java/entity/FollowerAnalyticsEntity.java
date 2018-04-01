@@ -23,25 +23,25 @@ public class FollowerAnalyticsEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String currentYear;
-    private String jan;
-    private String feb;
-    private String mar;
-    private String apr;
-    private String may;
-    private String jun;
-    private String jul;
-    private String aug;
-    private String sep;
-    private String oct;
-    private String nov;
-    private String december;
+    private Integer currentYear;
+    private Integer jan;
+    private Integer feb;
+    private Integer mar;
+    private Integer apr;
+    private Integer may;
+    private Integer jun;
+    private Integer jul;
+    private Integer aug;
+    private Integer sep;
+    private Integer oct;
+    private Integer nov;
+    private Integer december;
 
     public FollowerAnalyticsEntity() {
 
     }
 
-    public FollowerAnalyticsEntity(String currentYear) {
+    public FollowerAnalyticsEntity(Integer currentYear) {
         this.currentYear = currentYear;
     }
 
@@ -49,107 +49,107 @@ public class FollowerAnalyticsEntity implements Serializable {
         return id;
     }
 
-    public String getCurrentYear() {
+    public Integer getCurrentYear() {
         return currentYear;
     }
 
-    public void setCurrentYear(String currentYear) {
+    public void setCurrentYear(Integer currentYear) {
         this.currentYear = currentYear;
     }
 
-    public String getJan() {
+    public Integer getJan() {
         return jan;
     }
 
-    public void setJan(String jan) {
+    public void setJan(Integer jan) {
         this.jan = jan;
     }
 
-    public String getFeb() {
+    public Integer getFeb() {
         return feb;
     }
 
-    public void setFeb(String feb) {
+    public void setFeb(Integer feb) {
         this.feb = feb;
     }
 
-    public String getMar() {
+    public Integer getMar() {
         return mar;
     }
 
-    public void setMar(String mar) {
+    public void setMar(Integer mar) {
         this.mar = mar;
     }
 
-    public String getApr() {
+    public Integer getApr() {
         return apr;
     }
 
-    public void setApr(String apr) {
+    public void setApr(Integer apr) {
         this.apr = apr;
     }
 
-    public String getMay() {
+    public Integer getMay() {
         return may;
     }
 
-    public void setMay(String may) {
+    public void setMay(Integer may) {
         this.may = may;
     }
 
-    public String getJun() {
+    public Integer getJun() {
         return jun;
     }
 
-    public void setJun(String jun) {
+    public void setJun(Integer jun) {
         this.jun = jun;
     }
 
-    public String getJul() {
+    public Integer getJul() {
         return jul;
     }
 
-    public void setJul(String jul) {
+    public void setJul(Integer jul) {
         this.jul = jul;
     }
 
-    public String getAug() {
+    public Integer getAug() {
         return aug;
     }
 
-    public void setAug(String aug) {
+    public void setAug(Integer aug) {
         this.aug = aug;
     }
 
-    public String getSep() {
+    public Integer getSep() {
         return sep;
     }
 
-    public void setSep(String sep) {
+    public void setSep(Integer sep) {
         this.sep = sep;
     }
 
-    public String getOct() {
+    public Integer getOct() {
         return oct;
     }
 
-    public void setOct(String oct) {
+    public void setOct(Integer oct) {
         this.oct = oct;
     }
 
-    public String getNov() {
+    public Integer getNov() {
         return nov;
     }
 
-    public void setNov(String nov) {
+    public void setNov(Integer nov) {
         this.nov = nov;
     }
 
-    public String getDecember() {
+    public Integer getDecember() {
         return december;
     }
 
-    public void setDecember(String december) {
+    public void setDecember(Integer december) {
         this.december = december;
     }
 

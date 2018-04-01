@@ -37,7 +37,7 @@ public class BISessionBean implements BISessionBeanLocal {
     }
 
     @Override
-    public Long addNewFollowerAnalytics(String currentYear) {
+    public Long addNewFollowerAnalytics(Integer currentYear) {
         FollowerAnalyticsEntity followerAnalytics = new FollowerAnalyticsEntity(currentYear);
 
         entityManager.persist(followerAnalytics);

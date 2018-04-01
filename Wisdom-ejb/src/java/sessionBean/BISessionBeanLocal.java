@@ -16,7 +16,7 @@ import javax.ejb.Local;
 @Local
 public interface BISessionBeanLocal {
 
-    public Long addNewFollowerAnalytics(String currentYear);
+    public Long addNewFollowerAnalytics(Integer currentYear);
 
     public FollowerAnalyticsEntity getFollowAnalyticsById(Long followAnalyticsId) throws NoSuchEntityException;
 }
