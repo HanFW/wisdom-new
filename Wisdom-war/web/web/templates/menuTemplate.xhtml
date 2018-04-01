@@ -24,7 +24,10 @@
                         <p:menuitem value="Articles" action="authorViewAllArticles?faces-redirect=true"/>
                         <p:menuitem value="Questions" action="authorViewAllQuestions?faces-redirect=true"/>
                         <p:menuitem value="Wallet" action="authorViewWallet?faces-redirect=true"/>
-                        <p:menuitem value="Analytics"/>
+                        <p:submenu label="Analytics">
+                            <p:menuitem value="Followers Analytics" action="authorViewFollowersAnalytics.xhtml?faces-redirect=true"/>
+                            <p:menuitem value="Income Analytics"/>
+                        </p:submenu>
                     </p:menu>
                 </h:form>
             </div>

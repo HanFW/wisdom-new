@@ -33,6 +33,7 @@ public class ArticleEntity implements Serializable {
 
     private String topic;
     private String title;
+    @Column(columnDefinition = "LONGTEXT")
     private String description; // short intro text
     private String picPath; // path to article picture
     @Column(columnDefinition = "LONGTEXT")

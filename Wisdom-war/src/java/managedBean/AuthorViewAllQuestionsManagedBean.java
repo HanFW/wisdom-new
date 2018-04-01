@@ -7,7 +7,6 @@ package managedBean;
 
 import entity.QuestionEntity;
 import exception.NoSuchEntityException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
