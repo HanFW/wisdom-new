@@ -162,13 +162,13 @@ public class AuthorViewIncomeAnalyticsManagedBean {
                 value = Double.valueOf(totalIncomeMap.getValue().toString());
                 size = articleSessionBeanLocal.getArticlesByTopic(key).size();
 
-                System.out.println("size " + size);
-                averageIncome.set(key, (value / size));
+                averageIncome.set(key, value / size);
             }
         }
 
+        averageIncome.setShowDataLabels(true);
         averageIncome.setTitle("Average Income per Article Topic");
-        averageIncome.setLegendPosition("w");
+        averageIncome.setLegendPosition("e");
     }
 
     public void testTipIncome1() {
