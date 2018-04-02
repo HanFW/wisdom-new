@@ -40,7 +40,7 @@ public class ArticleEntity implements Serializable {
     private String content;
     private Integer numOfUpvotes;
     private LocalDateTime created; // time of creation
-    private Double totalIncome;
+    private Double rewardIncomePerArticle;
 
     @ManyToOne(cascade = {CascadeType.DETACH})
     private AuthorEntity author;
@@ -51,7 +51,7 @@ public class ArticleEntity implements Serializable {
         this.picPath = null; // default to no pic
         this.numOfUpvotes = 0;
         this.created = LocalDateTime.now();
-        this.totalIncome = 0.0;
+        this.rewardIncomePerArticle = 0.0;
     }
 
     public ArticleEntity(String topic, String title, String description,
@@ -125,12 +125,12 @@ public class ArticleEntity implements Serializable {
         this.created = created;
     }
 
-    public Double getTotalIncome() {
-        return totalIncome;
+    public Double getRewardIncomePerArticle() {
+        return rewardIncomePerArticle;
     }
 
-    public void setTotalIncome(Double totalIncome) {
-        this.totalIncome = totalIncome;
+    public void setRewardIncomePerArticle(Double rewardIncomePerArticle) {
+        this.rewardIncomePerArticle = rewardIncomePerArticle;
     }
 
     public AuthorEntity getAuthor() {

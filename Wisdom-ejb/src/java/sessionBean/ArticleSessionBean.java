@@ -253,9 +253,9 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
         reward.setArticle(article);
         article.getRewards().add(reward);
 
-        Double totalIncome = article.getTotalIncome();
-        Double newTotalIncome = totalIncome + amount;
-        article.setTotalIncome(newTotalIncome);
+        Double rewardIncome = article.getRewardIncomePerArticle();
+        Double newRewardIncome = rewardIncome + amount;
+        article.setRewardIncomePerArticle(newRewardIncome);
 
         entityManager.persist(reward);
         entityManager.merge(reader);

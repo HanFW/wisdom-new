@@ -8,7 +8,6 @@ package managedBean;
 import entity.ArticleEntity;
 import entity.ReaderEntity;
 import exception.InsufficientBalanceException;
-import exception.NoSuchEntityException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +38,7 @@ public class AuthorViewIncomeAnalyticsManagedBean {
     private PieChartModel averageIncome;
     private Long authorId;
     private String articleTopic;
-    private HashMap<String, Double> totalIncomePerTopic = new HashMap<String, Double>();
+    private HashMap<String, Double> rewardIncomePerTopic = new HashMap<String, Double>();
     private Double artsIncome = 0.0;
     private Double fashionIncome = 0.0;
     private Double foodIncome = 0.0;
@@ -89,75 +88,75 @@ public class AuthorViewIncomeAnalyticsManagedBean {
 
             switch (articleTopic) {
                 case Constants.TOPIC_ARTS:
-                    artsIncome = artsIncome + article.get(i).getTotalIncome();
+                    artsIncome = artsIncome + article.get(i).getRewardIncomePerArticle();
                     break;
                 case Constants.TOPIC_FASHION:
-                    fashionIncome = fashionIncome + article.get(i).getTotalIncome();
+                    fashionIncome = fashionIncome + article.get(i).getRewardIncomePerArticle();
                     break;
                 case Constants.TOPIC_FOOD:
-                    foodIncome = foodIncome + article.get(i).getTotalIncome();
+                    foodIncome = foodIncome + article.get(i).getRewardIncomePerArticle();
                     break;
                 case Constants.TOPIC_LIFESTYLE:
-                    lifestyleIncome = lifestyleIncome + article.get(i).getTotalIncome();
+                    lifestyleIncome = lifestyleIncome + article.get(i).getRewardIncomePerArticle();
                     break;
                 case Constants.TOPIC_MUSIC:
-                    musicIncome = musicIncome + article.get(i).getTotalIncome();
+                    musicIncome = musicIncome + article.get(i).getRewardIncomePerArticle();
                     break;
                 case Constants.TOPIC_PHOTOGRAPHY:
-                    photographyIncome = photographyIncome + article.get(i).getTotalIncome();
+                    photographyIncome = photographyIncome + article.get(i).getRewardIncomePerArticle();
                     break;
                 case Constants.TOPIC_POLITICS:
-                    politicsIncome = politicsIncome + article.get(i).getTotalIncome();
+                    politicsIncome = politicsIncome + article.get(i).getRewardIncomePerArticle();
                     break;
                 case Constants.TOPIC_SPORTS:
-                    sportsIncome = sportsIncome + article.get(i).getTotalIncome();
+                    sportsIncome = sportsIncome + article.get(i).getRewardIncomePerArticle();
                     break;
                 case Constants.TOPIC_TECHNOLOGY:
-                    technologyIncome = technologyIncome + article.get(i).getTotalIncome();
+                    technologyIncome = technologyIncome + article.get(i).getRewardIncomePerArticle();
                     break;
                 case Constants.TOPIC_TRAVEL:
-                    travelIncome = travelIncome + article.get(i).getTotalIncome();
+                    travelIncome = travelIncome + article.get(i).getRewardIncomePerArticle();
                     break;
             }
         }
 
         if (artsIncome != 0.0) {
-            totalIncomePerTopic.put(Constants.TOPIC_ARTS, artsIncome);
+            rewardIncomePerTopic.put(Constants.TOPIC_ARTS, artsIncome);
         }
         if (fashionIncome != 0.0) {
-            totalIncomePerTopic.put(Constants.TOPIC_FASHION, fashionIncome);
+            rewardIncomePerTopic.put(Constants.TOPIC_FASHION, fashionIncome);
         }
         if (foodIncome != 0.0) {
-            totalIncomePerTopic.put(Constants.TOPIC_FOOD, foodIncome);
+            rewardIncomePerTopic.put(Constants.TOPIC_FOOD, foodIncome);
         }
         if (lifestyleIncome != 0.0) {
-            totalIncomePerTopic.put(Constants.TOPIC_LIFESTYLE, lifestyleIncome);
+            rewardIncomePerTopic.put(Constants.TOPIC_LIFESTYLE, lifestyleIncome);
         }
         if (musicIncome != 0.0) {
-            totalIncomePerTopic.put(Constants.TOPIC_MUSIC, musicIncome);
+            rewardIncomePerTopic.put(Constants.TOPIC_MUSIC, musicIncome);
         }
         if (photographyIncome != 0.0) {
-            totalIncomePerTopic.put(Constants.TOPIC_PHOTOGRAPHY, photographyIncome);
+            rewardIncomePerTopic.put(Constants.TOPIC_PHOTOGRAPHY, photographyIncome);
         }
         if (politicsIncome != 0.0) {
-            totalIncomePerTopic.put(Constants.TOPIC_POLITICS, politicsIncome);
+            rewardIncomePerTopic.put(Constants.TOPIC_POLITICS, politicsIncome);
         }
         if (sportsIncome != 0.0) {
-            totalIncomePerTopic.put(Constants.TOPIC_SPORTS, sportsIncome);
+            rewardIncomePerTopic.put(Constants.TOPIC_SPORTS, sportsIncome);
         }
         if (technologyIncome != 0.0) {
-            totalIncomePerTopic.put(Constants.TOPIC_TECHNOLOGY, technologyIncome);
+            rewardIncomePerTopic.put(Constants.TOPIC_TECHNOLOGY, technologyIncome);
         }
         if (travelIncome != 0.0) {
-            totalIncomePerTopic.put(Constants.TOPIC_TRAVEL, travelIncome);
+            rewardIncomePerTopic.put(Constants.TOPIC_TRAVEL, travelIncome);
         }
 
         averageIncome = new PieChartModel();
 
-        if (totalIncomePerTopic.isEmpty()) {
+        if (rewardIncomePerTopic.isEmpty()) {
             averageIncome.set("No Article Found", 0);
         } else {
-            for (Map.Entry totalIncomeMap : totalIncomePerTopic.entrySet()) {
+            for (Map.Entry totalIncomeMap : rewardIncomePerTopic.entrySet()) {
                 key = totalIncomeMap.getKey().toString();
                 value = Double.valueOf(totalIncomeMap.getValue().toString());
                 size = articleSessionBeanLocal.getArticlesByTopic(key).size();
