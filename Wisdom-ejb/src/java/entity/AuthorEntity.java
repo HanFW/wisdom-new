@@ -6,13 +6,17 @@
 package entity;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
@@ -41,6 +45,10 @@ public class AuthorEntity implements Serializable {
     private String pwd;
     private Double balance; // received credit
     private Double qtnPrice;  // author-defined question price (default to 5)
+    private LocalDateTime created;
+
+    @OneToOne(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
+    private FollowerAnalyticsEntity followerAnalytics;
 
     public AuthorEntity() {
         this.picPath = null; // default to no pic
@@ -54,6 +62,7 @@ public class AuthorEntity implements Serializable {
         this.description = description;
         this.email = email;
         this.pwd = pwd;
+        this.created = LocalDateTime.now();
     }
 
     public Long getId() {
@@ -112,6 +121,22 @@ public class AuthorEntity implements Serializable {
         this.qtnPrice = qtnPrice;
     }
 
+    public LocalDateTime getCreated() {
+        return created;
+    }
+
+    public void setCreated(LocalDateTime created) {
+        this.created = created;
+    }
+
+    public FollowerAnalyticsEntity getFollowerAnalytics() {
+        return followerAnalytics;
+    }
+
+    public void setFollowerAnalytics(FollowerAnalyticsEntity followerAnalytics) {
+        this.followerAnalytics = followerAnalytics;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -135,5 +160,4 @@ public class AuthorEntity implements Serializable {
         return "AuthorEntity{" + "id=" + id + ", name=" + name + ", description=" + description + ", picPath=" + picPath + ", email=" + email + ", pwd=" + pwd + ", balance=" + balance + ", qtnPrice=" + qtnPrice + '}';
     }
 
-   
 }

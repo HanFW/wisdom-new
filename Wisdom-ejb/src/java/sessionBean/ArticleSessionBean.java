@@ -70,7 +70,7 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
         AuthorEntity author = authorSessionBeanLocal.retrieveAuthorById(authorId);
 
         if (author.getId() == null) {
-            return new ArrayList<ArticleEntity>();
+            return null;
         }
         try {
             Query query = entityManager.createQuery("Select a From ArticleEntity a Where a.author=:author");
@@ -78,12 +78,12 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
             return query.getResultList();
         } catch (EntityNotFoundException enfe) {
             System.out.println("Entity not found error: " + enfe.getMessage());
-            return new ArrayList<ArticleEntity>();
+            return null;
         }
     }
 
     @Override
-    public ArticleEntity getArticleById(Long articleId) 
+    public ArticleEntity getArticleById(Long articleId)
             throws NoSuchEntityException {
         if (articleId == null) {
             return null;
@@ -105,7 +105,7 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
      * DESC order (newest articles to oldest)
      */
     @Override
-    public List<ArticleEntity> getNewestArticlesOfFollowedAuthors(Long readerId) 
+    public List<ArticleEntity> getNewestArticlesOfFollowedAuthors(Long readerId)
             throws NoSuchEntityException {
         if (readerId == null) {
             return null;
@@ -137,7 +137,7 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
      * @return list of articles of a certain topic, created in the past 3 days,
      * from most upvotes to fewest
      */
-    @Override 
+    @Override
     public List<ArticleEntity> getMostLikedArticlesOfTopic(final String topic) {
         if (topic == null || topic.isEmpty()) {
             return null;
@@ -196,7 +196,7 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
         }
         return reader.getSaved();
     }
-    
+
     @Override
     public ReaderEntity unsaveArticle(Long readerId, Long articleId) throws RepeatActionException {
         ReaderEntity reader = entityManager.find(ReaderEntity.class, readerId);
@@ -209,8 +209,8 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
             throw new RepeatActionException("Error! Article has not been saved by this reader");
         }
 
-        for(int i = 0; i< reader.getSaved().size(); i++){
-            if(reader.getSaved().get(i).equals(article)){
+        for (int i = 0; i < reader.getSaved().size(); i++) {
+            if (reader.getSaved().get(i).equals(article)) {
                 reader.getSaved().remove(i);
             }
         }
@@ -218,7 +218,7 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
 
         return reader;
     }
-    
+
     @Override
     public Boolean checkArticleSaved(Long readerId, Long articleId) {
         ReaderEntity reader = entityManager.find(ReaderEntity.class, readerId);
@@ -232,7 +232,7 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
         }
         return false;
     }
-    
+
     @Override
     public ReaderEntity tipArticle(Long readerId, Long articleId, Double amount) throws InsufficientBalanceException {
         ReaderEntity reader = entityManager.find(ReaderEntity.class, readerId);
@@ -241,13 +241,13 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
             return null;
         }
 
-        if(amount > reader.getBalance()){
+        if (amount > reader.getBalance()) {
             throw new InsufficientBalanceException("Insufficient Balance!");
         }
         reader.setBalance(reader.getBalance() - amount);
         AuthorEntity author = article.getAuthor();
         author.setBalance(author.getBalance() + amount);
-        
+
         //record the transaction
         RewardEntity reward = new RewardEntity(amount);
         reward.setArticle(article);

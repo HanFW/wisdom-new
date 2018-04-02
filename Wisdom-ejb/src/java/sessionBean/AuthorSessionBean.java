@@ -6,6 +6,10 @@
 package sessionBean;
 
 import entity.AuthorEntity;
+import entity.FollowerAnalyticsEntity;
+import exception.NoSuchEntityException;
+import java.time.LocalDateTime;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
@@ -23,6 +27,9 @@ public class AuthorSessionBean implements AuthorSessionBeanLocal {
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
+    @EJB(name = "FollowerAnalyticsSessionBeanLocal")
+    private FollowerAnalyticsSessionBeanLocal followerAnalyticsSessionBeanLocal;
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -35,13 +42,13 @@ public class AuthorSessionBean implements AuthorSessionBeanLocal {
             query.setParameter("authorId", authorId);
 
             if (query.getResultList().isEmpty()) {
-                return new AuthorEntity();
+                return null;
             } else {
                 author = (AuthorEntity) query.getSingleResult();
             }
         } catch (EntityNotFoundException enfe) {
             System.out.println("Entity not found error: " + enfe.getMessage());
-            return new AuthorEntity();
+            return null;
         } catch (NonUniqueResultException nure) {
             System.out.println("Non unique result error: " + nure.getMessage());
         }
@@ -51,32 +58,46 @@ public class AuthorSessionBean implements AuthorSessionBeanLocal {
 
     @Override
     public Long createNewAuthor(String username, String description, String email, String password) {
+        FollowerAnalyticsEntity followerAnalytics = new FollowerAnalyticsEntity();
+
+        LocalDateTime created = LocalDateTime.now();
+        Long followerAnalyticsId = followerAnalyticsSessionBeanLocal.addNewFollowerAnalytics(Integer.valueOf(created.getYear()));
+
+        try {
+            followerAnalytics = followerAnalyticsSessionBeanLocal.getFollowAnalyticsById(followerAnalyticsId);
+        } catch (NoSuchEntityException e) {
+            // TODO:
+        }
+
         AuthorEntity author = new AuthorEntity(username, description, email, password);
+        author.setFollowerAnalytics(followerAnalytics);
+
         entityManager.persist(author);
         entityManager.flush();
+
         return author.getId();
     }
-    
+
     @Override
     public AuthorEntity authorLogin(String email, String password) {
         AuthorEntity author = null;
-        
+
         Query query = entityManager.createQuery("Select a From AuthorEntity a Where a.email=:email");
         query.setParameter("email", email);
-        
+
         if (query.getResultList().isEmpty()) {
             System.out.println("Author login failed: invalid user.");
             return null;
         } else {
             author = (AuthorEntity) query.getSingleResult();
-            if(author.getPwd().equals(password)) {
+            if (author.getPwd().equals(password)) {
                 return author;
             } else {
                 return null;
             }
         }
     }
-    
+
     /**
      *
      * @param email
@@ -101,6 +122,4 @@ public class AuthorSessionBean implements AuthorSessionBeanLocal {
 
         return true;
     }
-
-    
 }
