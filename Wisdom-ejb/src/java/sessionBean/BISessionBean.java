@@ -10,6 +10,7 @@ import exception.NoSuchEntityException;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -23,6 +24,9 @@ public class BISessionBean implements BISessionBeanLocal {
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
+    @EJB(name = "FollowSessionBeanLocal")
+    private FollowSessionBeanLocal followSessionBeanLocal;
+
     private static final Logger LOGGER = Logger.getLogger(ReaderSessionBean.class.getName()); // used to output info
     private static ConsoleHandler handler = null; // set logger's output to console
 
@@ -62,7 +66,60 @@ public class BISessionBean implements BISessionBeanLocal {
         return followerAnalytics;
     }
 
-    public void updateFollowersByMonth() {
+    @Override
+    public void updateFollowersByMonth(Integer monthValue, Long followerAnalyticsId, Long authorId) {
 
+        FollowerAnalyticsEntity followerAnalytics = new FollowerAnalyticsEntity();
+        Integer numOfFollowers = 0;
+
+        try {
+            followerAnalytics = getFollowAnalyticsById(followerAnalyticsId);
+        } catch (NoSuchEntityException e) {
+            // TODO:
+        }
+
+        numOfFollowers = followSessionBeanLocal.getNumOfFollowers(authorId, monthValue);
+        System.out.println("numOfFollowers " + numOfFollowers);
+
+        switch (monthValue) {
+            case 1:
+                followerAnalytics.setJan(numOfFollowers);
+                break;
+            case 2:
+                followerAnalytics.setFeb(numOfFollowers);
+                break;
+            case 3:
+                followerAnalytics.setMar(numOfFollowers);
+                break;
+            case 4:
+                followerAnalytics.setApr(numOfFollowers);
+                break;
+            case 5:
+                followerAnalytics.setMay(numOfFollowers);
+                break;
+            case 6:
+                followerAnalytics.setJun(numOfFollowers);
+                break;
+            case 7:
+                followerAnalytics.setJul(numOfFollowers);
+                break;
+            case 8:
+                followerAnalytics.setAug(numOfFollowers);
+                break;
+            case 9:
+                followerAnalytics.setSep(numOfFollowers);
+                break;
+            case 10:
+                followerAnalytics.setOct(numOfFollowers);
+                break;
+            case 11:
+                followerAnalytics.setNov(numOfFollowers);
+                break;
+            case 12:
+                followerAnalytics.setDecember(numOfFollowers);
+                break;
+        }
+
+        entityManager.flush();
     }
 }

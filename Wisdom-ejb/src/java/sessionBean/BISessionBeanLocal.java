@@ -19,4 +19,6 @@ public interface BISessionBeanLocal {
     public Long addNewFollowerAnalytics(Integer currentYear);
 
     public FollowerAnalyticsEntity getFollowAnalyticsById(Long followAnalyticsId) throws NoSuchEntityException;
+
+    public void updateFollowersByMonth(Integer monthValue, Long followerAnalyticsId, Long authorId);
 }

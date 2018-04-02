@@ -5,7 +5,6 @@
  */
 package sessionBean;
 
-import entity.ArticleEntity;
 import entity.AuthorEntity;
 import entity.TransactionEntity;
 import java.util.ArrayList;

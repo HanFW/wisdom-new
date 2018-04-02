@@ -42,13 +42,13 @@ public class AuthorSessionBean implements AuthorSessionBeanLocal {
             query.setParameter("authorId", authorId);
 
             if (query.getResultList().isEmpty()) {
-                return new AuthorEntity();
+                return null;
             } else {
                 author = (AuthorEntity) query.getSingleResult();
             }
         } catch (EntityNotFoundException enfe) {
             System.out.println("Entity not found error: " + enfe.getMessage());
-            return new AuthorEntity();
+            return null;
         } catch (NonUniqueResultException nure) {
             System.out.println("Non unique result error: " + nure.getMessage());
         }
@@ -122,5 +122,4 @@ public class AuthorSessionBean implements AuthorSessionBeanLocal {
 
         return true;
     }
-
 }

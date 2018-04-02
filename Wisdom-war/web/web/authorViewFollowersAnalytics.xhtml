@@ -14,6 +14,8 @@
         <p:outputLabel value="Followers Analytics" style="font-weight: bold;font-size: 22px"/>
         <br/>
         <p:chart type="line" model="#{authorViewFollowersAnalyticsManagedBean.followersAnalytics}" style="height:300px;"/>
+
+        <p:commandButton value="Test - Follow an author" actionListener="#{authorViewFollowersAnalyticsManagedBean.testFollow()}"/>
     </ui:define>
 
 </ui:composition>

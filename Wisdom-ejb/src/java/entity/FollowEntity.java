@@ -22,16 +22,20 @@ import javax.persistence.OneToOne;
 @NamedQueries({
     @NamedQuery(name = "FollowEntity.findByAuthorAndReader",
             query = "SELECT f FROM FollowEntity f "
-                    + "WHERE f.author.id = :authorId "
-                    + "AND f.reader.id = :readerId" + " AND f.status != 'DELETED'"),
+            + "WHERE f.author.id = :authorId "
+            + "AND f.reader.id = :readerId" + " AND f.status != 'DELETED'"),
     @NamedQuery(name = "FollowEntity.findFollowedAuthorsByReader",
             query = "SELECT a FROM FollowEntity f, AuthorEntity a "
-                    + "WHERE f.author.id = a.id "
-                    + "AND f.reader.id = :readerId" + " AND f.status != 'DELETED'"),
+            + "WHERE f.author.id = a.id "
+            + "AND f.reader.id = :readerId" + " AND f.status != 'DELETED'"),
     @NamedQuery(name = "FollowEntity.findFollowersByAuthor",
             query = "SELECT f FROM FollowEntity f, ReaderEntity r "
-                    + "WHERE f.reader.id = r.id "
-                    + "AND f.author.id = :authorId " + " AND f.status != 'DELETED'")
+            + "WHERE f.reader.id = r.id "
+            + "AND f.author.id = :authorId " + " AND f.status != 'DELETED'"),
+    @NamedQuery(name = "FollowEntity.findFollowersByAuthor_PerMonth",
+            query = "SELECT f FROM FollowEntity f, ReaderEntity r "
+            + "WHERE f.reader.id = r.id "
+            + "AND f.author.id = :authorId " + " AND f.status != 'DELETED'")
 })
 @Entity
 public class FollowEntity implements Serializable {
@@ -41,17 +45,19 @@ public class FollowEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String status;
-    
+
     @OneToOne
     private AuthorEntity author;
     @OneToOne
     private ReaderEntity reader;
     private final LocalDateTime created;
+    private Integer createdMonth;
 
     public FollowEntity() {
         this.created = LocalDateTime.now();
+        this.createdMonth = created.getMonthValue();
     }
-    
+
     public Long getId() {
         return id;
     }
@@ -79,7 +85,14 @@ public class FollowEntity implements Serializable {
     public void setStatus(String status) {
         this.status = status;
     }
-    
+
+    public Integer getCreatedMonth() {
+        return createdMonth;
+    }
+
+    public void setCreatedMonth(Integer createdMonth) {
+        this.createdMonth = createdMonth;
+    }
 
     @Override
     public boolean equals(Object object) {
@@ -99,5 +112,4 @@ public class FollowEntity implements Serializable {
         return "FollowEntity{" + "id=" + id + ", author=" + author + ", reader=" + reader + ", created=" + created + '}';
     }
 
-    
 }
