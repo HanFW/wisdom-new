@@ -25,8 +25,9 @@ public class FollowSessionBean implements FollowSessionBeanLocal {
     @Override
     public Integer getNumOfFollowers(Long authorId, Integer monthValue) {
 
-        Query query = entityManager.createNamedQuery("FollowEntity.findFollowersByAuthor")
-                .setParameter("authorId", authorId);
+        Query query = entityManager.createNamedQuery("FollowEntity.findFollowersByAuthor_PerMonth")
+                .setParameter("authorId", authorId)
+                .setParameter("monthValue", monthValue);
         
         if (query.getResultList().isEmpty()) {
             return 0;

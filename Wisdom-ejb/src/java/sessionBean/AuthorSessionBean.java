@@ -27,8 +27,8 @@ public class AuthorSessionBean implements AuthorSessionBeanLocal {
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
-    @EJB(name = "BISessionBeanLocal")
-    private BISessionBeanLocal bISessionBeanLocal;
+    @EJB(name = "FollowerAnalyticsSessionBeanLocal")
+    private FollowerAnalyticsSessionBeanLocal followerAnalyticsSessionBeanLocal;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -61,10 +61,10 @@ public class AuthorSessionBean implements AuthorSessionBeanLocal {
         FollowerAnalyticsEntity followerAnalytics = new FollowerAnalyticsEntity();
 
         LocalDateTime created = LocalDateTime.now();
-        Long followerAnalyticsId = bISessionBeanLocal.addNewFollowerAnalytics(Integer.valueOf(created.getYear()));
+        Long followerAnalyticsId = followerAnalyticsSessionBeanLocal.addNewFollowerAnalytics(Integer.valueOf(created.getYear()));
 
         try {
-            followerAnalytics = bISessionBeanLocal.getFollowAnalyticsById(followerAnalyticsId);
+            followerAnalytics = followerAnalyticsSessionBeanLocal.getFollowAnalyticsById(followerAnalyticsId);
         } catch (NoSuchEntityException e) {
             // TODO:
         }

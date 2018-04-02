@@ -35,7 +35,8 @@ import javax.persistence.OneToOne;
     @NamedQuery(name = "FollowEntity.findFollowersByAuthor_PerMonth",
             query = "SELECT f FROM FollowEntity f, ReaderEntity r "
             + "WHERE f.reader.id = r.id "
-            + "AND f.author.id = :authorId " + " AND f.status != 'DELETED'")
+            + "AND f.author.id = :authorId " + " AND f.status != 'DELETED' "
+            + "AND f.createdMonth = :monthValue")
 })
 @Entity
 public class FollowEntity implements Serializable {

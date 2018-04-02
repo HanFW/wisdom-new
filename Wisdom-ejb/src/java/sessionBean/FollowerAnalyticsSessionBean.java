@@ -7,6 +7,7 @@ package sessionBean;
 
 import entity.FollowerAnalyticsEntity;
 import exception.NoSuchEntityException;
+import java.time.LocalDateTime;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,67 +21,66 @@ import javax.persistence.PersistenceContext;
  * @author Yongxue
  */
 @Stateless
-public class BISessionBean implements BISessionBeanLocal {
+public class FollowerAnalyticsSessionBean implements FollowerAnalyticsSessionBeanLocal {
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
     @EJB(name = "FollowSessionBeanLocal")
     private FollowSessionBeanLocal followSessionBeanLocal;
-
+    
     private static final Logger LOGGER = Logger.getLogger(ReaderSessionBean.class.getName()); // used to output info
     private static ConsoleHandler handler = null; // set logger's output to console
 
     @PersistenceContext
     private EntityManager entityManager;
-
-    public BISessionBean() {
+    
+    public FollowerAnalyticsSessionBean() {
         handler = new ConsoleHandler();
         handler.setLevel(Level.FINEST);
         LOGGER.setLevel(Level.ALL);
         LOGGER.addHandler(handler);
     }
-
+    
     @Override
     public Long addNewFollowerAnalytics(Integer currentYear) {
         FollowerAnalyticsEntity followerAnalytics = new FollowerAnalyticsEntity(currentYear);
-
+        
         entityManager.persist(followerAnalytics);
         entityManager.flush();
-
+        
         return followerAnalytics.getId();
     }
-
+    
     @Override
     public FollowerAnalyticsEntity getFollowAnalyticsById(Long followAnalyticsId) throws NoSuchEntityException {
-
+        
         if (followAnalyticsId == null) {
             return null;
         }
-
+        
         FollowerAnalyticsEntity followerAnalytics = entityManager.find(FollowerAnalyticsEntity.class, followAnalyticsId);
         if (followerAnalytics == null) {
             LOGGER.log(Level.FINEST, "0. followerAnalytics w ID: {0} not found.", followAnalyticsId);
             throw new NoSuchEntityException("followerAnalytics " + followAnalyticsId + " not found.");
         }
-
+        
         return followerAnalytics;
     }
-
+    
     @Override
     public void updateFollowersByMonth(Integer monthValue, Long followerAnalyticsId, Long authorId) {
-
+        
         FollowerAnalyticsEntity followerAnalytics = new FollowerAnalyticsEntity();
         Integer numOfFollowers = 0;
-
+        
         try {
             followerAnalytics = getFollowAnalyticsById(followerAnalyticsId);
         } catch (NoSuchEntityException e) {
             // TODO:
         }
-
+        
         numOfFollowers = followSessionBeanLocal.getNumOfFollowers(authorId, monthValue);
-        System.out.println("numOfFollowers " + numOfFollowers);
-
+        
         switch (monthValue) {
             case 1:
                 followerAnalytics.setJan(numOfFollowers);
@@ -119,7 +119,35 @@ public class BISessionBean implements BISessionBeanLocal {
                 followerAnalytics.setDecember(numOfFollowers);
                 break;
         }
-
+        
+        entityManager.flush();
+    }
+    
+    @Override
+    public void updateAllMonthToZero(Long followerAnalyticsId) {
+        
+        FollowerAnalyticsEntity followerAnalytics = new FollowerAnalyticsEntity();
+        LocalDateTime currentTime = LocalDateTime.now();
+        
+        try {
+            followerAnalytics = getFollowAnalyticsById(followerAnalyticsId);
+        } catch (NoSuchEntityException e) {
+            // TODO:
+        }
+        
+        followerAnalytics.setFeb(0);
+        followerAnalytics.setMar(0);
+        followerAnalytics.setApr(0);
+        followerAnalytics.setMay(0);
+        followerAnalytics.setJun(0);
+        followerAnalytics.setJul(0);
+        followerAnalytics.setAug(0);
+        followerAnalytics.setSep(0);
+        followerAnalytics.setOct(0);
+        followerAnalytics.setNov(0);
+        followerAnalytics.setDecember(0);
+        followerAnalytics.setCurrentYear(currentTime.getYear());
+        
         entityManager.flush();
     }
 }

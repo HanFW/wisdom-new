@@ -14,11 +14,13 @@ import javax.ejb.Local;
  * @author Yongxue
  */
 @Local
-public interface BISessionBeanLocal {
+public interface FollowerAnalyticsSessionBeanLocal {
 
     public Long addNewFollowerAnalytics(Integer currentYear);
 
     public FollowerAnalyticsEntity getFollowAnalyticsById(Long followAnalyticsId) throws NoSuchEntityException;
 
     public void updateFollowersByMonth(Integer monthValue, Long followerAnalyticsId, Long authorId);
+
+    public void updateAllMonthToZero(Long followerAnalyticsId);
 }

@@ -21,7 +21,7 @@ import org.primefaces.model.chart.CategoryAxis;
 import org.primefaces.model.chart.LineChartModel;
 import org.primefaces.model.chart.LineChartSeries;
 import sessionBean.AuthorSessionBeanLocal;
-import sessionBean.BISessionBeanLocal;
+import sessionBean.FollowerAnalyticsSessionBeanLocal;
 import sessionBean.ReaderSessionBeanLocal;
 
 /**
@@ -38,8 +38,8 @@ public class AuthorViewFollowersAnalyticsManagedBean {
     @EJB(name = "AuthorSessionBeanLocal")
     private AuthorSessionBeanLocal authorSessionBeanLocal;
     
-    @EJB(name = "BISessionBeanLocal")
-    private BISessionBeanLocal bISessionBeanLocal;
+    @EJB(name = "FollowerAnalyticsSessionBeanLocal")
+    private FollowerAnalyticsSessionBeanLocal followerAnalyticsSessionBeanLocal;
     
     @EJB(name = "ReaderSessionBeanLocal")
     private ReaderSessionBeanLocal readerSessionBeanLocal;
@@ -82,7 +82,7 @@ public class AuthorViewFollowersAnalyticsManagedBean {
         followerAnalytics = author.getFollowerAnalytics();
         
         LocalDateTime currentTime = LocalDateTime.now();
-        bISessionBeanLocal.updateFollowersByMonth(currentTime.getMonthValue(), followerAnalytics.getId(), author.getId());
+        followerAnalyticsSessionBeanLocal.updateFollowersByMonth(currentTime.getMonthValue(), followerAnalytics.getId(), author.getId());
         
         LineChartModel model = new LineChartModel();
         
