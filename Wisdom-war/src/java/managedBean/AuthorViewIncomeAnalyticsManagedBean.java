@@ -6,6 +6,9 @@
 package managedBean;
 
 import entity.ArticleEntity;
+import entity.ReaderEntity;
+import exception.InsufficientBalanceException;
+import exception.NoSuchEntityException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +50,10 @@ public class AuthorViewIncomeAnalyticsManagedBean {
     private Double sportsIncome = 0.0;
     private Double technologyIncome = 0.0;
     private Double travelIncome = 0.0;
+
+    private String key;
+    private Double value;
+    private Integer size;
 
     private ExternalContext ec;
 
@@ -147,15 +154,64 @@ public class AuthorViewIncomeAnalyticsManagedBean {
 
         averageIncome = new PieChartModel();
 
-        for (Map.Entry totalIncomeMap : totalIncomePerTopic.entrySet()) {
-            System.out.println(totalIncomeMap.getKey() + " " + totalIncomeMap.getValue());
+        if (totalIncomePerTopic.isEmpty()) {
+            averageIncome.set("No Article Found", 0);
+        } else {
+            for (Map.Entry totalIncomeMap : totalIncomePerTopic.entrySet()) {
+                key = totalIncomeMap.getKey().toString();
+                value = Double.valueOf(totalIncomeMap.getValue().toString());
+                size = articleSessionBeanLocal.getArticlesByTopic(key).size();
+
+                System.out.println("size " + size);
+                averageIncome.set(key, (value / size));
+            }
         }
-        averageIncome.set("Brand 1", 540);
-        averageIncome.set("Brand 2", 325);
-        averageIncome.set("Brand 3", 702);
-        averageIncome.set("Brand 4", 421);
 
         averageIncome.setTitle("Average Income per Article Topic");
         averageIncome.setLegendPosition("w");
+    }
+
+    public void testTipIncome1() {
+
+        ReaderEntity reader = new ReaderEntity();
+
+        try {
+            reader = articleSessionBeanLocal.tipArticle(Long.valueOf(1), Long.valueOf(1), 13.0);
+        } catch (InsufficientBalanceException e) {
+
+        }
+    }
+
+    public void testTipIncome2() {
+
+        ReaderEntity reader = new ReaderEntity();
+
+        try {
+            reader = articleSessionBeanLocal.tipArticle(Long.valueOf(1), Long.valueOf(1), 8.0);
+        } catch (InsufficientBalanceException e) {
+
+        }
+    }
+
+    public void testTipIncome3() {
+
+        ReaderEntity reader = new ReaderEntity();
+
+        try {
+            reader = articleSessionBeanLocal.tipArticle(Long.valueOf(1), Long.valueOf(2), 15.0);
+        } catch (InsufficientBalanceException e) {
+
+        }
+    }
+
+    public void testTipIncome4() {
+
+        ReaderEntity reader = new ReaderEntity();
+
+        try {
+            reader = articleSessionBeanLocal.tipArticle(Long.valueOf(1), Long.valueOf(2), 24.0);
+        } catch (InsufficientBalanceException e) {
+
+        }
     }
 }
