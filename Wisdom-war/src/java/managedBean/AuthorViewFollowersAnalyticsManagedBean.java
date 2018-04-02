@@ -82,7 +82,7 @@ public class AuthorViewFollowersAnalyticsManagedBean {
         followerAnalytics = author.getFollowerAnalytics();
         
         LocalDateTime currentTime = LocalDateTime.now();
-        followerAnalyticsSessionBeanLocal.updateFollowersByMonth(currentTime.getMonthValue(), followerAnalytics.getId(), author.getId());
+        followerAnalyticsSessionBeanLocal.updateFollowersMonthly(currentTime.getMonthValue(), followerAnalytics.getId(), author.getId());
         
         LineChartModel model = new LineChartModel();
         

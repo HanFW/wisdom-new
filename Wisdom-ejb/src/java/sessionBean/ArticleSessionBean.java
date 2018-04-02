@@ -252,12 +252,29 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
         RewardEntity reward = new RewardEntity(amount);
         reward.setArticle(article);
         article.getRewards().add(reward);
-        
+
+        Double totalIncome = article.getTotalIncome();
+        Double newTotalIncome = totalIncome + amount;
+        article.setTotalIncome(newTotalIncome);
+
         entityManager.persist(reward);
         entityManager.merge(reader);
         entityManager.merge(author);
         entityManager.merge(article);
         entityManager.flush();
         return reader;
+    }
+
+    @Override
+    public List<ArticleEntity> getArticlesByTopic(String topic) {
+
+        try {
+            Query query = entityManager.createQuery("Select a From ArticleEntity a Where a.topic=:topic");
+            query.setParameter("topic", topic);
+            return query.getResultList();
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("Entity not found error: " + enfe.getMessage());
+            return new ArrayList<ArticleEntity>();
+        }
     }
 }
