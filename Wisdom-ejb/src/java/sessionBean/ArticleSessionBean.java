@@ -251,9 +251,12 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
         //record the transaction
         RewardEntity reward = new RewardEntity(amount);
         reward.setArticle(article);
+        article.getRewards().add(reward);
         
         entityManager.persist(reward);
         entityManager.merge(reader);
+        entityManager.merge(author);
+        entityManager.merge(article);
         entityManager.flush();
         return reader;
     }

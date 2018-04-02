@@ -6,8 +6,10 @@
 package sessionBean;
 
 import entity.AuthorEntity;
+import entity.CompensationEntity;
 import entity.QuestionEntity;
 import entity.ReaderEntity;
+import exception.InsufficientBalanceException;
 import exception.NoSuchEntityException;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -174,4 +176,44 @@ public class QuestionSessionBean implements QuestionSessionBeanLocal {
             }
         }
     }
+
+    @Override
+    public ReaderEntity askQuestion(Long readerId, Long authorId, QuestionEntity question) throws NoSuchEntityException, InsufficientBalanceException {
+        ReaderEntity reader = em.find(ReaderEntity.class, readerId);
+        AuthorEntity author = em.find(AuthorEntity.class, authorId);
+        if (reader == null || author == null) {
+            throw new NoSuchEntityException("author " + authorId + " or reader " + readerId + " not found");
+        }
+        
+        
+        if(author.getQtnPrice() > reader.getBalance()){
+            throw new InsufficientBalanceException("Insufficient Balance!");
+        }
+        //deduct the question price from reader
+        reader.setBalance(reader.getBalance() - author.getQtnPrice());
+        em.merge(reader);
+        
+        //create question
+        QuestionEntity newQuestion = new QuestionEntity(question.getTitle(), question.getContent());
+        newQuestion.setAuthor(author);
+        newQuestion.setReader(reader);
+        newQuestion.setPrice(author.getQtnPrice());
+        em.persist(newQuestion);
+        em.flush();
+        em.refresh(newQuestion);
+        
+        //record transaction
+        CompensationEntity compensation = new CompensationEntity(author.getQtnPrice());
+        compensation.setQuestion(newQuestion);
+        em.persist(compensation);
+        em.flush();
+        
+        newQuestion.setCompensation(compensation);
+        em.merge(newQuestion);
+        em.flush();
+        
+        return reader;
+    }
+    
+    
 }

@@ -6,6 +6,8 @@
 package sessionBean;
 
 import entity.QuestionEntity;
+import entity.ReaderEntity;
+import exception.InsufficientBalanceException;
 import exception.NoSuchEntityException;
 import java.util.List;
 import javax.ejb.Local;
@@ -30,4 +32,6 @@ public interface QuestionSessionBeanLocal {
     void updateQuestionPrice (Long authorId, Double newPrice);
     
     void checkExpiredQuestions ();
+
+    ReaderEntity askQuestion(Long readerId, Long authorId, QuestionEntity question) throws NoSuchEntityException, InsufficientBalanceException;
 }

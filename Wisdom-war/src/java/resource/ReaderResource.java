@@ -193,7 +193,7 @@ public class ReaderResource {
             Boolean result = readerSessionBean.checkFollow(readerId,authorId);
             
             if (result != null) { // success
-                return Response.ok().build();
+                return Response.ok().entity(result).build();
             } else {
                 return Response.status(Status.BAD_REQUEST).entity("missing data").build();
             }

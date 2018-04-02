@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "AuthorEntity.findFollowedAuthorsByReader",
             query = "SELECT a FROM FollowEntity f, AuthorEntity a "
                     + "WHERE f.author.id = a.id "
-                    + "AND f.reader.id = :readerId")
+                    + "AND f.reader.id = :readerId " + "AND f.status != 'DELETED'")
 })
 @Entity
 public class AuthorEntity implements Serializable {

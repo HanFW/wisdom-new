@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
+import utility.Constants;
 
 /**
  *
@@ -23,7 +24,7 @@ import javax.persistence.OneToOne;
     @NamedQuery(name = "FollowEntity.findByAuthorAndReader",
             query = "SELECT f FROM FollowEntity f "
                     + "WHERE f.author.id = :authorId "
-                    + "AND f.reader.id = :readerId" + " AND f.status != 'DELETED'"),
+                    + "AND f.reader.id = :readerId" + " AND f.status != 'DELECTED'"),
     @NamedQuery(name = "FollowEntity.findFollowedAuthorsByReader",
             query = "SELECT a FROM FollowEntity f, AuthorEntity a "
                     + "WHERE f.author.id = a.id "
@@ -50,6 +51,7 @@ public class FollowEntity implements Serializable {
 
     public FollowEntity() {
         this.created = LocalDateTime.now();
+        this.status = Constants.STATUS_ACTIVE;
     }
     
     public Long getId() {

@@ -6,15 +6,19 @@
 package resource;
 
 import entity.QuestionEntity;
+import entity.ReaderEntity;
+import exception.InsufficientBalanceException;
 import exception.NoSuchEntityException;
 import java.util.List;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.json.JsonObject;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
@@ -81,5 +85,24 @@ public class QuestionResource {
         }
     }
     
+    @Path("{id}/ask/{authorId}")
+    @POST
+    public Response askQuestion(@PathParam("id") final Long readerId,
+            @PathParam("authorId") final Long authorId,
+            final QuestionEntity question) {
+
+        try {
+            ReaderEntity reader = questionSessionBean.askQuestion(readerId, authorId, question);
+            if (reader != null) { // success
+                return Response.ok().entity(reader).build();
+            } else {
+                return Response.status(Status.BAD_REQUEST).entity("missing data").build();
+            }
+        } catch(InsufficientBalanceException e){
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }catch (NoSuchEntityException e) { // question not found
+            return Response.status(Status.NOT_FOUND).entity(e.getMessage()).build();
+        }
+    }
 
 }
