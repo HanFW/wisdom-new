@@ -12,6 +12,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -42,6 +43,7 @@ public class AuthorAddNewArticleManagedBean implements Serializable {
     private String articleDescription;
     private String articleContent;
     private LocalDateTime created;
+    private String createdString;
     private String picPath;
 
     private UploadedFile imageFile;
@@ -99,7 +101,10 @@ public class AuthorAddNewArticleManagedBean implements Serializable {
         ec = FacesContext.getCurrentInstance().getExternalContext();
 
         authorId = Long.valueOf(ec.getSessionMap().get("authorId").toString());
-        created = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        createdString = LocalDateTime.now().format(formatter);
+        created = LocalDateTime.parse(createdString, formatter);
+
         articleDuplicate = articleSessionBeanLocal.checkDuplicateArticle(artilceTitle, authorId);
 
         switch (articleDuplicate) {
