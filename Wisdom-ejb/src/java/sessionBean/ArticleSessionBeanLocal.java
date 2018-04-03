@@ -22,7 +22,7 @@ import javax.ejb.Local;
 public interface ArticleSessionBeanLocal {
 
     public Long addNewArticle(String topic, String title, String description,
-            String context, LocalDateTime created, Long authorId);
+            String context, LocalDateTime created, String picPath, Long authorId);
 
     public List<ArticleEntity> getArticlesByAuthorId(Long authorId);
 
@@ -45,5 +45,7 @@ public interface ArticleSessionBeanLocal {
     public ReaderEntity tipArticle(Long readerId, Long articleId, Double amount) throws InsufficientBalanceException;
 
     public List<ArticleEntity> getArticlesByTopic(String topic);
+
+    public String checkDuplicateArticle(String title, Long authorId);
 
 }

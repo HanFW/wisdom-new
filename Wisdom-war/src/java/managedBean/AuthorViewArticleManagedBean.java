@@ -39,6 +39,7 @@ public class AuthorViewArticleManagedBean implements Serializable {
     private Long authorId;
     private String picPath;
     private String filename;
+    private String articleUUID;
 
     private ArticleEntity article;
     private AuthorEntity author;
@@ -61,8 +62,9 @@ public class AuthorViewArticleManagedBean implements Serializable {
             // TODO:
         }
         author = authorSessionBeanLocal.retrieveAuthorById(authorId);
+        articleUUID = article.getPicPath();
 
-        filename = "author_" + authorId + ".png";
+        filename = "author_" + authorId + "_" + articleUUID + ".png";
         picPath = "http://localhost:8080/" + filename;
     }
 

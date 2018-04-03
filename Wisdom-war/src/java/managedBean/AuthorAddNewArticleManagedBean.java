@@ -10,12 +10,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.UUID;
 import javax.ejb.EJB;
 import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 import sessionBean.ArticleSessionBeanLocal;
@@ -25,8 +28,8 @@ import sessionBean.ArticleSessionBeanLocal;
  * @author Yongxue
  */
 @Named(value = "authorAddNewArticleManagedBean")
-@RequestScoped
-public class AuthorAddNewArticleManagedBean {
+@ViewScoped
+public class AuthorAddNewArticleManagedBean implements Serializable {
 
     /**
      * Creates a new instance of AddNewArticleManagedBean
@@ -39,10 +42,12 @@ public class AuthorAddNewArticleManagedBean {
     private String articleDescription;
     private String articleContent;
     private LocalDateTime created;
+    private String picPath;
 
     private UploadedFile imageFile;
     private Long newArticleId;
     private Long authorId;
+    private String articleDuplicate;
 
     private ExternalContext ec;
 
@@ -95,11 +100,22 @@ public class AuthorAddNewArticleManagedBean {
 
         authorId = Long.valueOf(ec.getSessionMap().get("authorId").toString());
         created = LocalDateTime.now();
+        articleDuplicate = articleSessionBeanLocal.checkDuplicateArticle(artilceTitle, authorId);
 
-        newArticleId = articleSessionBeanLocal.addNewArticle(articleTopic,
-                artilceTitle, articleDescription, articleContent, created, authorId);
+        switch (articleDuplicate) {
+            case "Unique":
+                newArticleId = articleSessionBeanLocal.addNewArticle(articleTopic,
+                        artilceTitle, articleDescription, articleContent, created,
+                        picPath, authorId);
 
-        ec.redirect(ec.getRequestContextPath() + "/web/authorViewAllArticles.xhtml?faces-redirect=true");
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Successfully Submitted!", " "));
+                ec.getFlash().setKeepMessages(true);
+                ec.redirect(ec.getRequestContextPath() + "/web/authorViewAllArticles.xhtml?faces-redirect=true");
+                break;
+            case "Duplicate":
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Duplicate Article!", " "));
+                break;
+        }
     }
 
     public void upload(FileUploadEvent event) throws IOException {
@@ -108,9 +124,10 @@ public class AuthorAddNewArticleManagedBean {
 
         imageFile = event.getFile();
         authorId = Long.valueOf(ec.getSessionMap().get("authorId").toString());
+        picPath = UUID.randomUUID().toString();
 
         if (imageFile != null) {
-            String filename = "author_" + authorId + ".png";
+            String filename = "author_" + authorId + "_" + picPath + ".png";
 
             String newFilePath = System.getProperty("user.dir").replace("config", "docroot") + System.getProperty("file.separator");
             OutputStream output = new FileOutputStream(new File(newFilePath, filename));
