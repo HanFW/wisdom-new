@@ -7,6 +7,8 @@ package entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -16,6 +18,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -26,8 +29,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = "AuthorEntity.findFollowedAuthorsByReader",
             query = "SELECT a FROM FollowEntity f, AuthorEntity a "
-                    + "WHERE f.author.id = a.id "
-                    + "AND f.reader.id = :readerId " + "AND f.status != 'DELETED'")
+            + "WHERE f.author.id = a.id "
+            + "AND f.reader.id = :readerId " + "AND f.status != 'DELETED'")
 })
 @Entity
 public class AuthorEntity implements Serializable {
@@ -49,6 +52,8 @@ public class AuthorEntity implements Serializable {
 
     @OneToOne(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
     private FollowerAnalyticsEntity followerAnalytics;
+    @OneToMany(cascade = CascadeType.DETACH)
+    private List<IncomeAnalyticsEntity> incomeAnalytics = new ArrayList<>();
 
     public AuthorEntity() {
         this.picPath = null; // default to no pic
@@ -135,6 +140,14 @@ public class AuthorEntity implements Serializable {
 
     public void setFollowerAnalytics(FollowerAnalyticsEntity followerAnalytics) {
         this.followerAnalytics = followerAnalytics;
+    }
+
+    public List<IncomeAnalyticsEntity> getIncomeAnalytics() {
+        return incomeAnalytics;
+    }
+
+    public void setIncomeAnalytics(List<IncomeAnalyticsEntity> incomeAnalytics) {
+        this.incomeAnalytics = incomeAnalytics;
     }
 
     @Override

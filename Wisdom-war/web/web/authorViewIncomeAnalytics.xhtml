@@ -12,8 +12,14 @@
 
     <ui:define name="content">
         <p:outputLabel value="Income Analytics" style="font-weight: bold;font-size: 22px"/>
-        <br/>
+        <br/><br/>
         <p:chart type="pie" model="#{authorViewIncomeAnalyticsManagedBean.averageIncome}" style="width:400px;height:300px" />
+
+        <p:commandButton value="Test 1 - Tip an Article" actionListener="#{authorViewIncomeAnalyticsManagedBean.testTipIncome1()}"/>
+        <p:commandButton value="Test 2 - Tip an Article" actionListener="#{authorViewIncomeAnalyticsManagedBean.testTipIncome2()}"/>
+        <p:commandButton value="Test 3 - Tip an Article" actionListener="#{authorViewIncomeAnalyticsManagedBean.testTipIncome3()}"/>
+        <p:commandButton value="Test 4 - Tip an Article" actionListener="#{authorViewIncomeAnalyticsManagedBean.testTipIncome4()}"/>
+
     </ui:define>
 
 </ui:composition>

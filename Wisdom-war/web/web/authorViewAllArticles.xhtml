@@ -9,7 +9,7 @@
     <ui:define name="title">
         Wisdom
     </ui:define>
-    
+
     <ui:define name="content">
         <p:outputLabel value="My Articles" style="font-weight: bold;font-size: 22px"/>
 
@@ -38,36 +38,28 @@
                     </p:panelGrid>
                 </f:facet>
 
-                <p:column filterBy="#{article.title}" headerText="Title" filterMatchMode="contains">
+                <p:column headerText="Title">
                     <h:outputText value="#{article.title}" />
                 </p:column>
 
-                <p:column filterBy="#{article.topic}" headerText="Topic" filterMatchMode="exact" style="width: 18%">
-                    <f:facet name="filter">
-                        <p:selectOneMenu onchange="PF('articleTable').filter()" >
-                            <f:selectItem itemLabel="Please Select" itemValue="#{null}" noSelectionOption="true" />
-                            <f:selectItem itemLabel="Arts" itemValue="Arts" />
-                            <f:selectItem itemLabel="Fashion" itemValue="Fashion" />
-                            <f:selectItem itemLabel="Food" itemValue="Food" />
-                            <f:selectItem itemLabel="Lifestyle" itemValue="Lifestyle" />
-                            <f:selectItem itemLabel="Music" itemValue="Music" />
-                            <f:selectItem itemLabel="Photography" itemValue="Photography" />
-                            <f:selectItem itemLabel="Politics" itemValue="Politics" />
-                            <f:selectItem itemLabel="Sports" itemValue="Sports" />
-                            <f:selectItem itemLabel="Technology" itemValue="Technology" />
-                            <f:selectItem itemLabel="Travel" itemValue="Travel" />
-                        </p:selectOneMenu>
-                    </f:facet>
+                <p:column headerText="Topic" style="width: 11%">
                     <h:outputText value="#{article.topic}" />
                 </p:column>
 
-                <p:column filterBy="#{article.created}" headerText="Time" filterMatchMode="contains" style="width: 22%">
+                <p:column headerText="Time" style="width: 21%">
                     <h:outputText value="#{article.created}" />
                 </p:column>
 
-                <p:column headerText="Likes" sortBy="#{article.numOfUpvotes}" style="width: 12%"
-                          filterBy="#{article.numOfUpvotes}">
+                <p:column headerText="Likes" sortBy="#{article.numOfUpvotes}" style="width: 8%">
                     <h:outputText value="#{article.numOfUpvotes}" />
+                </p:column>
+
+                <p:column headerText="Rewards" sortBy="#{article.numOfRewards}" style="width: 11%">
+                    <h:outputText value="#{article.numOfRewards}" />
+                </p:column>
+
+                <p:column headerText="Income" sortBy="#{article.rewardIncomePerArticle}" style="width: 10%">
+                    <h:outputText value="#{article.rewardIncomePerArticle}" />
                 </p:column>
 
                 <p:column headerText="View" style="width: 8%"> 

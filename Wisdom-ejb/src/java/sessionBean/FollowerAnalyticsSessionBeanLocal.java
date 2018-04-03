@@ -20,7 +20,7 @@ public interface FollowerAnalyticsSessionBeanLocal {
 
     public FollowerAnalyticsEntity getFollowAnalyticsById(Long followAnalyticsId) throws NoSuchEntityException;
 
-    public void updateFollowersByMonth(Integer monthValue, Long followerAnalyticsId, Long authorId);
+    public void updateFollowersMonthly(Integer monthValue, Long followerAnalyticsId, Long authorId);
 
     public void updateAllMonthToZero(Long followerAnalyticsId);
 }

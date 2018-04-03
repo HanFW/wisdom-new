@@ -68,7 +68,7 @@ public class FollowerAnalyticsSessionBean implements FollowerAnalyticsSessionBea
     }
     
     @Override
-    public void updateFollowersByMonth(Integer monthValue, Long followerAnalyticsId, Long authorId) {
+    public void updateFollowersMonthly(Integer monthValue, Long followerAnalyticsId, Long authorId) {
         
         FollowerAnalyticsEntity followerAnalytics = new FollowerAnalyticsEntity();
         Integer numOfFollowers = 0;

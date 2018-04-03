@@ -44,4 +44,6 @@ public interface ArticleSessionBeanLocal {
 
     public ReaderEntity tipArticle(Long readerId, Long articleId, Double amount) throws InsufficientBalanceException;
 
+    public List<ArticleEntity> getArticlesByTopic(String topic);
+
 }

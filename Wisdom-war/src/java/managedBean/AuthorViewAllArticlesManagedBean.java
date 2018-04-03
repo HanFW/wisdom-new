@@ -7,11 +7,13 @@ package managedBean;
 
 import entity.ArticleEntity;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.view.ViewScoped;
 import javax.inject.Named;
 import sessionBean.ArticleSessionBeanLocal;
 
@@ -20,8 +22,8 @@ import sessionBean.ArticleSessionBeanLocal;
  * @author Yongxue
  */
 @Named(value = "authorViewAllArticlesManagedBean")
-@RequestScoped
-public class AuthorViewAllArticlesManagedBean {
+@ViewScoped
+public class AuthorViewAllArticlesManagedBean implements Serializable {
 
     /**
      * Creates a new instance of MyArticlesAuthorManagedBean
@@ -29,9 +31,18 @@ public class AuthorViewAllArticlesManagedBean {
     @EJB(name = "ArticleSessionBeanLocal")
     private ArticleSessionBeanLocal articleSessionBeanLocal;
 
+    List<ArticleEntity> article;
+
     private Long articleId;
 
     private ExternalContext ec;
+
+    @PostConstruct
+    public void init() {
+        ec = FacesContext.getCurrentInstance().getExternalContext();
+
+        article = articleSessionBeanLocal.getArticlesByAuthorId(Long.valueOf(ec.getSessionMap().get("authorId").toString()));
+    }
 
     public Long getArticleId() {
         return articleId;
@@ -41,20 +52,20 @@ public class AuthorViewAllArticlesManagedBean {
         this.articleId = articleId;
     }
 
-    public AuthorViewAllArticlesManagedBean() {
-    }
-
-    public List<ArticleEntity> getArticle() throws IOException {
-
-        ec = FacesContext.getCurrentInstance().getExternalContext();
-
-        List<ArticleEntity> article = articleSessionBeanLocal.getArticlesByAuthorId(Long.valueOf(ec.getSessionMap().get("authorId").toString()));
-
+    public List<ArticleEntity> getArticle() {
         return article;
     }
 
+    public void setArticle(List<ArticleEntity> article) {
+        this.article = article;
+    }
+
+    public AuthorViewAllArticlesManagedBean() {
+
+    }
+
     public void viewArticle() throws IOException {
-        
+
         ec = FacesContext.getCurrentInstance().getExternalContext();
 
         ec.getFlash().put("articleId", articleId);

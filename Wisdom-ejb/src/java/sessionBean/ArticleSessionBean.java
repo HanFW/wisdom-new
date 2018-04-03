@@ -31,44 +31,44 @@ import javax.persistence.Query;
  */
 @Stateless
 public class ArticleSessionBean implements ArticleSessionBeanLocal {
-
+    
     @EJB(name = "AuthorSessionBeanLocal")
     private AuthorSessionBeanLocal authorSessionBeanLocal;
-
+    
     @PersistenceContext
     private EntityManager entityManager;
-
+    
     private static final Logger LOGGER
             = Logger.getLogger(ArticleSessionBean.class.getName());
     private static ConsoleHandler handler = null;
-
+    
     public ArticleSessionBean() {
         handler = new ConsoleHandler();
         handler.setLevel(Level.FINE);
         LOGGER.setLevel(Level.FINEST);
         LOGGER.addHandler(handler);
     }
-
+    
     @Override
     public Long addNewArticle(String topic, String title, String description,
             String context, LocalDateTime created, Long authorId) {
-
+        
         AuthorEntity author = authorSessionBeanLocal.retrieveAuthorById(authorId);
-
+        
         ArticleEntity article = new ArticleEntity(topic, title, description, context, created);
         article.setAuthor(author);
-
+        
         entityManager.persist(article);
         entityManager.flush();
-
+        
         return article.getId();
     }
-
+    
     @Override
     public List<ArticleEntity> getArticlesByAuthorId(Long authorId) {
-
+        
         AuthorEntity author = authorSessionBeanLocal.retrieveAuthorById(authorId);
-
+        
         if (author.getId() == null) {
             return null;
         }
@@ -81,20 +81,20 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
             return null;
         }
     }
-
+    
     @Override
     public ArticleEntity getArticleById(Long articleId)
             throws NoSuchEntityException {
         if (articleId == null) {
             return null;
         }
-
+        
         ArticleEntity article = entityManager.find(ArticleEntity.class, articleId);
         if (article == null) {
             LOGGER.log(Level.FINEST, "0. article w ID: {0} not found.", articleId);
             throw new NoSuchEntityException("article " + articleId + " not found.");
         }
-
+        
         return article;
     }
 
@@ -110,12 +110,12 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
         if (readerId == null) {
             return null;
         }
-
+        
         ReaderEntity reader = entityManager.find(ReaderEntity.class, readerId);
         if (reader == null) { // reader id not found
             throw new NoSuchEntityException("reader " + readerId + " not found");
         }
-
+        
         Query q = entityManager.createQuery("select a from ArticleEntity a, FollowEntity f "
                 + "where f.reader.id = :readerId "
                 + "and f.author.id = a.author.id "
@@ -127,7 +127,7 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, e.getMessage());
         }
-
+        
         return articles;
     }
 
@@ -142,7 +142,7 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
         if (topic == null || topic.isEmpty()) {
             return null;
         }
-
+        
         Query q = entityManager.createQuery("select a from ArticleEntity a "
                 + "where a.topic = :topic "
                 + "and a.created > :threeDaysAgo "
@@ -155,21 +155,21 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, e.getMessage());
         }
-
+        
         return articles;
     }
-
+    
     @Override
     public ArticleEntity likeArticle(Long articleId) {
         ArticleEntity article = entityManager.find(ArticleEntity.class, articleId);
         if (article == null) {
             return null;
         }
-
+        
         article.setNumOfUpvotes(article.getNumOfUpvotes() + 1);
         return article;
     }
-
+    
     @Override
     public ReaderEntity saveArticle(Long readerId, Long articleId) throws RepeatActionException {
         ReaderEntity reader = entityManager.find(ReaderEntity.class, readerId);
@@ -177,17 +177,17 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
         if (reader == null || article == null) {
             return null;
         }
-
+        
         if (reader.getSaved().contains(article)) {
             throw new RepeatActionException("Error! Article is already saved by this reader");
         }
-
+        
         reader.getSaved().add(article);
         entityManager.merge(reader);
-
+        
         return reader;
     }
-
+    
     @Override
     public List<ArticleEntity> getAllSavedArticles(Long readerId) {
         ReaderEntity reader = entityManager.find(ReaderEntity.class, readerId);
@@ -196,7 +196,7 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
         }
         return reader.getSaved();
     }
-
+    
     @Override
     public ReaderEntity unsaveArticle(Long readerId, Long articleId) throws RepeatActionException {
         ReaderEntity reader = entityManager.find(ReaderEntity.class, readerId);
@@ -204,21 +204,21 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
         if (reader == null || article == null) {
             return null;
         }
-
+        
         if (!reader.getSaved().contains(article)) {
             throw new RepeatActionException("Error! Article has not been saved by this reader");
         }
-
+        
         for (int i = 0; i < reader.getSaved().size(); i++) {
             if (reader.getSaved().get(i).equals(article)) {
                 reader.getSaved().remove(i);
             }
         }
         entityManager.merge(reader);
-
+        
         return reader;
     }
-
+    
     @Override
     public Boolean checkArticleSaved(Long readerId, Long articleId) {
         ReaderEntity reader = entityManager.find(ReaderEntity.class, readerId);
@@ -226,13 +226,13 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
         if (reader == null || article == null) {
             return null;
         }
-
+        
         if (reader.getSaved().contains(article)) {
             return true;
         }
         return false;
     }
-
+    
     @Override
     public ReaderEntity tipArticle(Long readerId, Long articleId, Double amount) throws InsufficientBalanceException {
         ReaderEntity reader = entityManager.find(ReaderEntity.class, readerId);
@@ -240,7 +240,7 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
         if (reader == null || article == null) {
             return null;
         }
-
+        
         if (amount > reader.getBalance()) {
             throw new InsufficientBalanceException("Insufficient Balance!");
         }
@@ -253,11 +253,33 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
         reward.setArticle(article);
         article.getRewards().add(reward);
         
+        Double rewardIncome = article.getRewardIncomePerArticle();
+        Integer numOfRewards = article.getNumOfRewards();
+        
+        Double newRewardIncome = rewardIncome + amount;
+        Integer newNumOfRewards = numOfRewards + 1;
+        
+        article.setRewardIncomePerArticle(newRewardIncome);
+        article.setNumOfRewards(newNumOfRewards);
+        
         entityManager.persist(reward);
         entityManager.merge(reader);
         entityManager.merge(author);
         entityManager.merge(article);
         entityManager.flush();
         return reader;
+    }
+    
+    @Override
+    public List<ArticleEntity> getArticlesByTopic(String topic) {
+        
+        try {
+            Query query = entityManager.createQuery("Select a From ArticleEntity a Where a.topic=:topic");
+            query.setParameter("topic", topic);
+            return query.getResultList();
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("Entity not found error: " + enfe.getMessage());
+            return new ArrayList<ArticleEntity>();
+        }
     }
 }
