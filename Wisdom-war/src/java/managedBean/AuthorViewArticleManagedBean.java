@@ -63,7 +63,7 @@ public class AuthorViewArticleManagedBean implements Serializable {
         author = authorSessionBeanLocal.retrieveAuthorById(authorId);
 
         filename = "author_" + authorId + ".png";
-        picPath = System.getProperty("user.dir").replace("config", "docroot") + System.getProperty("file.separator") + filename;
+        picPath = "http://localhost:8080/" + filename;
     }
 
     public Long getArticleId() {

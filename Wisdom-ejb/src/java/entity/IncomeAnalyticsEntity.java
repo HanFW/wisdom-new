@@ -6,6 +6,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,12 +28,14 @@ public class IncomeAnalyticsEntity implements Serializable {
     private Double monthlyRewardIncome;
     private Double monthlyQuestionIncome;
 
-    public Long getId() {
-        return id;
+    public IncomeAnalyticsEntity() {
+        this.monthlyRewardIncome = 0.0;
+        this.monthlyQuestionIncome = 0.0;
+        this.monthValue = LocalDateTime.now().getMonthValue();
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Long getId() {
+        return id;
     }
 
     public Integer getMonthValue() {
