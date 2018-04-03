@@ -24,19 +24,19 @@ import utility.Constants;
     @NamedQuery(name = "FollowEntity.findByAuthorAndReader",
             query = "SELECT f FROM FollowEntity f "
             + "WHERE f.author.id = :authorId "
-            + "AND f.reader.id = :readerId" + " AND f.status != 'DELETED'"),
+            + "AND f.reader.id = :readerId " + "AND f.status != 'DELETED'"),
     @NamedQuery(name = "FollowEntity.findFollowedAuthorsByReader",
             query = "SELECT a FROM FollowEntity f, AuthorEntity a "
             + "WHERE f.author.id = a.id "
-            + "AND f.reader.id = :readerId" + " AND f.status != 'DELETED'"),
+            + "AND f.reader.id = :readerId " + "AND f.status != 'DELETED'"),
     @NamedQuery(name = "FollowEntity.findFollowersByAuthor",
             query = "SELECT f FROM FollowEntity f, ReaderEntity r "
             + "WHERE f.reader.id = r.id "
-            + "AND f.author.id = :authorId " + " AND f.status != 'DELETED'"),
+            + "AND f.author.id = :authorId " + "AND f.status != 'DELETED'"),
     @NamedQuery(name = "FollowEntity.findFollowersByAuthor_PerMonth",
             query = "SELECT f FROM FollowEntity f, ReaderEntity r "
             + "WHERE f.reader.id = r.id "
-            + "AND f.author.id = :authorId " + " AND f.status != 'DELETED' "
+            + "AND f.author.id = :authorId " + "AND f.status != 'DELETED' "
             + "AND f.createdMonth = :monthValue")
 })
 @Entity
