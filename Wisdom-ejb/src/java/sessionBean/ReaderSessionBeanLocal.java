@@ -9,6 +9,7 @@ import entity.AuthorEntity;
 import entity.ReaderEntity;
 import exception.DuplicateEntityException;
 import exception.NoSuchEntityException;
+import exception.RepeatActionException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Local;
@@ -21,7 +22,7 @@ import javax.ejb.Local;
 public interface ReaderSessionBeanLocal {
     
 
-    ReaderEntity followAuthor(Long authorId, Long readerId) throws NoSuchEntityException;
+    ReaderEntity followAuthor(Long authorId, Long readerId) throws NoSuchEntityException, RepeatActionException;
 
     List<AuthorEntity> getAllFollowingAuthors(Long readerId);
 
@@ -35,7 +36,7 @@ public interface ReaderSessionBeanLocal {
 
     ReaderEntity setInterestedTopics(ArrayList<String> topics, Long readerId) throws NoSuchEntityException;
 
-    ReaderEntity unfollowAuthor(Long authorId, Long readerId)throws NoSuchEntityException;
+    ReaderEntity unfollowAuthor(Long authorId, Long readerId)throws NoSuchEntityException, RepeatActionException;
 
     Boolean checkFollow(Long authorId, Long readerId) throws NoSuchEntityException;
 

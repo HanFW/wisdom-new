@@ -8,6 +8,7 @@ package managedBean;
 import entity.AuthorEntity;
 import entity.FollowerAnalyticsEntity;
 import exception.NoSuchEntityException;
+import exception.RepeatActionException;
 import java.time.LocalDateTime;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -107,7 +108,7 @@ public class AuthorViewFollowersAnalyticsManagedBean {
         return model;
     }
     
-    public void testFollow() {
+    public void testFollow() throws RepeatActionException {
         ec = FacesContext.getCurrentInstance().getExternalContext();
         
         authorId = Long.valueOf(ec.getSessionMap().get("authorId").toString());

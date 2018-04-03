@@ -10,6 +10,7 @@ import entity.FollowEntity;
 import entity.ReaderEntity;
 import exception.DuplicateEntityException;
 import exception.NoSuchEntityException;
+import exception.RepeatActionException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.ConsoleHandler;
@@ -144,8 +145,16 @@ public class ReaderSessionBean implements ReaderSessionBeanLocal {
         return reader;
     }
 
+    /**
+     *
+     * @param authorId
+     * @param readerId
+     * @return
+     * @throws NoSuchEntityException
+     * @throws RepeatActionException
+     */
     @Override
-    public ReaderEntity followAuthor(Long authorId, Long readerId) throws NoSuchEntityException {
+    public ReaderEntity followAuthor(Long authorId, Long readerId) throws NoSuchEntityException, RepeatActionException{
         ReaderEntity reader = em.find(ReaderEntity.class, readerId);
         AuthorEntity author = em.find(AuthorEntity.class, authorId);
         if (reader == null || author == null) {
@@ -155,18 +164,21 @@ public class ReaderSessionBean implements ReaderSessionBeanLocal {
         Query q = em.createNamedQuery("FollowEntity.findByAuthorAndReader")
                 .setParameter("authorId", authorId)
                 .setParameter("readerId", readerId);
-        FollowEntity relationship;
+        List<FollowEntity> relationships = new ArrayList<>();
         try {
-            relationship = (FollowEntity) q.getSingleResult();
-            throw new EntityExistsException("Error! Author is already followed by this reader");
-        } catch (NoResultException e) {
-            relationship = new FollowEntity();
+            relationships = q.getResultList();
+        } catch (Exception e) {
+            LOGGER.log(Level.INFO, "Unexpected exception at getResultList");
+            // TODO: handle all other unexpected exceptions
+        }
+        if(relationships.isEmpty()){// not following
+            FollowEntity relationship = new FollowEntity();
             relationship.setAuthor(author);
             relationship.setReader(reader);
             em.persist(relationship);
             em.flush();
-        } catch (Exception e) {
-            // TODO: handle all other unexpected exceptions
+        }else{//already following
+            throw new RepeatActionException("Error! Author is already followed by this reader");
         }
         return reader;
     }
@@ -205,7 +217,7 @@ public class ReaderSessionBean implements ReaderSessionBeanLocal {
     }
 
     @Override
-    public ReaderEntity unfollowAuthor(Long authorId, Long readerId) throws NoSuchEntityException {
+    public ReaderEntity unfollowAuthor(Long authorId, Long readerId) throws NoSuchEntityException, RepeatActionException {
         ReaderEntity reader = em.find(ReaderEntity.class, readerId);
         AuthorEntity author = em.find(AuthorEntity.class, authorId);
         if (reader == null || author == null) {
