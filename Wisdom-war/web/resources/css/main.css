@@ -19,6 +19,7 @@
 .login-button {
     width: 360px;
     height: 45px;
+    margin-left: 2px;
 }
 
 /*Author Signup*/
@@ -40,7 +41,23 @@
     height: 45px;
 }
 
-/*Fixed CSS*/
+/*Menu Template*/
+.logo-image {
+    height: 100%;
+    width: auto;
+}
+
+.ui-menu .ui-menuitem-link {
+    font-size: 15px;
+    padding-bottom: 7px;
+    font-weight: 300;
+}
+
+/*Primefaces CSS*/
 .ui-message{
     text-align: left;
+}
+
+.ui-widget {
+    font-family: "Roboto", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
 }
