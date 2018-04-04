@@ -50,7 +50,6 @@ public class ArticleEntity implements Serializable {
     private List<RewardEntity> rewards = new ArrayList<>();
 
     public ArticleEntity() {
-//        this.picPath = null; // default to no pic
         this.numOfUpvotes = 0;
         this.created = LocalDateTime.now();
         this.rewardIncomePerArticle = 0.0;

@@ -41,14 +41,14 @@
                 </f:facet>
 
                 <p:column headerText="Title">
-                    <h:outputText value="#{article.title}" />
+                    <h:outputText value="#{article.title}" escape="false"/>
                 </p:column>
 
                 <p:column headerText="Topic" style="width: 11%">
                     <h:outputText value="#{article.topic}" />
                 </p:column>
 
-                <p:column headerText="Time" style="width: 21%">
+                <p:column headerText="Time" style="width: 18%">
                     <h:outputText value="#{article.created}" />
                 </p:column>
 
