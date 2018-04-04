@@ -1,0 +1,28 @@
+/*Author Login*/
+.login-panel {
+    margin: 190px auto 0 auto;
+    text-align: center;
+    width: 380px;
+    min-height: 440px;
+    font-size: 14px;
+}
+
+.login-panel h3 {
+    font-size: 24px;
+    font-weight: 400;
+    padding-bottom: 10px;
+}
+
+.login-panel .ui-g-12 {
+    padding-top: 0px;
+}
+
+.login-input {
+    width: 350px;
+    height: 40px;
+}
+
+.login-button {
+    width: 360px;
+    height: 45px;
+}

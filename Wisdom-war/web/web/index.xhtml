@@ -5,29 +5,37 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
+        <h:outputStylesheet library="css" name="default.css"/>
+        <h:outputStylesheet library="css" name="main.css"/>
         <title>Wisdom</title>
     </h:head>
     <h:body>
         <h:form id="loginForm">
-            <h3>Login</h3>
-            <div>
+            <div class="login-panel">
+                <h3>Author Login</h3>
                 <p:messages globalOnly="true"/>
-                <h:panelGrid columns="3">
-                    <p:outputLabel for="email" value="Email: "/>
-                    <p:inputText id="email" value="#{loginManagedBean.email}" required="true" requiredMessage="Please enter your registered email." >
-                        <f:validateRegex pattern="^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$" />
-                    </p:inputText>
-                    <p:message for="email"/>
-                    
-                    <p:outputLabel for="password" value="Password: "/>
-                    <p:inputText id="password" type="password" value="#{loginManagedBean.password}" required="true" requiredMessage="Please enter your password." />
-                    <p:message for="password"/>
-                                        
-                    <p:commandButton value="Login" type="submit" actionListener="#{loginManagedBean.doLogin}" update="@form"/>
-                </h:panelGrid>
-                
-                New user? 
-                <p:commandLink value="Register here. " type="submit" action="signup?faces-redirect=true" immediate="true"/>
+                <div class="ui-g">
+                    <div class="ui-g-12">
+                        <p:inputText class="login-input" placeholder="Email" id="email" value="#{loginManagedBean.email}" required="true" requiredMessage="Please enter your registered email." >
+                            <f:validateRegex pattern="^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$" />
+                        </p:inputText>
+                    </div>
+                    <div class="ui-g-12">
+                        <p:message for="email"/>
+                    </div>
+                    <div class="ui-g-12">
+                        <p:inputText class="login-input" placeholder="Password" id="password" type="password" value="#{loginManagedBean.password}" required="true" requiredMessage="Please enter your password." />
+                    </div>
+                    <div class="ui-g-12">
+                        <p:message for="password"/>
+                    </div>
+                    <div class="ui-g-12">
+                        <p:commandButton class="login-button" value="Login" type="submit" actionListener="#{loginManagedBean.doLogin}" update="@form"/>
+                        <br/><br/>
+                        New user? 
+                        <p:commandLink value="Sign up here. " type="submit" action="signup?faces-redirect=true" immediate="true"/>
+                    </div>
+                </div>
             </div>
         </h:form>
     </h:body>
