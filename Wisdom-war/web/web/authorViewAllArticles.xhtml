@@ -14,6 +14,8 @@
         <p:outputLabel value="My Articles" style="font-weight: bold;font-size: 22px"/>
 
         <h:form>
+            <p:messages id="message" globalOnly="true"/>
+
             <p:dataTable var="article" value="#{authorViewAllArticlesManagedBean.article}" reflow="true"
                          style="margin-bottom:40px" widgetVar="articleTable" emptyMessage="No Article Found" paginator="true"
                          rows="10" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">

@@ -50,7 +50,7 @@ public class ArticleEntity implements Serializable {
     private List<RewardEntity> rewards = new ArrayList<>();
 
     public ArticleEntity() {
-        this.picPath = null; // default to no pic
+//        this.picPath = null; // default to no pic
         this.numOfUpvotes = 0;
         this.created = LocalDateTime.now();
         this.rewardIncomePerArticle = 0.0;
@@ -58,13 +58,14 @@ public class ArticleEntity implements Serializable {
     }
 
     public ArticleEntity(String topic, String title, String description,
-            String content, LocalDateTime created) {
+            String content, LocalDateTime created, String picPath) {
         this();
         this.topic = topic;
         this.title = title;
         this.description = description;
         this.content = content;
         this.created = created;
+        this.picPath = picPath;
         // relationship fields are set using setters
     }
 

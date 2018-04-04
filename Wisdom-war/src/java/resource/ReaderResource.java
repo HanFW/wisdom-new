@@ -9,6 +9,7 @@ import entity.AuthorEntity;
 import entity.ReaderEntity;
 import exception.DuplicateEntityException;
 import exception.NoSuchEntityException;
+import exception.RepeatActionException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.ws.rs.core.Context;
@@ -32,6 +34,7 @@ import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import org.primefaces.json.JSONObject;
 import sessionBean.ReaderSessionBeanLocal;
 
 /**
@@ -159,6 +162,8 @@ public class ReaderResource {
             }
         } catch (NoSuchEntityException e) { // reader not found
             return Response.status(Status.NOT_FOUND).entity(e.getMessage()).build();
+        } catch (RepeatActionException e) {
+            return Response.status(Status.CONFLICT).entity(e.getMessage()).build();
         } catch (Exception e) { // invalid JsonArray, etc
             return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
@@ -179,6 +184,8 @@ public class ReaderResource {
             }
         } catch (NoSuchEntityException e) { // reader not found
             return Response.status(Status.NOT_FOUND).entity(e.getMessage()).build();
+        } catch (RepeatActionException e) {
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
         } catch (Exception e) { // invalid JsonArray, etc
             return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
@@ -193,7 +200,8 @@ public class ReaderResource {
             Boolean result = readerSessionBean.checkFollow(readerId,authorId);
             
             if (result != null) { // success
-                return Response.ok().entity(result).build();
+                JsonObject json = Json.createObjectBuilder().add("result", result).build();
+                return Response.ok().entity(json).build();
             } else {
                 return Response.status(Status.BAD_REQUEST).entity("missing data").build();
             }

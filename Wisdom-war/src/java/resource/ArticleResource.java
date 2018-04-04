@@ -16,6 +16,7 @@ import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.ws.rs.core.Context;
@@ -130,7 +131,7 @@ public class ArticleResource {
                 return Response.status(Status.NOT_FOUND).entity("entity not found").build();
             }
         } catch (RepeatActionException e) { // article already saved
-            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+            return Response.status(Status.CONFLICT).entity(e.getMessage()).build();
         } catch (Exception e) { // invalid JsonArray, etc
             return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
@@ -165,7 +166,8 @@ public class ArticleResource {
             Boolean result = articleSessionBean.checkArticleSaved(readerId,articleId);
             
             if (result != null) { // success
-                return Response.ok().build();
+                 JsonObject json = Json.createObjectBuilder().add("result", result).build();
+                return Response.ok().entity(json).build();
             } else {
                 return Response.status(Status.NOT_FOUND).entity("reader or article not found").build();
             }
@@ -210,7 +212,7 @@ public class ArticleResource {
                 return Response.status(Status.BAD_REQUEST).entity("reader entity not found").build();
             }
         } catch(InsufficientBalanceException e){// ..should check at front-end
-            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+            return Response.status(Status.NOT_ACCEPTABLE).entity(e.getMessage()).build();
         } catch (Exception e) { // invalid JsonArray, etc
             return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
         }
