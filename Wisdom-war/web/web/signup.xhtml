@@ -5,11 +5,14 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core">
     <h:head>
-        <title>Sign up</title>
+        <h:outputStylesheet library="css" name="default.css"/>
+        <h:outputStylesheet library="css" name="main.css"/>
+        <title>Wisdom - Sign up</title>
     </h:head>
     <h:body>
         <h:form id="signupForm">
             <h3>Sign up</h3>
+            <p:messages globalOnly="true"/>
             <div>                
                 <h:panelGrid columns="3">
                     <p:outputLabel for="firstName" value="First name: "/>

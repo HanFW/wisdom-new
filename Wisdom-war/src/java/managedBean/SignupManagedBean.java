@@ -5,6 +5,8 @@
  */
 package managedBean;
 
+import entity.AuthorEntity;
+import exception.DuplicateEntityException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import javax.ejb.EJB;
@@ -49,21 +51,26 @@ public class SignupManagedBean {
     }
     
     public void signup(ActionEvent event) {
-        authorId = authorSessionBeanLocal.createNewAuthor(firstName + " " + lastName, selfIntroduction, email, password);
-        if (authorId == null) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "You have registered already, please login directly.", " "));
-        } else {
-            System.out.println("### sign up: author ID " + authorId);
-            ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
-            ec.getSessionMap().put("authorId", authorId);
-            RequestContext rc = RequestContext.getCurrentInstance();
-            rc.execute("PF('redirectDialog').show();");
+        try {
+            authorId = authorSessionBeanLocal.createNewAuthor(firstName + " " + lastName, selfIntroduction, email, password);
+            if (authorId == null) {
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please enter all the fields correctly", " "));
+            } else {
+                System.out.println("### sign up: author ID " + authorId);
+                ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+                ec.getSessionMap().put("authorId", authorId);
+                RequestContext rc = RequestContext.getCurrentInstance();
+                rc.execute("PF('redirectDialog').show();");
+            }
+        } catch (DuplicateEntityException ex) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "This email has been registered already, please change your email address or login directly.", " "));
         }
     }
     
     public void directLogin(ActionEvent event) throws IOException {
-        System.out.println("Author " + authorId + " - " + firstName + " " + lastName + " logged in.");
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+        AuthorEntity author = authorSessionBeanLocal.retrieveAuthorById((Long) ec.getSessionMap().get("authorId"));
+        System.out.println("Author " + author.getId() + " - " + author.getName() + " logged in.");
         ec.redirect(ec.getRequestContextPath() + "/web/overview.xhtml?faces-redirect=true");
     }
     
