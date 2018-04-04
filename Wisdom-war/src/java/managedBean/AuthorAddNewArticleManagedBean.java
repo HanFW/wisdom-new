@@ -100,26 +100,30 @@ public class AuthorAddNewArticleManagedBean implements Serializable {
 
         ec = FacesContext.getCurrentInstance().getExternalContext();
 
-        authorId = Long.valueOf(ec.getSessionMap().get("authorId").toString());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        createdString = LocalDateTime.now().format(formatter);
-        created = LocalDateTime.parse(createdString, formatter);
+        if (imageFile == null) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please upload your image!", " "));
+        } else {
+            authorId = Long.valueOf(ec.getSessionMap().get("authorId").toString());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            createdString = LocalDateTime.now().format(formatter);
+            created = LocalDateTime.parse(createdString, formatter);
 
-        articleDuplicate = articleSessionBeanLocal.checkDuplicateArticle(artilceTitle, authorId);
+            articleDuplicate = articleSessionBeanLocal.checkDuplicateArticle(artilceTitle, authorId);
 
-        switch (articleDuplicate) {
-            case "Unique":
-                newArticleId = articleSessionBeanLocal.addNewArticle(articleTopic,
-                        artilceTitle, articleDescription, articleContent, created,
-                        picPath, authorId);
+            switch (articleDuplicate) {
+                case "Unique":
+                    newArticleId = articleSessionBeanLocal.addNewArticle(articleTopic,
+                            artilceTitle, articleDescription, articleContent, created,
+                            picPath, authorId);
 
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Successfully Submitted!", " "));
-                ec.getFlash().setKeepMessages(true);
-                ec.redirect(ec.getRequestContextPath() + "/web/authorViewAllArticles.xhtml?faces-redirect=true");
-                break;
-            case "Duplicate":
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Duplicate Article!", " "));
-                break;
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Successfully Submitted!", " "));
+                    ec.getFlash().setKeepMessages(true);
+                    ec.redirect(ec.getRequestContextPath() + "/web/authorViewAllArticles.xhtml?faces-redirect=true");
+                    break;
+                case "Duplicate":
+                    FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Duplicate Article!", " "));
+                    break;
+            }
         }
     }
 

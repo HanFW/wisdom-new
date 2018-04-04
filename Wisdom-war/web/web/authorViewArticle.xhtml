@@ -15,20 +15,24 @@
 
     <ui:define name="content">
         <h:form>
-            <p:panel>
-                <p:outputLabel value="#{authorViewArticleManagedBean.article.title}" 
-                               style="font-weight: bold;font-size: 22px"/>
-                <br/><br/>
-                <p:outputLabel value="#{authorViewArticleManagedBean.article.topic}" 
-                               style="font-size: 16px"/>
-                <h:outputText value="&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;" />
+            <p:panel style="width: 800px">
+                <center>
+                    <p:outputLabel value="#{authorViewArticleManagedBean.article.title}" 
+                                   style="font-weight: bold;font-size: 22px" escape="false"/>
+                    <br/><br/>
+                    <p:outputLabel value="#{authorViewArticleManagedBean.article.topic}" 
+                                   style="font-size: 16px" escape="false"/>
+                    <h:outputText value="&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;" />
 
-                <p:outputLabel value="#{authorViewArticleManagedBean.article.created}" 
-                               style="font-size: 16px"/>
-                
+                    <p:outputLabel value="#{authorViewArticleManagedBean.article.created}" 
+                                   style="font-size: 16px"/>
+                    <br/><br/>
+                    <img src="#{authorViewArticleManagedBean.picPath}" style="width: 450px;height: 300px"/>
+                </center>
                 <br/><br/>
-                <img src="#{authorViewArticleManagedBean.picPath}" style="width: 450px;height: 300px"/>
-                
+                <p:outputLabel value="#{authorViewArticleManagedBean.article.content}" 
+                               style="font-size: 16px" escape="false"/>
+
             </p:panel>
         </h:form>
     </ui:define>
