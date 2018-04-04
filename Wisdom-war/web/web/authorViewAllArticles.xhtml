@@ -7,12 +7,13 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="title">
-        Wisdom
+        Wisdom - Articles
+    </ui:define>
+    <ui:define name="section-title">
+        My Articles
     </ui:define>
 
     <ui:define name="content">
-        <p:outputLabel value="My Articles" style="font-weight: bold;font-size: 22px"/>
-
         <h:form>
             <p:messages id="message" globalOnly="true"/>
 
@@ -21,10 +22,10 @@
                          rows="10" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
 
                 <f:facet name="header">
-                    <p:panelGrid>
+                    <p:panelGrid class="article-header">
                         <p:row>
                             <p:column style="border-style: none">
-                                <p:commandButton id="createNewArticle" action="/web/authorAddNewArticle.xhtml?faces-redirect=true" 
+                                <p:commandButton class="create-button" id="createNewArticle" action="/web/authorAddNewArticle.xhtml?faces-redirect=true" 
                                                  value="Create New Article" immediate = "true">
                                 </p:commandButton>
                             </p:column>

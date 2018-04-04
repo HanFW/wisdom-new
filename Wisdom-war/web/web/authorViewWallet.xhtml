@@ -7,17 +7,19 @@
                 xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="title">
-        title
+        Wisdom - Wallet
+    </ui:define>
+    <ui:define name="section-title">
+        My Wallet
     </ui:define>
 
     <ui:define name="content">
         <h:form>
-            <p:panel>
-                <p:outputLabel value="My Wallet" style="font-weight: bold;font-size: 22px"/>
-                <br/><br/><br/>
-                <p:outputLabel value="Total Balance: " style="font-size: 18px"/>
-                <p:outputLabel value="#{authorViewWalletManagedBean.authorBalance} S$" style="font-size: 18px"/>
-            </p:panel>
+            <div class="summary-panel">
+                <p:outputLabel value="Total Balance: "/>
+                <p:outputLabel class="summary-number" value="#{authorViewWalletManagedBean.authorBalance} S$"/>
+            </div>
+            <br/>
 
             <p:dataTable var="transaction" value="#{authorViewWalletManagedBean.transaction}" 
                          reflow="true" paginator="true" rows="10" emptyMessage="No Transaction Found" 

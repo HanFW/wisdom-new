@@ -22,6 +22,15 @@
     margin-left: 2px;
 }
 
+.login-panel a:link {
+  color: #636FB6;
+  text-decoration: none;
+}
+
+.login-panel a:link:hover  {
+  text-decoration: underline;
+}
+
 /*Author Signup*/
 .signup-panel{
     margin: 80px auto 0 auto;
@@ -51,6 +60,33 @@
     font-size: 15px;
     padding-bottom: 7px;
     font-weight: 300;
+    color: #31353D;
+}
+
+/*Questions*/
+.summary-panel {
+    border: none;
+    font-size: 14px;
+}
+
+.summary-number {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.summary-panel .update-button {
+    font-size: 10px;
+    margin-left: 10px;
+    font-weight: 400;
+}
+
+/*Articles*/
+.article-header .ui-widget-content {
+    border: none;
+}
+
+.article-header .create-button {
+    
 }
 
 /*Primefaces CSS*/
@@ -58,6 +94,17 @@
     text-align: left;
 }
 
-.ui-widget {
-    font-family: "Roboto", "Lucida Grande CE", lucida, "Helvetica CE", sans-serif;
+.ui-widget-header {
+    background: none;
+}
+
+/*Datatable*/
+.ui-datatable .ui-column-filter {
+    width: 90%;
+}
+
+.ui-datatable .ui-state-default {
+    background: none;
+    font-weight: 500;
+    color: #636FB6;
 }
