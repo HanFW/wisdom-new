@@ -11,42 +11,46 @@
     </h:head>
     <h:body>
         <h:form id="signupForm">
-            <h3>Sign up</h3>
-            <p:messages globalOnly="true"/>
-            <div>                
-                <h:panelGrid columns="3">
-                    <p:outputLabel for="firstName" value="First name: "/>
-                    <p:inputText type="text" id="firstName" value="#{signupManagedBean.firstName}" required="true" requiredMessage="Please enter your first name." />
-                    <p:message for="firstName"/>
-                    
-                    <p:outputLabel for="lastName" value="Last name: "/>
-                    <p:inputText type="text" id="lastName" value="#{signupManagedBean.lastName}" required="true" requiredMessage="Please enter your last name." />
-                    <p:message for="lastName"/>
-                    
-                    <p:outputLabel for="email" value="Email: "/>
-                    <p:inputText type="text" id="email" value="#{signupManagedBean.email}" required="true" requiredMessage="Please enter your email.">
-                        <f:validateRegex pattern="^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$" />
-                    </p:inputText>
-                    <p:message for="email"/>
-                    
-                    <p:outputLabel for="profileImage" value="Profile image: "/>
-                    <p:fileUpload id="profileImage" fileUploadListener="#{signupManagedBean.profileImageUpload}" mode="advanced" skinSimple="true" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" sizeLimit="1000000" multiple="false"/>
-                    <p:message for="profileImage"/>
-                    
-                    <p:outputLabel for="selfIntro" value="Self introduction: "/>
-                    <p:inputTextarea id="selfIntro" value="#{signupManagedBean.selfIntroduction}" rows="5" cols="30" maxlength="150" counterTemplate="{0} characters remaining." required="true" requiredMessage="Please enter a self introduction."/>
-                    <p:message for="selfIntro"/>
-                    
-                    <p:outputLabel for="pwd1" value="Password: "/>
-                    <p:password id="pwd1" value="#{signupManagedBean.password}" feedback="true" match="pwd2" required="true" label="Password 1" requiredMessage="Please create a password."/>
-                    <p:message for="pwd1"/>
-                    
-                    <p:outputLabel for="pwd2" value="Confirm password: "/>
-                    <p:password id="pwd2" value="#{signupManagedBean.password}" required="true" label="Password 2" requiredMessage="Please enter your password again."/>
-                    <p:message for="pwd2"/>
-                                        
-                    <p:commandButton value="Submit" type="submit" actionListener="#{signupManagedBean.signup}" update="@form"/>
-                </h:panelGrid>
+            <div class="signup-panel">
+                <h3>Sign up</h3>
+                <p:messages globalOnly="true"/>
+                <div class="ui-g">
+                    <div class="ui-g-6">
+                        <p:inputText placeholder="First name" type="text" id="firstName" value="#{signupManagedBean.firstName}" required="true" requiredMessage="Please enter your first name." />
+                        <p:message for="firstName"/>
+                    </div>
+                    <div class="ui-g-6">
+                        <p:inputText placeholder="Last name" type="text" id="lastName" value="#{signupManagedBean.lastName}" required="true" requiredMessage="Please enter your last name." />
+                        <p:message for="lastName"/>
+                    </div>
+                    <div class="ui-g-12">
+                        <p:inputText placeholder="Email" type="text" id="email" value="#{signupManagedBean.email}" required="true" requiredMessage="Please enter your email.">
+                            <f:validateRegex pattern="^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$" />
+                        </p:inputText>
+                        <p:message for="email"/>
+                    </div>
+                    <div class="ui-g-12">
+                        <p:inputTextarea placeholder="Please enter a short introduction of yourself (150 characters max)" id="selfIntro" counter="selfIntroDisplay" value="#{signupManagedBean.selfIntroduction}" rows="3" maxlength="150" counterTemplate="{0} characters remaining." required="true" requiredMessage="Please enter a self introduction.">
+                            <f:validateLength maximum="150"/>
+                        </p:inputTextarea>
+                        <p:message id="selfIntroDisplay" for="selfIntro"/>
+                    </div>
+                    <div class="ui-g-12">
+                        <p:fileUpload label="Profile Image" id="profileImage" fileUploadListener="#{signupManagedBean.profileImageUpload}" mode="advanced" skinSimple="true" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" sizeLimit="1000000" multiple="false"/>
+                        <p:message for="profileImage"/>
+                    </div>
+                    <div class="ui-g-6">
+                        <p:password placeholder="Password" id="pwd1" value="#{signupManagedBean.password}" feedback="true" inline="true" match="pwd2" required="true" label="Password 1" requiredMessage="Please create a password."/>
+                        <p:message for="pwd1"/>
+                    </div>
+                    <div class="ui-g-6">
+                        <p:password placeholder="Confirm password" id="pwd2" value="#{signupManagedBean.password}" required="true" label="Password 2" requiredMessage="Please enter your password again."/>
+                        <p:message for="pwd2"/>
+                    </div>
+                    <div class="ui-g-12">
+                        <p:commandButton class="signup-button" value="Submit" type="submit" actionListener="#{signupManagedBean.signup}" update="@form"/>
+                    </div>
+                </div>
             </div>
         </h:form>
         

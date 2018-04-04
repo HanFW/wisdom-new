@@ -19,14 +19,10 @@
                         <p:inputText class="login-input" placeholder="Email" id="email" value="#{loginManagedBean.email}" required="true" requiredMessage="Please enter your registered email." >
                             <f:validateRegex pattern="^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$" />
                         </p:inputText>
-                    </div>
-                    <div class="ui-g-12">
                         <p:message for="email"/>
                     </div>
                     <div class="ui-g-12">
                         <p:inputText class="login-input" placeholder="Password" id="password" type="password" value="#{loginManagedBean.password}" required="true" requiredMessage="Please enter your password." />
-                    </div>
-                    <div class="ui-g-12">
                         <p:message for="password"/>
                     </div>
                     <div class="ui-g-12">
