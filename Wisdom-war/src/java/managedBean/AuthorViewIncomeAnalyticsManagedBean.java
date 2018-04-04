@@ -154,7 +154,7 @@ public class AuthorViewIncomeAnalyticsManagedBean {
         averageIncome = new PieChartModel();
 
         if (rewardIncomePerTopic.isEmpty()) {
-            averageIncome.set("No Article Found", 0);
+            averageIncome.set("No Article Found", 1);
         } else {
             for (Map.Entry totalIncomeMap : rewardIncomePerTopic.entrySet()) {
                 key = totalIncomeMap.getKey().toString();

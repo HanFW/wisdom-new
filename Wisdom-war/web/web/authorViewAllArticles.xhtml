@@ -40,11 +40,11 @@
                     </p:panelGrid>
                 </f:facet>
 
-                <p:column headerText="Title">
+                <p:column headerText="Title" filterBy="#{article.title}" filterMatchMode="contains">
                     <h:outputText value="#{article.title}" escape="false"/>
                 </p:column>
 
-                <p:column headerText="Topic" style="width: 11%">
+                <p:column headerText="Topic" style="width: 11%" filterBy="#{article.topic}" filterMatchMode="contains">
                     <h:outputText value="#{article.topic}" />
                 </p:column>
 
