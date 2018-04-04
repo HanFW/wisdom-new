@@ -6,6 +6,7 @@
 package sessionBean;
 
 import entity.AuthorEntity;
+import exception.DuplicateEntityException;
 import javax.ejb.Local;
 
 /**
@@ -17,7 +18,7 @@ public interface AuthorSessionBeanLocal {
 
     AuthorEntity retrieveAuthorById(Long authorId);
 
-    Long createNewAuthor(String username, String description, String email, String password);
+    Long createNewAuthor(String username, String description, String email, String password) throws DuplicateEntityException;
 
     AuthorEntity authorLogin(String email, String password);
 

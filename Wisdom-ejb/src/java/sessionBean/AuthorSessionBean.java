@@ -7,6 +7,7 @@ package sessionBean;
 
 import entity.AuthorEntity;
 import entity.FollowerAnalyticsEntity;
+import exception.DuplicateEntityException;
 import exception.NoSuchEntityException;
 import java.time.LocalDateTime;
 import javax.ejb.EJB;
@@ -57,7 +58,15 @@ public class AuthorSessionBean implements AuthorSessionBeanLocal {
     }
 
     @Override
-    public Long createNewAuthor(String username, String description, String email, String password) {
+    public Long createNewAuthor(String username, String description, String email, String password) throws DuplicateEntityException{
+        if (username == null || email == null || password == null) {
+            return null;
+        }
+        
+        if (authorHasEmailConflict(email)) {
+            throw new DuplicateEntityException("author " + email + " exists.");
+        }
+        
         FollowerAnalyticsEntity followerAnalytics = new FollowerAnalyticsEntity();
 
         LocalDateTime created = LocalDateTime.now();

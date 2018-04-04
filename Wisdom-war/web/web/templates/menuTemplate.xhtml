@@ -7,32 +7,41 @@
 
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <h:outputStylesheet library="css" name="default.css"/>
-        <h:outputStylesheet library="css" name="cssLayout.css"/>
         <title><ui:insert name="title"/></title>
     </h:head>
 
     <h:body>
+        <h:outputStylesheet library="css" name="default.css"/>
+        <h:outputStylesheet library="css" name="cssLayout.css"/>
+        <h:outputStylesheet library="css" name="main.css"/>
+        
         <div id="top" class="top">
-            Wisdom
+            <img class="logo-image" src="../resources/images/logo.png" alt="Wisdom"/>
         </div>
-        <div>
-            <div id="left">
-                <h:form>
-                    <p:menu toggleable="true">
-                        <p:menuitem value="Overview" action="overview?faces-redirect=true"/>
-                        <p:menuitem value="Articles" action="authorViewAllArticles?faces-redirect=true"/>
-                        <p:menuitem value="Questions" action="authorViewAllQuestions?faces-redirect=true"/>
-                        <p:menuitem value="Wallet" action="authorViewWallet?faces-redirect=true"/>
-                        <p:submenu label="Analytics">
-                            <p:menuitem value="Followers Analytics" action="authorViewFollowersAnalytics.xhtml?faces-redirect=true"/>
-                            <p:menuitem value="Income Analytics" action="authorViewIncomeAnalytics.xhtml?faces-redirect=true"/>
-                        </p:submenu>
-                    </p:menu>
-                </h:form>
+        <div class="ui-g maincontent-container">
+            <div class="ui-g-2">
+                <div class="menu-panel">
+                    <h:form>
+                        <p:menu toggleable="true">
+                            <p:menuitem value="Overview" action="overview?faces-redirect=true"/>
+                            <p:menuitem value="Articles" action="authorViewAllArticles?faces-redirect=true"/>
+                            <p:menuitem value="Questions" action="authorViewAllQuestions?faces-redirect=true"/>
+                            <p:menuitem value="Wallet" action="authorViewWallet?faces-redirect=true"/>
+                            <p:submenu label="Analytics">
+                                <p:menuitem value="Followers Analytics" action="authorViewFollowersAnalytics.xhtml?faces-redirect=true"/>
+                                <p:menuitem value="Income Analytics" action="authorViewIncomeAnalytics.xhtml?faces-redirect=true"/>
+                            </p:submenu>
+                        </p:menu>
+                    </h:form>
+                </div>
             </div>
-            <div id="content" class="left_content">
-                <ui:insert name="content">Content</ui:insert>
+            <div class="ui-g-10">
+                <div class="main-panel">
+                    <div class="main-title">
+                        <h3><ui:insert name="section-title"></ui:insert></h3>
+                    </div>
+                    <ui:insert name="content"></ui:insert>
+                </div>
             </div>
         </div>
     </h:body>
