@@ -15,6 +15,10 @@ public class Constants {
     public static final String STATUS_ANSWERED = "ANSWERED";
     public static final String STATUS_REJECTED = "REJECTED";
     public static final String STATUS_EXPIRED = "EXPIRED";
+    
+    // transaction type
+    public static final String TRANSACTION_COMPENSATION = "Question Income";
+    public static final String TRANSACTION_REWARD = "Article Income";
 
     // interest topics
     public static final String TOPIC_ARTS = "Arts";

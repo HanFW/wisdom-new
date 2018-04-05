@@ -123,7 +123,11 @@ public class QuestionSessionBean implements QuestionSessionBeanLocal {
         if (question == null) {
             LOGGER.log(Level.SEVERE, "question entity not found");
         } else {
+            //update question status
             question.setStatus(Constants.STATUS_REJECTED);
+            
+            //refund question price to reader
+            question.getReader().setBalance(question.getReader().getBalance() + question.getPrice());
         }
     }
     
@@ -137,8 +141,26 @@ public class QuestionSessionBean implements QuestionSessionBeanLocal {
         if (question == null) {
             LOGGER.log(Level.SEVERE, "question entity not found");
         } else {
+            //update question
             question.setReply(reply);
             question.setStatus(Constants.STATUS_ANSWERED);
+            
+            //record transaction
+            CompensationEntity compensation = new CompensationEntity(question.getPrice());
+            compensation.setTransactionType(Constants.TRANSACTION_COMPENSATION);
+            em.persist(compensation);
+            
+            // compensation - question
+            compensation.setQuestion(question);
+            question.setCompensation(compensation);
+            // compensation - from (Reader)
+            compensation.setFrom(question.getReader());
+            // compensation - to (Author)
+            compensation.setTo(question.getAuthor());            
+            
+            //credit question price to author account
+            question.getAuthor().setBalance(question.getAuthor().getBalance() + question.getPrice());
+            em.flush();
         }
     }
     
@@ -169,8 +191,12 @@ public class QuestionSessionBean implements QuestionSessionBeanLocal {
         
         for(QuestionEntity question : questions) {
             if(question.getCreated().isBefore(LocalDateTime.now().minusMinutes(1))) {
+                //update question status
                 question.setStatus(Constants.STATUS_EXPIRED);
                 System.out.println("question expired");
+                
+                //refund question price to reader
+                question.getReader().setBalance(question.getReader().getBalance() + question.getPrice());
             } else {
                 break;
             }
@@ -201,16 +227,6 @@ public class QuestionSessionBean implements QuestionSessionBeanLocal {
         em.persist(newQuestion);
         em.flush();
         em.refresh(newQuestion);
-        
-        //record transaction
-        CompensationEntity compensation = new CompensationEntity(author.getQtnPrice());
-        compensation.setQuestion(newQuestion);
-        em.persist(compensation);
-        em.flush();
-        
-        newQuestion.setCompensation(compensation);
-        em.merge(newQuestion);
-        em.flush();
         
         return reader;
     }

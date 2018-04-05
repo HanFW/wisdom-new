@@ -25,6 +25,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import utility.Constants;
 
 /**
  *
@@ -252,9 +253,13 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
 
         //record the transaction
         RewardEntity reward = new RewardEntity(amount);
+        reward.setTransactionType(Constants.TRANSACTION_REWARD);
+        
         reward.setArticle(article);
         article.getRewards().add(reward);
-
+        reward.setFrom(reader);
+        reward.setTo(author);
+        
         Double rewardIncome = article.getRewardIncomePerArticle();
         Integer numOfRewards = article.getNumOfRewards();
 

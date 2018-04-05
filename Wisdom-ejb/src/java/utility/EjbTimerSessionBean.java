@@ -5,6 +5,7 @@
  */
 package utility;
 
+import entity.AuthorEntity;
 import entity.QuestionEntity;
 import exception.NoSuchEntityException;
 import java.time.LocalDateTime;
@@ -89,9 +90,11 @@ public class EjbTimerSessionBean implements EjbTimerSessionBeanLocal {
     
     private void handleTimeout_Question() {
         QuestionEntity question = new QuestionEntity("Title New", "Content new content new content new");
-        question.setAuthor(authorSessionBeanLocal.retrieveAuthorById(Long.parseLong("1")));
+        AuthorEntity author = authorSessionBeanLocal.retrieveAuthorById(Long.parseLong("1"));
+        question.setAuthor(author);
         try {
             question.setReader(readerSessionBeanLocal.authenticateReader("reader@gmail.com", "password"));
+            question.setPrice(author.getQtnPrice());
         } catch (NoSuchEntityException ex) {
             Logger.getLogger(InitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
         }
