@@ -58,7 +58,7 @@ public class AuthorSessionBean implements AuthorSessionBeanLocal {
     }
 
     @Override
-    public Long createNewAuthor(String username, String description, String email, String password) throws DuplicateEntityException{
+    public Long createNewAuthor(String username, String description, String email, String password, String picPath) throws DuplicateEntityException{
         if (username == null || email == null || password == null) {
             return null;
         }
@@ -78,7 +78,7 @@ public class AuthorSessionBean implements AuthorSessionBeanLocal {
             // TODO:
         }
 
-        AuthorEntity author = new AuthorEntity(username, description, email, password);
+        AuthorEntity author = new AuthorEntity(username, description, email, password, picPath);
         author.setFollowerAnalytics(followerAnalytics);
 
         entityManager.persist(author);

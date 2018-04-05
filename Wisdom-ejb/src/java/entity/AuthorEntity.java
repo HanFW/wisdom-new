@@ -63,13 +63,14 @@ public class AuthorEntity implements Serializable {
         this.qtnIncome = 0.0;
     }
 
-    public AuthorEntity(String name, String description, String email, String pwd) {
+    public AuthorEntity(String name, String description, String email, String pwd, String picPath) {
         this();
         this.name = name;
         this.description = description;
         this.email = email;
         this.pwd = pwd;
         this.created = LocalDateTime.now();
+        this.picPath = picPath;
     }
 
     public Long getId() {

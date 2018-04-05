@@ -36,8 +36,11 @@
                         <p:message id="selfIntroDisplay" for="selfIntro"/>
                     </div>
                     <div class="ui-g-12">
-                        <p:fileUpload label="Profile Image" id="profileImage" fileUploadListener="#{signupManagedBean.profileImageUpload}" mode="advanced" skinSimple="true" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" sizeLimit="1000000" multiple="false"/>
-                        <p:message for="profileImage"/>
+                        <p:fileUpload label="Profile Image"  id="profileImage" required="true" requiredMessage="Required Field" update="imageUploadMessage"
+                               mode="advanced" skinSimple="true"
+                              sizeLimit="1000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" 
+                              fileUploadListener="#{signupManagedBean.profileImageUpload}" multiple="false"/>
+                        <p:messages closable="true" for="profileImage" id="imageUploadMessage"/>
                     </div>
                     <div class="ui-g-6">
                         <p:password placeholder="Password" id="pwd1" value="#{signupManagedBean.password}" feedback="true" inline="true" match="pwd2" required="true" label="Password 1" requiredMessage="Please create a password."/>

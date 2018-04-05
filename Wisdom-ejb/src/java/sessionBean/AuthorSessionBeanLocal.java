@@ -18,7 +18,7 @@ public interface AuthorSessionBeanLocal {
 
     AuthorEntity retrieveAuthorById(Long authorId);
 
-    Long createNewAuthor(String username, String description, String email, String password) throws DuplicateEntityException;
+    Long createNewAuthor(String username, String description, String email, String password, String picPath) throws DuplicateEntityException;
 
     AuthorEntity authorLogin(String email, String password);
 
