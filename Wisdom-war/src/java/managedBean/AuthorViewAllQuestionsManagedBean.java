@@ -5,18 +5,22 @@
  */
 package managedBean;
 
+import entity.AuthorEntity;
 import entity.QuestionEntity;
 import exception.NoSuchEntityException;
+import java.io.Serializable;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.faces.view.ViewScoped;
+import org.primefaces.context.RequestContext;
 import sessionBean.AuthorSessionBeanLocal;
 import sessionBean.QuestionSessionBeanLocal;
 import utility.Constants;
@@ -26,8 +30,8 @@ import utility.Constants;
  * @author hanfengwei
  */
 @Named(value = "authorViewAllQuestionsManagedBean")
-@RequestScoped
-public class AuthorViewAllQuestionsManagedBean {
+@ViewScoped
+public class AuthorViewAllQuestionsManagedBean implements Serializable {
     
     @EJB
     private QuestionSessionBeanLocal questionSessionBeanLocal;
@@ -38,7 +42,6 @@ public class AuthorViewAllQuestionsManagedBean {
     private Long authorId = null;
     private QuestionEntity question;
     private String reply;
-    private Long questionId;
     
     /**
      * Creates a new instance of AuthorViewAllQuestionsManagedBean
@@ -50,7 +53,20 @@ public class AuthorViewAllQuestionsManagedBean {
     public void init() {
         ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
         authorId = (Long) ec.getSessionMap().get("authorId");
-        questionPrice = authorSessionBeanLocal.retrieveAuthorById(authorId).getQtnPrice();
+        AuthorEntity author = authorSessionBeanLocal.retrieveAuthorById(authorId);
+        if(author != null){
+            questionPrice = author.getQtnPrice();
+        }
+    }
+    
+    public void validateReply (ActionEvent event) {
+        if(reply == null || reply.equals("")) {
+            ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
+            FacesContext.getCurrentInstance().addMessage("questionReply", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Please enter your reply", " "));
+        } else {
+            RequestContext rc = RequestContext.getCurrentInstance();
+            rc.execute("PF('replyConfirmation').show();");
+        }
     }
     
     public void updateQuestionPrice (ActionEvent event) {
@@ -59,15 +75,13 @@ public class AuthorViewAllQuestionsManagedBean {
         questionSessionBeanLocal.updateQuestionPrice(authorId, questionPrice);
     }
     
-    public void rejectQuestion () {
+    public void rejectQuestion (ActionEvent event) {
         reply = "";
-        questionId = Long.parseLong(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("questionId"));
-        questionSessionBeanLocal.rejectQuestion(questionId);
+        questionSessionBeanLocal.rejectQuestion(question.getId());
     }
     
-    public void replyToQuestion () {
-        questionId = Long.parseLong(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("questionId"));
-        questionSessionBeanLocal.replyToQuestion(questionId, reply);
+    public void replyToQuestion (ActionEvent event) {
+        questionSessionBeanLocal.replyToQuestion(question.getId(), reply);
         reply = "";
     }
     
@@ -121,15 +135,6 @@ public class AuthorViewAllQuestionsManagedBean {
 
     public void setReply(String reply) {
         this.reply = reply;
-    }
-
-    public Long getQuestionId() {
-        return questionId;
-    }
-
-    public void setQuestionId(Long questionId) {
-        System.out.println("set question id " + questionId);
-        this.questionId = questionId;
     }
 
     public Double getQuestionPrice() {
