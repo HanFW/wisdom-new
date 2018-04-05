@@ -24,6 +24,7 @@ public class IncomeAnalyticsEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Integer currentYear;
     private Integer monthValue;
     private Double monthlyRewardIncome;
     private Double monthlyQuestionIncome;
@@ -31,11 +32,18 @@ public class IncomeAnalyticsEntity implements Serializable {
     public IncomeAnalyticsEntity() {
         this.monthlyRewardIncome = 0.0;
         this.monthlyQuestionIncome = 0.0;
-        this.monthValue = LocalDateTime.now().getMonthValue();
     }
 
     public Long getId() {
         return id;
+    }
+
+    public Integer getCurrentYear() {
+        return currentYear;
+    }
+
+    public void setCurrentYear(Integer currentYear) {
+        this.currentYear = currentYear;
     }
 
     public Integer getMonthValue() {

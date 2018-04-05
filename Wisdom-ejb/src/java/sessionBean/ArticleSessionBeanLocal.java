@@ -48,4 +48,6 @@ public interface ArticleSessionBeanLocal {
 
     public String checkDuplicateArticle(String title, Long authorId);
 
+    public List<ArticleEntity> getArticlesByAuthorIdMonthly(Long authorId, Integer monthValue);
+
 }

@@ -41,7 +41,7 @@ public class ArticleEntity implements Serializable {
     private Integer numOfUpvotes;
     private LocalDateTime created; // time of creation
     private Double rewardIncomePerArticle;
-    private String createdMonth;
+    private Integer createdMonthValue;
     private Integer numOfRewards;
 
     @ManyToOne(cascade = {CascadeType.DETACH})
@@ -136,12 +136,12 @@ public class ArticleEntity implements Serializable {
         this.rewardIncomePerArticle = rewardIncomePerArticle;
     }
 
-    public String getCreatedMonth() {
-        return createdMonth;
+    public Integer getCreatedMonthValue() {
+        return createdMonthValue;
     }
 
-    public void setCreatedMonth(String createdMonth) {
-        this.createdMonth = createdMonth;
+    public void setCreatedMonthValue(Integer createdMonthValue) {
+        this.createdMonthValue = createdMonthValue;
     }
 
     public Integer getNumOfRewards() {

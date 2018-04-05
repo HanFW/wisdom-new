@@ -49,6 +49,7 @@ public class AuthorEntity implements Serializable {
     private Double balance; // received credit
     private Double qtnPrice;  // author-defined question price (default to 5)
     private LocalDateTime created;
+    private Double qtnIncome;
 
     @OneToOne(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
     private FollowerAnalyticsEntity followerAnalytics;
@@ -59,6 +60,7 @@ public class AuthorEntity implements Serializable {
         this.picPath = null; // default to no pic
         this.balance = 0.0;
         this.qtnPrice = 5.0;
+        this.qtnIncome = 0.0;
     }
 
     public AuthorEntity(String name, String description, String email, String pwd) {
@@ -132,6 +134,14 @@ public class AuthorEntity implements Serializable {
 
     public void setCreated(LocalDateTime created) {
         this.created = created;
+    }
+
+    public Double getQtnIncome() {
+        return qtnIncome;
+    }
+
+    public void setQtnIncome(Double qtnIncome) {
+        this.qtnIncome = qtnIncome;
     }
 
     public FollowerAnalyticsEntity getFollowerAnalytics() {

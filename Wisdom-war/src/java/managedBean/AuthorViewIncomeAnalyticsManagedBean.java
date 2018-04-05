@@ -8,6 +8,7 @@ package managedBean;
 import entity.ArticleEntity;
 import entity.ReaderEntity;
 import exception.InsufficientBalanceException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,8 +18,13 @@ import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import org.primefaces.model.chart.Axis;
+import org.primefaces.model.chart.AxisType;
+import org.primefaces.model.chart.BarChartModel;
+import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.PieChartModel;
 import sessionBean.ArticleSessionBeanLocal;
+import sessionBean.IncomeAnalyticsSessionBeanLocal;
 import utility.Constants;
 
 /**
@@ -35,7 +41,12 @@ public class AuthorViewIncomeAnalyticsManagedBean {
     @EJB(name = "ArticleSessionBeanLocal")
     private ArticleSessionBeanLocal articleSessionBeanLocal;
 
+    @EJB(name = "IncomeAnalyticsSessionBeanLocal")
+    private IncomeAnalyticsSessionBeanLocal incomeAnalyticsSessionBeanLocal;
+
     private PieChartModel averageIncome;
+    private BarChartModel incomeAnalytics;
+
     private Long authorId;
     private String articleTopic;
     private HashMap<String, Double> rewardIncomePerTopic = new HashMap<String, Double>();
@@ -50,6 +61,13 @@ public class AuthorViewIncomeAnalyticsManagedBean {
     private Double technologyIncome = 0.0;
     private Double travelIncome = 0.0;
 
+    private Long incomeAnalyticsId;
+    private LocalDateTime created;
+    private Integer currentYear;
+    private Integer monthValue;
+    private Double monthlyRewardIncome;
+    private Double monthlyQuestionIncome;
+
     private String key;
     private Double value;
     private Integer size;
@@ -62,6 +80,7 @@ public class AuthorViewIncomeAnalyticsManagedBean {
     @PostConstruct
     public void init() {
         createPieModels();
+        createBarModels();
     }
 
     public PieChartModel getAverageIncome() {
@@ -72,8 +91,20 @@ public class AuthorViewIncomeAnalyticsManagedBean {
         this.averageIncome = averageIncome;
     }
 
+    public BarChartModel getIncomeAnalytics() {
+        return incomeAnalytics;
+    }
+
+    public void setIncomeAnalytics(BarChartModel incomeAnalytics) {
+        this.incomeAnalytics = incomeAnalytics;
+    }
+
     private void createPieModels() {
         createPieModel1();
+    }
+
+    private void createBarModels() {
+        createBarModel();
     }
 
     private void createPieModel1() {
@@ -168,6 +199,51 @@ public class AuthorViewIncomeAnalyticsManagedBean {
         averageIncome.setShowDataLabels(true);
         averageIncome.setTitle("Average Income per Article Topic");
         averageIncome.setLegendPosition("e");
+    }
+
+    private BarChartModel initBarModel() {
+
+        created = LocalDateTime.now();
+        currentYear = created.getYear();
+        monthValue = created.getMonthValue();
+
+        List<ArticleEntity> article = articleSessionBeanLocal.getArticlesByAuthorIdMonthly(authorId, monthValue);
+
+        for (int i = 0; i < article.size(); i++) {
+            monthlyRewardIncome = monthlyRewardIncome + article.get(i).getRewardIncomePerArticle();
+        }
+
+        incomeAnalyticsId = incomeAnalyticsSessionBeanLocal.addNewIncomeAnalytics(currentYear,
+                monthValue, monthlyRewardIncome, monthlyQuestionIncome);
+
+        BarChartModel model = new BarChartModel();
+
+        ChartSeries reward = new ChartSeries();
+        reward.setLabel("Reward");
+        reward.set("2004", 120);
+
+        ChartSeries compensation = new ChartSeries();
+        compensation.setLabel("Compensation");
+        compensation.set("2004", 52);
+
+        model.addSeries(reward);
+        model.addSeries(compensation);
+
+        return model;
+    }
+
+    private void createBarModel() {
+        incomeAnalytics = initBarModel();
+
+        incomeAnalytics.setTitle("Six-Month Income Analytics");
+        incomeAnalytics.setLegendPosition("e");
+        incomeAnalytics.setStacked(true);
+
+        Axis xAxis = incomeAnalytics.getAxis(AxisType.X);
+
+        Axis yAxis = incomeAnalytics.getAxis(AxisType.Y);
+        yAxis.setLabel("Income");
+        yAxis.setMin(0);
     }
 
     public void testTipIncome1() {

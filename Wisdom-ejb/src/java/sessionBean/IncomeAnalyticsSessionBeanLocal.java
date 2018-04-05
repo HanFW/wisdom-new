@@ -13,5 +13,7 @@ import javax.ejb.Local;
  */
 @Local
 public interface IncomeAnalyticsSessionBeanLocal {
-    
+
+    public Long addNewIncomeAnalytics(Integer currentYear, Integer monthValue,
+            Double monthlyRewardIncome, Double monthlyQuestionIncome);
 }

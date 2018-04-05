@@ -305,4 +305,23 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
             return "Multiple Entries";
         }
     }
+
+    @Override
+    public List<ArticleEntity> getArticlesByAuthorIdMonthly(Long authorId, Integer monthValue) {
+
+        AuthorEntity author = authorSessionBeanLocal.retrieveAuthorById(authorId);
+
+        if (author.getId() == null) {
+            return null;
+        }
+        try {
+            Query query = entityManager.createQuery("Select a From ArticleEntity a Where a.author=:author And a.createdMonthValue=:monthValue");
+            query.setParameter("author", author);
+            query.setParameter("monthValue", monthValue);
+            return query.getResultList();
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("Entity not found error: " + enfe.getMessage());
+            return null;
+        }
+    }
 }
