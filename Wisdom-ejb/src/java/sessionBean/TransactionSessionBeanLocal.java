@@ -17,4 +17,6 @@ import javax.ejb.Local;
 public interface TransactionSessionBeanLocal {
 
     public List<TransactionEntity> getTransactionByAuthorId(Long authorId);
+
+    public List<TransactionEntity> getTransactionByTypeMonthly(String transactionType, Integer monthValue, Long authorId);
 }

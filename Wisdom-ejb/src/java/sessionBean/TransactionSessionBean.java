@@ -48,4 +48,26 @@ public class TransactionSessionBean implements TransactionSessionBeanLocal {
             return new ArrayList<TransactionEntity>();
         }
     }
+
+    @Override
+    public List<TransactionEntity> getTransactionByTypeMonthly(String transactionType, Integer monthValue, Long authorId) {
+
+        AuthorEntity author = authorSessionBeanLocal.retrieveAuthorById(authorId);
+
+        try {
+            Query query = entityManager.createQuery("Select t From TransactionEntity t Where t.transactionType=:transactionType And t.createdMonth=:monthValue And t.to=:author");
+            query.setParameter("transactionType", transactionType);
+            query.setParameter("monthValue", monthValue);
+            query.setParameter("author", author);
+
+            if (query.getResultList().isEmpty()) {
+                return new ArrayList<TransactionEntity>();
+            } else {
+                return query.getResultList();
+            }
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("Entity not found error: " + enfe.getMessage());
+            return new ArrayList<TransactionEntity>();
+        }
+    }
 }

@@ -254,12 +254,12 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
         //record the transaction
         RewardEntity reward = new RewardEntity(amount);
         reward.setTransactionType(Constants.TRANSACTION_REWARD);
-        
+
         reward.setArticle(article);
         article.getRewards().add(reward);
         reward.setFrom(reader);
         reward.setTo(author);
-        
+
         Double rewardIncome = article.getRewardIncomePerArticle();
         Integer numOfRewards = article.getNumOfRewards();
 
@@ -283,7 +283,12 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
         try {
             Query query = entityManager.createQuery("Select a From ArticleEntity a Where a.topic=:topic");
             query.setParameter("topic", topic);
-            return query.getResultList();
+
+            if (query.getResultList().isEmpty()) {
+                return new ArrayList<ArticleEntity>();
+            } else {
+                return query.getResultList();
+            }
         } catch (EntityNotFoundException enfe) {
             System.out.println("Entity not found error: " + enfe.getMessage());
             return new ArrayList<ArticleEntity>();
@@ -323,7 +328,12 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
             Query query = entityManager.createQuery("Select a From ArticleEntity a Where a.author=:author And a.createdMonthValue=:monthValue");
             query.setParameter("author", author);
             query.setParameter("monthValue", monthValue);
-            return query.getResultList();
+
+            if (query.getResultList().isEmpty()) {
+                return new ArrayList<ArticleEntity>();
+            } else {
+                return query.getResultList();
+            }
         } catch (EntityNotFoundException enfe) {
             System.out.println("Entity not found error: " + enfe.getMessage());
             return null;

@@ -15,7 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -33,14 +33,16 @@ public abstract class TransactionEntity implements Serializable {
     private Double amount;
     private LocalDateTime created; // initialised to .now() upon construction
     private String transactionType;
+    private Integer createdMonth;
 
-    @OneToOne(cascade = {CascadeType.DETACH})
+    @ManyToOne(cascade = {CascadeType.DETACH})
     private ReaderEntity from;
-    @OneToOne(cascade = {CascadeType.DETACH})
+    @ManyToOne(cascade = {CascadeType.DETACH})
     private AuthorEntity to;
 
     public TransactionEntity() {
         this.created = LocalDateTime.now();
+        this.createdMonth = created.getMonthValue();
     }
 
     public TransactionEntity(Double amount) {
@@ -66,6 +68,14 @@ public abstract class TransactionEntity implements Serializable {
 
     public void setTransactionType(String transactionType) {
         this.transactionType = transactionType;
+    }
+
+    public Integer getCreatedMonth() {
+        return createdMonth;
+    }
+
+    public void setCreatedMonth(Integer createdMonth) {
+        this.createdMonth = createdMonth;
     }
 
     public ReaderEntity getFrom() {

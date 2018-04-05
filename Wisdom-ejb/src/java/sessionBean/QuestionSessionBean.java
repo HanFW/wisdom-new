@@ -156,7 +156,7 @@ public class QuestionSessionBean implements QuestionSessionBeanLocal {
             // compensation - from (Reader)
             compensation.setFrom(question.getReader());
             // compensation - to (Author)
-            compensation.setTo(question.getAuthor());            
+            compensation.setTo(question.getAuthor());
             
             //credit question price to author account
             question.getAuthor().setBalance(question.getAuthor().getBalance() + question.getPrice());

@@ -7,6 +7,7 @@ package managedBean;
 
 import entity.ArticleEntity;
 import entity.ReaderEntity;
+import entity.TransactionEntity;
 import exception.InsufficientBalanceException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -25,6 +26,7 @@ import org.primefaces.model.chart.ChartSeries;
 import org.primefaces.model.chart.PieChartModel;
 import sessionBean.ArticleSessionBeanLocal;
 import sessionBean.IncomeAnalyticsSessionBeanLocal;
+import sessionBean.TransactionSessionBeanLocal;
 import utility.Constants;
 
 /**
@@ -43,6 +45,9 @@ public class AuthorViewIncomeAnalyticsManagedBean {
 
     @EJB(name = "IncomeAnalyticsSessionBeanLocal")
     private IncomeAnalyticsSessionBeanLocal incomeAnalyticsSessionBeanLocal;
+
+    @EJB(name = "TransactionSessionBeanLocal")
+    private TransactionSessionBeanLocal transactionSessionBeanLocal;
 
     private PieChartModel averageIncome;
     private BarChartModel incomeAnalytics;
@@ -206,11 +211,17 @@ public class AuthorViewIncomeAnalyticsManagedBean {
         created = LocalDateTime.now();
         currentYear = created.getYear();
         monthValue = created.getMonthValue();
+        authorId = Long.valueOf(ec.getSessionMap().get("authorId").toString());
 
         List<ArticleEntity> article = articleSessionBeanLocal.getArticlesByAuthorIdMonthly(authorId, monthValue);
-
         for (int i = 0; i < article.size(); i++) {
             monthlyRewardIncome = monthlyRewardIncome + article.get(i).getRewardIncomePerArticle();
+        }
+
+        List<TransactionEntity> transaction = transactionSessionBeanLocal
+                .getTransactionByTypeMonthly(Constants.TRANSACTION_COMPENSATION, monthValue, authorId);
+        for (int j = 0; j < transaction.size(); j++) {
+            monthlyQuestionIncome = monthlyQuestionIncome + transaction.get(j).getAmount();
         }
 
         incomeAnalyticsId = incomeAnalyticsSessionBeanLocal.addNewIncomeAnalytics(currentYear,
