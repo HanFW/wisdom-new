@@ -17,7 +17,7 @@
         <h:form>
             <div class="summary-panel">
                 <p:outputLabel id="price" value="Current price per question: " />
-                <p:outputLabel class="summary-number" value="#{authorViewAllQuestionsManagedBean.questionPrice}" />
+                <p:outputLabel id="questionPrice" class="summary-number" value="#{authorViewAllQuestionsManagedBean.questionPrice}" />
                 <p:tooltip for="price" value="Default price is 5.0 per question" position="bottom"/>
                 <p:commandButton class="update-button" value="Update Price" onclick="PF('updatePriceDialog').show();"/>
             </div>
@@ -26,10 +26,10 @@
                 <p:outputLabel value="New price: " for="newPrice"/>
                 <p:inputText type="number" id="newPrice" value="#{authorViewAllQuestionsManagedBean.questionPrice}"/>
                 <br/>
-                <p:commandButton update="@form" value="Update" oncomplete="PF('updatePriceDialog').hide();" actionListener="#{authorViewAllQuestionsManagedBean.updateQuestionPrice}"/>
+                <p:commandButton process="@this,newPrice" update="questionPrice" value="Update" oncomplete="PF('updatePriceDialog').hide();" actionListener="#{authorViewAllQuestionsManagedBean.updateQuestionPrice}"/>
             </p:dialog>
-        </h:form>
-        <h:form>
+
+            
             <p:tabView>
                 <p:tab title="Pending">
                     <p:dataTable var="pQuestion" value="#{authorViewAllQuestionsManagedBean.pendingQuestions}" reflow="true"
@@ -49,7 +49,7 @@
                         </p:column>
                         <p:column headerText="Actions">
                             <center>
-                                <p:commandButton icon="ui-icon-mail-open" oncomplete="PF('actionsDialog').show();" update="@form">
+                                <p:commandButton icon="ui-icon-mail-open" oncomplete="PF('actionsDialog').show();" update="@(.ui-dialog)">
                                     <f:setPropertyActionListener target="#{authorViewAllQuestionsManagedBean.question}" value="#{pQuestion}" />
                                 </p:commandButton>
                             </center>
@@ -132,21 +132,21 @@
                 <br/>
                 <h:outputLabel value="Reply: " for="questionReply"/>
                 <br/>
+                <p:messages for="questionReply" autoUpdate="true"/>
                 <p:inputTextarea placeholder="Please enter if you want to reply" rows="5" cols="50" id="questionReply" value="#{authorViewAllQuestionsManagedBean.reply}"/>
                 <br/>
-                <p:commandButton value="Reject" action="#{authorViewAllQuestionsManagedBean.rejectQuestion}" oncomplete="PF('actionsDialog').hide();" update="@form">
-                    <f:param name="questionId" value="#{authorViewAllQuestionsManagedBean.question.id}" />
-                    <p:confirm header="Reject the question?" message="You will not receive credits for this question." />
-                </p:commandButton>
-                <p:commandButton value="Reply" action="#{authorViewAllQuestionsManagedBean.replyToQuestion}" oncomplete="PF('actionsDialog').hide();" update="@form">
-                    <f:param name="questionId" value="#{authorViewAllQuestionsManagedBean.question.id}" />
-                    <p:confirm header="Reply to the question?" message="Your reply will be sent to the reader. #{authorViewAllQuestionsManagedBean.question.price} will be transfered to your account." />
-                </p:commandButton>
+                <p:commandButton value="Reject" onclick="PF('rejectConfirmation').show();"/>
+                <p:commandButton value="Reply" actionListener="#{authorViewAllQuestionsManagedBean.validateReply}"/>
             </p:dialog>
+
+            <p:confirmDialog widgetVar="rejectConfirmation" header="Reject the question?" message="You will not receive credits for this question.">
+                <p:commandButton value="Cancel" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" onclick="PF('rejectConfirmation').hide();"/>
+                <p:commandButton value="Confirm" type="submit" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" actionListener="#{authorViewAllQuestionsManagedBean.rejectQuestion}" oncomplete="PF('actionsDialog').hide();" update="@form"/>
+            </p:confirmDialog>
             
-            <p:confirmDialog global="true">
-                <p:commandButton value="Cancel" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-                <p:commandButton value="Confirm" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+            <p:confirmDialog widgetVar="replyConfirmation" header="Reply to the question?" message="Your reply will be sent to the reader. #{authorViewAllQuestionsManagedBean.question.price} will be transfered to your account." >
+                <p:commandButton value="Cancel" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" onclick="PF('replyConfirmation').hide();"/>
+                <p:commandButton value="Confirm" type="submit" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" actionListener="#{authorViewAllQuestionsManagedBean.replyToQuestion}" oncomplete="PF('actionsDialog').hide();" update="@form"/>
             </p:confirmDialog>
         </h:form>
     </ui:define>
