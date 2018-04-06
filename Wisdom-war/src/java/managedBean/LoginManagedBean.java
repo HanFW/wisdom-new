@@ -26,9 +26,10 @@ import sessionBean.AuthorSessionBeanLocal;
 @Named(value = "loginManagedBean")
 @RequestScoped
 public class LoginManagedBean {
+
     @EJB
     private AuthorSessionBeanLocal authorSessionBeanLocal;
-    
+
     private String email;
     private String password;
 
@@ -37,10 +38,10 @@ public class LoginManagedBean {
      */
     public LoginManagedBean() {
     }
-    
+
     public void doLogin(ActionEvent event) throws IOException {
         AuthorEntity author = authorSessionBeanLocal.authorLogin(email, password);
-        if(author == null) {
+        if (author == null) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Invalid email/password", " "));
         } else {
             ExternalContext ec = FacesContext.getCurrentInstance().getExternalContext();
@@ -49,7 +50,7 @@ public class LoginManagedBean {
             ec.redirect(ec.getRequestContextPath() + "/web/overview.xhtml?faces-redirect=true");
         }
     }
-    
+
     private String md5Hashing(String stringToHash) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("MD5");
         return Arrays.toString(md.digest(stringToHash.getBytes()));

@@ -34,8 +34,15 @@ public class IncomeAnalyticsEntity implements Serializable {
     private AuthorEntity author;
 
     public IncomeAnalyticsEntity() {
-        this.monthlyRewardIncome = 0.0;
-        this.monthlyQuestionIncome = 0.0;
+
+    }
+
+    public IncomeAnalyticsEntity(Integer currentYear, Integer monthValue,
+            Double monthlyRewardIncome, Double monthlyQuestionIncome) {
+        this.currentYear = currentYear;
+        this.monthValue = monthValue;
+        this.monthlyRewardIncome = monthlyRewardIncome;
+        this.monthlyQuestionIncome = monthlyQuestionIncome;
     }
 
     public Long getId() {
