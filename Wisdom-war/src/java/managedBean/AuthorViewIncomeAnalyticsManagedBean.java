@@ -275,8 +275,6 @@ public class AuthorViewIncomeAnalyticsManagedBean {
             }
         }
 
-        compensation.set("2004", 52);
-
         model.addSeries(reward);
         model.addSeries(compensation);
 

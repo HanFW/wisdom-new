@@ -54,6 +54,7 @@ public class ArticleEntity implements Serializable {
         this.created = LocalDateTime.now();
         this.rewardIncomePerArticle = 0.0;
         this.numOfRewards = 0;
+        this.createdMonthValue = created.getMonthValue();
     }
 
     public ArticleEntity(String topic, String title, String description,
