@@ -6,11 +6,12 @@
 package entity;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -28,6 +29,9 @@ public class IncomeAnalyticsEntity implements Serializable {
     private Integer monthValue;
     private Double monthlyRewardIncome;
     private Double monthlyQuestionIncome;
+
+    @ManyToOne(cascade = {CascadeType.DETACH})
+    private AuthorEntity author;
 
     public IncomeAnalyticsEntity() {
         this.monthlyRewardIncome = 0.0;
@@ -68,6 +72,14 @@ public class IncomeAnalyticsEntity implements Serializable {
 
     public void setMonthlyQuestionIncome(Double monthlyQuestionIncome) {
         this.monthlyQuestionIncome = monthlyQuestionIncome;
+    }
+
+    public AuthorEntity getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(AuthorEntity author) {
+        this.author = author;
     }
 
     @Override

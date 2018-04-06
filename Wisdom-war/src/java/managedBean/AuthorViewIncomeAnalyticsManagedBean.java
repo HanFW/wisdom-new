@@ -6,6 +6,7 @@
 package managedBean;
 
 import entity.ArticleEntity;
+import entity.IncomeAnalyticsEntity;
 import entity.ReaderEntity;
 import entity.TransactionEntity;
 import exception.InsufficientBalanceException;
@@ -227,14 +228,39 @@ public class AuthorViewIncomeAnalyticsManagedBean {
         incomeAnalyticsId = incomeAnalyticsSessionBeanLocal.addNewIncomeAnalytics(currentYear,
                 monthValue, monthlyRewardIncome, monthlyQuestionIncome);
 
+        List<IncomeAnalyticsEntity> incomeAnalyticsList = incomeAnalyticsSessionBeanLocal.getIncomeAnalyticsByAuthorId(authorId);
+        int length = incomeAnalyticsList.size();
+        Integer currentMonthValue = 0;
+        int counts = 6;
+
         BarChartModel model = new BarChartModel();
-
         ChartSeries reward = new ChartSeries();
-        reward.setLabel("Reward");
-        reward.set("2004", 120);
-
         ChartSeries compensation = new ChartSeries();
+
+        reward.setLabel("Reward");
         compensation.setLabel("Compensation");
+
+        for (int i = length - 1; i >= length - 6; i--) {
+            currentMonthValue = incomeAnalyticsList.get(i).getMonthValue();
+
+            if (length < 6) {
+                reward.set(monthValueConverter(currentMonthValue), incomeAnalyticsList.get(i).getMonthlyRewardIncome());
+                compensation.set(monthValueConverter(currentMonthValue), incomeAnalyticsList.get(i).getMonthlyQuestionIncome());
+                counts--;
+
+                if (i == 0) {
+                    if (currentMonthValue < counts) {
+
+                    } else {
+
+                    }
+                }
+            } else if (length >= 6) {
+                reward.set(monthValueConverter(currentMonthValue), incomeAnalyticsList.get(i).getMonthlyRewardIncome());
+                compensation.set(monthValueConverter(currentMonthValue), incomeAnalyticsList.get(i).getMonthlyQuestionIncome());
+            }
+        }
+
         compensation.set("2004", 52);
 
         model.addSeries(reward);
@@ -299,5 +325,51 @@ public class AuthorViewIncomeAnalyticsManagedBean {
         } catch (InsufficientBalanceException e) {
 
         }
+    }
+
+    private String monthValueConverter(Integer monthValue) {
+
+        String month = "";
+
+        switch (monthValue) {
+            case 1:
+                month = "Jan";
+                break;
+            case 2:
+                month = "Feb";
+                break;
+            case 3:
+                month = "Mar";
+                break;
+            case 4:
+                month = "Apr";
+                break;
+            case 5:
+                month = "May";
+                break;
+            case 6:
+                month = "Jun";
+                break;
+            case 7:
+                month = "Jul";
+                break;
+            case 8:
+                month = "Aug";
+                break;
+            case 9:
+                month = "Sep";
+                break;
+            case 10:
+                month = "Oct";
+                break;
+            case 11:
+                month = "Nov";
+                break;
+            case 12:
+                month = "Dec";
+                break;
+        }
+
+        return month;
     }
 }

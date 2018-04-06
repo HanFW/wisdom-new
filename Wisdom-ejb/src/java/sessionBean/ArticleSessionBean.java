@@ -73,7 +73,7 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
         AuthorEntity author = authorSessionBeanLocal.retrieveAuthorById(authorId);
 
         if (author.getId() == null) {
-            return null;
+            return new ArrayList<ArticleEntity>();
         }
         try {
             Query query = entityManager.createQuery("Select a From ArticleEntity a Where a.author=:author");
@@ -81,7 +81,7 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
             return query.getResultList();
         } catch (EntityNotFoundException enfe) {
             System.out.println("Entity not found error: " + enfe.getMessage());
-            return null;
+            return new ArrayList<ArticleEntity>();
         }
     }
 

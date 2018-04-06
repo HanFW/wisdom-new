@@ -5,10 +5,16 @@
  */
 package sessionBean;
 
+import entity.AuthorEntity;
 import entity.IncomeAnalyticsEntity;
+import java.util.ArrayList;
+import java.util.List;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -19,6 +25,9 @@ public class IncomeAnalyticsSessionBean implements IncomeAnalyticsSessionBeanLoc
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
+    @EJB(name = "AuthorSessionBeanLocal")
+    private AuthorSessionBeanLocal authorSessionBeanLocal;
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -32,5 +41,23 @@ public class IncomeAnalyticsSessionBean implements IncomeAnalyticsSessionBeanLoc
         entityManager.flush();
 
         return incomeAnalytics.getId();
+    }
+
+    @Override
+    public List<IncomeAnalyticsEntity> getIncomeAnalyticsByAuthorId(Long authorId) {
+
+        AuthorEntity author = authorSessionBeanLocal.retrieveAuthorById(authorId);
+
+        if (author.getId() == null) {
+            return new ArrayList<IncomeAnalyticsEntity>();
+        }
+        try {
+            Query query = entityManager.createQuery("Select i From IncomeAnalyticsEntity i Where i.author=:author");
+            query.setParameter("author", author);
+            return query.getResultList();
+        } catch (EntityNotFoundException enfe) {
+            System.out.println("Entity not found error: " + enfe.getMessage());
+            return new ArrayList<IncomeAnalyticsEntity>();
+        }
     }
 }

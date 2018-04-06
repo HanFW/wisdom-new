@@ -5,6 +5,8 @@
  */
 package sessionBean;
 
+import entity.IncomeAnalyticsEntity;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -16,4 +18,6 @@ public interface IncomeAnalyticsSessionBeanLocal {
 
     public Long addNewIncomeAnalytics(Integer currentYear, Integer monthValue,
             Double monthlyRewardIncome, Double monthlyQuestionIncome);
+
+    public List<IncomeAnalyticsEntity> getIncomeAnalyticsByAuthorId(Long authorId);
 }

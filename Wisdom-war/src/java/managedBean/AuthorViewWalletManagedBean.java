@@ -5,11 +5,9 @@
  */
 package managedBean;
 
-import entity.ArticleEntity;
 import entity.AuthorEntity;
 import entity.TransactionEntity;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
