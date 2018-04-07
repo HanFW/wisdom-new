@@ -14,5 +14,7 @@ import javax.ejb.Local;
 @Local
 public interface FollowSessionBeanLocal {
 
-    public Integer getNumOfFollowers(Long authorId, Integer monthValue);
+    public Integer getNumOfFollowersMonthly(Long authorId, Integer monthValue, Integer currentYear);
+
+    public Integer getNumOfFollowersByAuthorId(Long authorId);
 }

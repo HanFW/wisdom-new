@@ -6,7 +6,6 @@
 package managedBean;
 
 import entity.AuthorEntity;
-import java.time.LocalDateTime;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -41,6 +40,7 @@ public class OverviewManagedBean {
     private Double todayIncome;
     private Double todayRewardIncome;
     private Double todayQuestionIncome;
+    private Integer todayNewFollowers;
 
     private Long authorId;
     private AuthorEntity author;
@@ -63,7 +63,7 @@ public class OverviewManagedBean {
         username = author.getName();
         introduction = author.getDescription();
         balance = author.getBalance();
-        numOfFollowers = followSessionBeanLocal.getNumOfFollowers(authorId, LocalDateTime.now().getMonthValue());
+        numOfFollowers = followSessionBeanLocal.getNumOfFollowersByAuthorId(authorId);
         todayRewardIncome = author.getTodayRewardIncome();
         todayQuestionIncome = author.getTodayQuestionIncome();
         todayIncome = todayRewardIncome + todayQuestionIncome;
@@ -131,5 +131,13 @@ public class OverviewManagedBean {
 
     public void setTodayQuestionIncome(Double todayQuestionIncome) {
         this.todayQuestionIncome = todayQuestionIncome;
+    }
+
+    public Integer getTodayNewFollowers() {
+        return todayNewFollowers;
+    }
+
+    public void setTodayNewFollowers(Integer todayNewFollowers) {
+        this.todayNewFollowers = todayNewFollowers;
     }
 }

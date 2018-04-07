@@ -65,11 +65,13 @@ public class AuthorViewFollowersAnalyticsManagedBean {
     }
     
     private void createLineModels() {
+        
         followersAnalytics = initLinearModel();
         followersAnalytics.setTitle("Number of followers");
         followersAnalytics.setLegendPosition("e");
         followersAnalytics.setShowPointLabels(true);
         followersAnalytics.getAxes().put(AxisType.X, new CategoryAxis("Months"));
+        
         Axis yAxis = followersAnalytics.getAxis(AxisType.Y);
         yAxis.setMin(0);
     }
@@ -83,7 +85,12 @@ public class AuthorViewFollowersAnalyticsManagedBean {
         followerAnalytics = author.getFollowerAnalytics();
         
         LocalDateTime currentTime = LocalDateTime.now();
-        followerAnalyticsSessionBeanLocal.updateFollowersMonthly(currentTime.getMonthValue(), followerAnalytics.getId(), author.getId());
+        followerAnalyticsSessionBeanLocal.updateFollowersMonthly(currentTime.getYear(),
+                currentTime.getMonthValue(), followerAnalytics.getId(), author.getId());
+        
+        if (currentTime.getMonthValue() == 1) {
+            followerAnalyticsSessionBeanLocal.updateAllMonthToZero(followerAnalytics.getId());
+        }
         
         LineChartModel model = new LineChartModel();
         

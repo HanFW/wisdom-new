@@ -23,11 +23,25 @@ public class FollowSessionBean implements FollowSessionBeanLocal {
     private EntityManager entityManager;
 
     @Override
-    public Integer getNumOfFollowers(Long authorId, Integer monthValue) {
+    public Integer getNumOfFollowersMonthly(Long authorId, Integer monthValue, Integer currentYear) {
 
         Query query = entityManager.createNamedQuery("FollowEntity.findFollowersByAuthor_PerMonth")
                 .setParameter("authorId", authorId)
-                .setParameter("monthValue", monthValue);
+                .setParameter("monthValue", monthValue)
+                .setParameter("currentYear", currentYear);
+        
+        if (query.getResultList().isEmpty()) {
+            return 0;
+        } else {
+            return query.getResultList().size();
+        }
+    }
+    
+    @Override
+    public Integer getNumOfFollowersByAuthorId(Long authorId) {
+
+        Query query = entityManager.createNamedQuery("FollowEntity.findFollowersByAuthor")
+                .setParameter("authorId", authorId);
         
         if (query.getResultList().isEmpty()) {
             return 0;
