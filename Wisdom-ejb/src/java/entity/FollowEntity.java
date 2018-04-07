@@ -38,6 +38,12 @@ import utility.Constants;
             + "WHERE f.reader.id = r.id "
             + "AND f.author.id = :authorId " + "AND f.status != 'DELETED' "
             + "AND f.createdMonth = :monthValue "
+            + "AND f.createdYear = :currentYear"),
+    @NamedQuery(name = "FollowEntity.findFollowersByAuthor_PerDay",
+            query = "SELECT f FROM FollowEntity f, ReaderEntity r "
+            + "WHERE f.reader.id = r.id "
+            + "AND f.author.id = :authorId " + "AND f.status != 'DELETED' "
+            + "AND f.createdDay = :dayValue "
             + "AND f.createdYear = :currentYear")
 })
 @Entity

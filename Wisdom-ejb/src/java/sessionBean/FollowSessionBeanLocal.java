@@ -17,4 +17,6 @@ public interface FollowSessionBeanLocal {
     public Integer getNumOfFollowersMonthly(Long authorId, Integer monthValue, Integer currentYear);
 
     public Integer getNumOfFollowersByAuthorId(Long authorId);
+
+    public Integer getNumOfFollowersDaily(Long authorId, Integer dayValue, Integer currentYear);
 }

@@ -38,65 +38,65 @@ public class AuthorViewFollowersAnalyticsManagedBean {
      */
     @EJB(name = "AuthorSessionBeanLocal")
     private AuthorSessionBeanLocal authorSessionBeanLocal;
-    
+
     @EJB(name = "FollowerAnalyticsSessionBeanLocal")
     private FollowerAnalyticsSessionBeanLocal followerAnalyticsSessionBeanLocal;
-    
+
     @EJB(name = "ReaderSessionBeanLocal")
     private ReaderSessionBeanLocal readerSessionBeanLocal;
-    
+
     private LineChartModel followersAnalytics;
     private Long authorId;
     private FollowerAnalyticsEntity followerAnalytics;
     private AuthorEntity author;
-    
+
     private ExternalContext ec;
-    
+
     public AuthorViewFollowersAnalyticsManagedBean() {
     }
-    
+
     @PostConstruct
     public void init() {
         createLineModels();
     }
-    
+
     public LineChartModel getFollowersAnalytics() {
         return followersAnalytics;
     }
-    
+
     private void createLineModels() {
-        
+
         followersAnalytics = initLinearModel();
         followersAnalytics.setTitle("Number of followers");
         followersAnalytics.setLegendPosition("e");
         followersAnalytics.setShowPointLabels(true);
         followersAnalytics.getAxes().put(AxisType.X, new CategoryAxis("Months"));
-        
+
         Axis yAxis = followersAnalytics.getAxis(AxisType.Y);
         yAxis.setMin(0);
     }
-    
+
     private LineChartModel initLinearModel() {
-        
+
         ec = FacesContext.getCurrentInstance().getExternalContext();
-        
+
         authorId = Long.valueOf(ec.getSessionMap().get("authorId").toString());
         author = authorSessionBeanLocal.retrieveAuthorById(authorId);
         followerAnalytics = author.getFollowerAnalytics();
-        
+
         LocalDateTime currentTime = LocalDateTime.now();
         followerAnalyticsSessionBeanLocal.updateFollowersMonthly(currentTime.getYear(),
                 currentTime.getMonthValue(), followerAnalytics.getId(), author.getId());
-        
+
         if (currentTime.getMonthValue() == 1) {
             followerAnalyticsSessionBeanLocal.updateAllMonthToZero(followerAnalytics.getId());
         }
-        
+
         LineChartModel model = new LineChartModel();
-        
+
         LineChartSeries series1 = new LineChartSeries();
         series1.setLabel("Number of followers in " + followerAnalytics.getCurrentYear());
-        
+
         series1.set("Jan", followerAnalytics.getJan());
         series1.set("Feb", followerAnalytics.getFeb());
         series1.set("Mar", followerAnalytics.getMar());
@@ -109,22 +109,35 @@ public class AuthorViewFollowersAnalyticsManagedBean {
         series1.set("Oct", followerAnalytics.getOct());
         series1.set("Nov", followerAnalytics.getNov());
         series1.set("Dec", followerAnalytics.getDecember());
-        
+
         model.addSeries(series1);
-        
+
         return model;
     }
-    
+
     public void testFollow() throws RepeatActionException {
         ec = FacesContext.getCurrentInstance().getExternalContext();
-        
+
         authorId = Long.valueOf(ec.getSessionMap().get("authorId").toString());
-        
+
         try {
             readerSessionBeanLocal.followAuthor(authorId, Long.valueOf(1));
         } catch (NoSuchEntityException e) {
             // TODO:
         }
-        
+
+    }
+
+    public void testFollow2() throws RepeatActionException {
+        ec = FacesContext.getCurrentInstance().getExternalContext();
+
+        authorId = Long.valueOf(ec.getSessionMap().get("authorId").toString());
+
+        try {
+            readerSessionBeanLocal.followAuthor(authorId, Long.valueOf(2));
+        } catch (NoSuchEntityException e) {
+            // TODO:
+        }
+
     }
 }

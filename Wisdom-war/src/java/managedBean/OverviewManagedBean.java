@@ -6,6 +6,7 @@
 package managedBean;
 
 import entity.AuthorEntity;
+import java.time.LocalDateTime;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
@@ -45,6 +46,7 @@ public class OverviewManagedBean {
     private Long authorId;
     private AuthorEntity author;
     private String filename;
+    private LocalDateTime currentTime;
 
     private ExternalContext ec;
 
@@ -57,6 +59,7 @@ public class OverviewManagedBean {
 
         authorId = Long.valueOf(ec.getSessionMap().get("authorId").toString());
         author = authorSessionBeanLocal.retrieveAuthorById(authorId);
+        currentTime = LocalDateTime.now();
 
         filename = "author_" + author.getPicPath() + ".png";
         profileImagePath = "http://localhost:8080/" + filename;
@@ -67,6 +70,8 @@ public class OverviewManagedBean {
         todayRewardIncome = author.getTodayRewardIncome();
         todayQuestionIncome = author.getTodayQuestionIncome();
         todayIncome = todayRewardIncome + todayQuestionIncome;
+        todayNewFollowers = followSessionBeanLocal.getNumOfFollowersDaily(authorId,
+                currentTime.getDayOfYear(), currentTime.getYear());
     }
 
     public String getProfileImagePath() {
