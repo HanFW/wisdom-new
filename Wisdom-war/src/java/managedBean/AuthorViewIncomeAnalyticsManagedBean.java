@@ -246,6 +246,7 @@ public class AuthorViewIncomeAnalyticsManagedBean {
         List<IncomeAnalyticsEntity> incomeAnalyticsList = incomeAnalyticsSessionBeanLocal.getIncomeAnalyticsByAuthorId(authorId);
         int length = incomeAnalyticsList.size();
         Integer currentMonthValue = 0;
+        Integer currentYear = 0;
 
         BarChartModel model = new BarChartModel();
         ChartSeries reward = new ChartSeries();
@@ -255,6 +256,7 @@ public class AuthorViewIncomeAnalyticsManagedBean {
         compensation.setLabel("Compensation");
 
         for (int i = length - 1; i >= length - 6; i--) {
+            currentYear = LocalDateTime.now().getYear();
             if (i >= 0) {
                 currentMonthValue = incomeAnalyticsList.get(i).getMonthValue();
             } else {
@@ -264,25 +266,25 @@ public class AuthorViewIncomeAnalyticsManagedBean {
             if (length < 6) {
                 if (i < 0) {
                     if (currentMonthValue <= 0) {
-                        rewardList.add(new Reward(monthValueConverter((12 + currentMonthValue)), 0.0));
-                        compensationList.add(new Compensation(monthValueConverter((12 + currentMonthValue)), 0.0));
+                        rewardList.add(new Reward((currentYear - 1), monthValueConverter((12 + currentMonthValue)), 0.0));
+                        compensationList.add(new Compensation((currentYear - 1), monthValueConverter((12 + currentMonthValue)), 0.0));
                     } else {
-                        rewardList.add(new Reward(monthValueConverter(currentMonthValue), 0.0));
-                        compensationList.add(new Compensation(monthValueConverter(currentMonthValue), 0.0));
+                        rewardList.add(new Reward(currentYear, monthValueConverter(currentMonthValue), 0.0));
+                        compensationList.add(new Compensation(currentYear, monthValueConverter(currentMonthValue), 0.0));
                     }
                 } else {
-                    rewardList.add(new Reward(monthValueConverter(currentMonthValue), incomeAnalyticsList.get(i).getMonthlyRewardIncome()));
-                    compensationList.add(new Compensation(monthValueConverter(currentMonthValue), incomeAnalyticsList.get(i).getMonthlyQuestionIncome()));
+                    rewardList.add(new Reward(currentYear, monthValueConverter(currentMonthValue), incomeAnalyticsList.get(i).getMonthlyRewardIncome()));
+                    compensationList.add(new Compensation(currentYear, monthValueConverter(currentMonthValue), incomeAnalyticsList.get(i).getMonthlyQuestionIncome()));
                 }
             } else if (length >= 6) {
-                rewardList.add(new Reward(monthValueConverter(currentMonthValue), incomeAnalyticsList.get(i).getMonthlyRewardIncome()));
-                compensationList.add(new Compensation(monthValueConverter(currentMonthValue), incomeAnalyticsList.get(i).getMonthlyQuestionIncome()));
+                rewardList.add(new Reward(currentYear, monthValueConverter(currentMonthValue), incomeAnalyticsList.get(i).getMonthlyRewardIncome()));
+                compensationList.add(new Compensation(currentYear, monthValueConverter(currentMonthValue), incomeAnalyticsList.get(i).getMonthlyQuestionIncome()));
             }
         }
 
         for (int i = rewardList.size() - 1; i >= 0; i--) {
-            reward.set(rewardList.get(i).getMonth(), rewardList.get(i).getRewardIncome());
-            compensation.set(compensationList.get(i).getMonth(), compensationList.get(i).getQuestionIncome());
+            reward.set(rewardList.get(i).getYear() + " " + rewardList.get(i).getMonth(), rewardList.get(i).getRewardIncome());
+            compensation.set(compensationList.get(i).getYear() + " " + compensationList.get(i).getMonth(), compensationList.get(i).getQuestionIncome());
         }
 
         model.addSeries(reward);

@@ -13,10 +13,20 @@ public class Compensation {
 
     private String month;
     private Double questionIncome;
+    private Integer year;
 
-    public Compensation(String month, Double questionIncome) {
+    public Compensation(Integer year, String month, Double questionIncome) {
+        this.year = year;
         this.month = month;
         this.questionIncome = questionIncome;
+    }
+
+    public Integer getYear() {
+        return year;
+    }
+
+    public void setYear(Integer year) {
+        this.year = year;
     }
 
     public String getMonth() {
