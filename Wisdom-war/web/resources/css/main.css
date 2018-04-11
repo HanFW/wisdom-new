@@ -101,6 +101,7 @@
 /*Datatable*/
 .ui-datatable .ui-column-filter {
     width: 90%;
+    display: none;
 }
 
 .ui-datatable .ui-state-default {

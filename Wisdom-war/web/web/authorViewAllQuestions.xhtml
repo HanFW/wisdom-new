@@ -17,13 +17,13 @@
         <h:form>
             <div class="summary-panel">
                 <p:outputLabel id="price" value="Current price per question: " />
-                <p:outputLabel id="questionPrice" class="summary-number" value="#{authorViewAllQuestionsManagedBean.questionPrice}" />
-                <p:tooltip for="price" value="Default price is 5.0 per question" position="bottom"/>
-                <p:commandButton class="update-button" value="Update Price" onclick="PF('updatePriceDialog').show();"/>
+                <p:outputLabel id="questionPrice" class="summary-number" value="S$ #{authorViewAllQuestionsManagedBean.questionPrice}" />
+                <p:tooltip for="price" value="Default price is S$ 5.0 per question" position="bottom"/>
+                <p:commandButton class="update-button" value="Update" onclick="PF('updatePriceDialog').show();"/>
             </div>
             
             <p:dialog position="550,80" header="Update Question Price" widgetVar="updatePriceDialog" resizable="false" responsive="true">
-                <p:outputLabel value="New price: " for="newPrice"/>
+                <p:outputLabel value="New price: S$ " for="newPrice"/>
                 <p:inputText type="number" id="newPrice" value="#{authorViewAllQuestionsManagedBean.questionPrice}"/>
                 <br/>
                 <p:commandButton process="@this,newPrice" update="questionPrice" value="Update" oncomplete="PF('updatePriceDialog').hide();" actionListener="#{authorViewAllQuestionsManagedBean.updateQuestionPrice}"/>
@@ -59,7 +59,7 @@
                 
                 <p:tab title="Replied">
                     <p:dataTable var="aQuestion" value="#{authorViewAllQuestionsManagedBean.answeredQuestions}" reflow="true"
-                         style="margin-bottom:40px" widgetVar="aQuestionTable" emptyMessage="No Question Found" paginator="true"
+                         style="margin-bottom:40px" widgetVar="aQuestionTable" emptyMessage="No Question Found" paginator="true" paginatorPosition="bottom"
                          rows="10" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
                         <p:column headerText="Reader" filterBy="#{aQuestion.reader.name}" filterMatchMode="contains" width="20%">
                             <h:outputText value="#{aQuestion.reader.name}"/>
@@ -83,7 +83,7 @@
                 
                 <p:tab title="Expired">
                     <p:dataTable var="eQuestion" value="#{authorViewAllQuestionsManagedBean.expiredQuestions}" reflow="true"
-                         style="margin-bottom:40px" widgetVar="eQuestionTable" emptyMessage="No Question Found" paginator="true"
+                         style="margin-bottom:40px" widgetVar="eQuestionTable" emptyMessage="No Question Found" paginator="true" paginatorPosition="bottom"
                          rows="10" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
                         <p:column headerText="Reader" filterBy="#{eQuestion.reader.name}" filterMatchMode="contains" width="20%">
                             <h:outputText value="#{eQuestion.reader.name}"/>
@@ -102,7 +102,7 @@
                 
                 <p:tab title="Rejected">
                     <p:dataTable var="rQuestion" value="#{authorViewAllQuestionsManagedBean.rejectedQuestions}" reflow="true"
-                         style="margin-bottom:40px" widgetVar="rQuestionTable" emptyMessage="No Question Found" paginator="true"
+                         style="margin-bottom:40px" widgetVar="rQuestionTable" emptyMessage="No Question Found" paginator="true" paginatorPosition="bottom"
                          rows="10" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
                         <p:column headerText="Reader" filterBy="#{rQuestion.reader.name}" filterMatchMode="contains" width="20%">
                             <h:outputText value="#{rQuestion.reader.name}"/>

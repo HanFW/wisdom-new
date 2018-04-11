@@ -17,12 +17,12 @@
         <h:form>
             <div class="summary-panel">
                 <p:outputLabel value="Total Balance: "/>
-                <p:outputLabel class="summary-number" value="#{authorViewWalletManagedBean.authorBalance} S$"/>
+                <p:outputLabel class="summary-number" value="S$ #{authorViewWalletManagedBean.authorBalance}"/>
             </div>
             <br/>
 
             <p:dataTable var="transaction" value="#{authorViewWalletManagedBean.transaction}" 
-                         reflow="true" paginator="true" rows="10" emptyMessage="No Transaction Found" 
+                         reflow="true" paginator="true" rows="10" emptyMessage="No Transaction Found"  paginatorPosition="bottom"
                          paginatorTemplate="{FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
 
                 <p:column headerText="Time"> 
