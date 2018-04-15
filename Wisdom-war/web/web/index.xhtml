@@ -10,30 +10,35 @@
         <title>Wisdom - Login</title>
     </h:head>
     <h:body>
-        <h:form id="loginForm">
-            <div class="login-panel">
-                <h3>Author Login</h3>
-                <p:messages globalOnly="true"/>
-                <div class="ui-g">
-                    <div class="ui-g-12">
-                        <p:inputText class="login-input" placeholder="Email" id="email" value="#{loginManagedBean.email}" required="true" requiredMessage="Please enter your registered email." validatorMessage="Please enter a correct email address.">
-                            <f:validateRegex pattern="^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$" />
-                        </p:inputText>
-                        <p:message for="email"/>
-                    </div>
-                    <div class="ui-g-12">
-                        <p:inputText class="login-input" placeholder="Password" id="password" type="password" value="#{loginManagedBean.password}" required="true" requiredMessage="Please enter your password." />
-                        <p:message for="password"/>
-                    </div>
-                    <div class="ui-g-12">
-                        <p:commandButton class="login-button" value="Login" type="submit" actionListener="#{loginManagedBean.doLogin}" update="@form"/>
-                        <br/><br/>
-                        New user? 
-                        <p:commandLink value="Sign up here. " type="submit" action="signup?faces-redirect=true" immediate="true"/>
+        <div class="login-container">
+            <div class="logo-bg-container">
+                <h:graphicImage class="logo-image logo-bg" library="images" name="logo.png" alt="Wisdom"/>
+            </div>
+            <h:form id="loginForm">
+                <div class="login-panel">
+                    <h3>Author Login</h3>
+                    <p:messages globalOnly="true"/>
+                    <div class="ui-g">
+                        <div class="ui-g-12">
+                            <p:inputText class="login-input" placeholder="Email" id="email" value="#{loginManagedBean.email}" required="true" requiredMessage="Please enter your registered email." validatorMessage="Please enter a correct email address.">
+                                <f:validateRegex pattern="^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$" />
+                            </p:inputText>
+                            <p:message for="email"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:inputText class="login-input" placeholder="Password" id="password" type="password" value="#{loginManagedBean.password}" required="true" requiredMessage="Please enter your password." />
+                            <p:message for="password"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:commandButton class="login-button" value="Login" type="submit" actionListener="#{loginManagedBean.doLogin}" update="@form"/>
+                            <br/><br/>
+                            New user? 
+                            <p:commandLink value="Sign up here. " type="submit" action="signup?faces-redirect=true" immediate="true"/>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </h:form>
+            </h:form>
+        </div>
     </h:body>
 </html>
 

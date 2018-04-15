@@ -10,59 +10,67 @@
         <title>Wisdom - Sign up</title>
     </h:head>
     <h:body>
-        <h:form id="signupForm">
-            <div class="signup-panel">
-                <h3>Sign up</h3>
-                <p:messages globalOnly="true"/>
-                <div class="ui-g">
-                    <div class="ui-g-6 signup-inputbox">
-                        <p:inputText placeholder="First name" type="text" id="firstName" value="#{signupManagedBean.firstName}" required="true" requiredMessage="Please enter your first name." />
-                        <p:message for="firstName"/>
-                    </div>
-                    <div class="ui-g-6 signup-inputbox">
-                        <p:inputText placeholder="Last name" type="text" id="lastName" value="#{signupManagedBean.lastName}" required="true" requiredMessage="Please enter your last name." />
-                        <p:message for="lastName"/>
-                    </div>
-                    <div class="ui-g-12 signup-inputbox">
-                        <p:inputText placeholder="Email" type="text" id="email" value="#{signupManagedBean.email}" required="true" requiredMessage="Please enter your email." validatorMessage="Please enter a correct email address.">
-                            <f:validateRegex pattern="^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$" />
-                        </p:inputText>
-                        <p:message for="email"/>
-                    </div>
-                    <div class="ui-g-12">
-                        <p:inputTextarea class="login-textarea" placeholder="Please enter a short introduction of yourself (150 characters max)" id="selfIntro" value="#{signupManagedBean.selfIntroduction}" maxlength="150" required="true" requiredMessage="Please enter a self introduction." autoResize="false">
-                            <f:validateLength maximum="150"/>
-                        </p:inputTextarea>
-                        <p:message for="selfIntro"/>
-                    </div>
-                    <div class="ui-g-12">
-                        <p:fileUpload label="Profile Image"  id="profileImage" required="true" requiredMessage="Required Field" update="imageUploadMessage"
-                               mode="advanced" skinSimple="true"
-                              sizeLimit="1000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" 
-                              fileUploadListener="#{signupManagedBean.profileImageUpload}" multiple="false"/>
-                        <p:messages closable="true" for="profileImage" id="imageUploadMessage"/>
-                    </div>
-                    <div class="ui-g-6">
-                        <p:password placeholder="Password" id="pwd1" value="#{signupManagedBean.password}" feedback="true" inline="true" match="pwd2" required="true" label="Password 1" requiredMessage="Please create a password."/>
-                        <p:message for="pwd1"/>
-                    </div>
-                    <div class="ui-g-6">
-                        <p:password placeholder="Confirm password" id="pwd2" value="#{signupManagedBean.password}" required="true" label="Password 2" requiredMessage="Please enter your password again."/>
-                        <p:message for="pwd2"/>
-                    </div>
-                    <div class="ui-g-12">
-                        <p:commandButton class="signup-button" value="Submit" type="submit" actionListener="#{signupManagedBean.signup}" update="@form"/>
+        <div class="login-container">
+            <div class="logo-bg-container">
+                <h:graphicImage class="logo-image logo-bg" library="images" name="logo.png" alt="Wisdom"/>
+            </div>
+            <h:form id="signupForm">
+                <div class="signup-panel">
+                    <h3>Sign up</h3>
+                    <p:messages globalOnly="true"/>
+                    <div class="ui-g">
+                        <div class="ui-g-6 signup-inputbox">
+                            <p:inputText placeholder="First name" type="text" id="firstName" value="#{signupManagedBean.firstName}" required="true" requiredMessage="Please enter your first name." />
+                            <p:message for="firstName"/>
+                        </div>
+                        <div class="ui-g-6 signup-inputbox">
+                            <p:inputText placeholder="Last name" type="text" id="lastName" value="#{signupManagedBean.lastName}" required="true" requiredMessage="Please enter your last name." />
+                            <p:message for="lastName"/>
+                        </div>
+                        <div class="ui-g-12 signup-inputbox">
+                            <p:inputText placeholder="Email" type="text" id="email" value="#{signupManagedBean.email}" required="true" requiredMessage="Please enter your email." validatorMessage="Please enter a correct email address.">
+                                <f:validateRegex pattern="^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$" />
+                            </p:inputText>
+                            <p:message for="email"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:inputTextarea class="login-textarea" placeholder="Please enter a short introduction of yourself (150 characters max)" id="selfIntro" value="#{signupManagedBean.selfIntroduction}" maxlength="150" required="true" requiredMessage="Please enter a self introduction." autoResize="false">
+                                <f:validateLength maximum="150"/>
+                            </p:inputTextarea>
+                            <p:message for="selfIntro"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:fileUpload label="Profile Image"  id="profileImage" required="true" requiredMessage="Required Field" update="imageUploadMessage"
+                                          mode="advanced" skinSimple="true"
+                                          sizeLimit="1000000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" 
+                                          fileUploadListener="#{signupManagedBean.profileImageUpload}" multiple="false"/>
+                            <p:messages closable="true" for="profileImage" id="imageUploadMessage"/>
+                        </div>
+                        <div class="ui-g-6">
+                            <p:password placeholder="Password" id="pwd1" value="#{signupManagedBean.password}" feedback="true" inline="true" match="pwd2" required="true" label="Password 1" requiredMessage="Please create a password."/>
+                            <p:message for="pwd1"/>
+                        </div>
+                        <div class="ui-g-6">
+                            <p:password placeholder="Confirm password" id="pwd2" value="#{signupManagedBean.password}" required="true" label="Password 2" requiredMessage="Please enter your password again."/>
+                            <p:message for="pwd2"/>
+                        </div>
+                        <div class="ui-g-12">
+                            <p:commandButton class="signup-button" value="Submit" type="submit" actionListener="#{signupManagedBean.signup}" update="@form"/>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </h:form>
-        
-        <h:form id="redirectionForm">
-            <p:dialog header="Signup successful!" widgetVar="redirectDialog" responsive="true">
-                <p:commandButton value="Back to homepage" actionListener="#{signupManagedBean.backToHomepage}"/>
-                <p:commandButton value="Login directly" actionListener="#{signupManagedBean.directLogin}"/>
-            </p:dialog>
-        </h:form>
+                <br/>
+                <br/>
+                <br/>
+            </h:form>
+
+            <h:form id="redirectionForm">
+                <p:confirmDialog message="Do you want to login directly or go back to homepage?" header="Signup successful!" widgetVar="redirectDialog" responsive="true">
+                    <p:commandButton value="Back to homepage" actionListener="#{signupManagedBean.backToHomepage}"/>
+                    <p:commandButton value="Login directly" actionListener="#{signupManagedBean.directLogin}"/>
+                </p:confirmDialog>
+            </h:form>
+        </div>
     </h:body>
 </html>
 
