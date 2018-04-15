@@ -14,9 +14,16 @@
         <h:outputStylesheet library="css" name="theme.css"/>
         <h:outputStylesheet library="css" name="cssLayout.css"/>
         <h:outputStylesheet library="css" name="main.css"/>
-        
+
         <div id="top" class="top">
-            <img class="logo-image" src="../resources/images/logo.png" alt="Wisdom"/>
+            <div class="logo-container">
+                <h:graphicImage class="logo-image" library="images" name="logo.png" alt="Wisdom"/>
+            </div>
+            <div class="logout-container">
+                <p:commandLink actionListener="#{logoutManagedBean.doLogout}">
+                    <h:graphicImage class="logout-icon" library="images" name="logout.png" alt="Logout"/>
+                </p:commandLink>
+            </div>
         </div>
         <div class="ui-g maincontent-container">
             <div class="ui-g-2">

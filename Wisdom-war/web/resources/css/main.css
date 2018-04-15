@@ -38,6 +38,23 @@ h4 {
     padding-top: 10px;
 }
 
+.logo-container {
+    display: inline-block;
+    width: 180px;
+    background-color: #5B5F87;
+}
+
+.logout-container {
+    display: inline-block;
+    float: right;
+    margin-right: 30px;
+}
+
+.logout-icon {
+    height: 100%;
+    width: auto;
+}
+
 /*Author Login*/
 .login-container {
     margin-top: 0px;
