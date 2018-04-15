@@ -7,7 +7,7 @@
     height: 40px;
     border-bottom: 1px solid #ebebeb;
     z-index: 100;
-    background-color: #ffffff;
+    background-color: #6E74A4;
     color: black;
     padding: 7px;
     margin-bottom: 10px;
@@ -26,39 +26,7 @@
     border: 1px solid #ebebeb;
 }
 
-.ui-menu {
-    width: 100%;
-    border: none;
-}
-
 .main-panel {
     border-left: 1px solid #ebebeb;
     padding-left: 10px;
 }
-
-/*#left {
-    float: left;
-    background-color: #dddddd;
-    padding: 5px;
-    width: 200px;
-}
-
-.left_content {
-    background-color: #dddddd;
-    padding: 5px;
-    margin-left: 220px;
-}
-
-#top a:link, #top a:visited {
-  color: white;
-  font-weight : bold;
-  text-decoration: none;
-}
-
-#top a:link:hover, #top a:visited:hover  {
-  color: black;
-  font-weight : bold;
-  text-decoration : underline;
-}*/
-
-

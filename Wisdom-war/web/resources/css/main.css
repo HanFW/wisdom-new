@@ -1,3 +1,24 @@
+body {
+    background-color: rgb(247,247,247);
+    font-size: 12px;
+    font-family: Roboto, Helvetica, Arial, sans-serif; 
+    color: #31353D;
+    margin: 10px;
+}
+
+h3 {
+    font-family: Roboto, Helvetica, Arial, sans-serif; 
+    font-size: 24px;
+    font-weight: 400;
+}
+
+h4 {
+    font-family: Roboto, Helvetica, Arial, sans-serif; 
+    font-size: 18px;
+    font-weight: 400;
+    margin-bottom: 10px;
+}
+
 /*Author Login*/
 .login-panel {
     margin: 190px auto 0 auto;

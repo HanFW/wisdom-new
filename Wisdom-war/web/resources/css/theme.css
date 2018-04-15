@@ -1,0 +1,81 @@
+/*General*/
+.ui-widget { 
+    font-family: Roboto, Helvetica, Arial, sans-serif; 
+    font-size: 1.1em; 
+}
+
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { 
+    font-family: Roboto, Helvetica, Arial, sans-serif; 
+    font-size: 1em; 
+}
+
+.ui-widget-content { 
+    color: #31353D; 
+}
+
+.ui-widget-content a { 
+    color: #31353D; 
+}
+
+.ui-widget-header { 
+    border: 1px solid #dddddd; 
+    background: #dddddd url("#{resource['primefaces-flick:images/ui-bg_highlight-soft_50_dddddd_1x100.png']}") 50% 50% repeat-x; 
+    color: #444444; 
+    font-weight: bold; 
+}
+
+
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default { 
+    background: #6E74A4; 
+    font-weight: 500; 
+    color: #ffffff; 
+}
+
+.ui-state-default a, .ui-state-default a:link, .ui-state-default a:visited { 
+    color: #FCF7F8; 
+}
+
+.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus { 
+    border: 1px solid #9DA1C1;
+    background: #5B5F87;
+    font-weight: 500; 
+    /*color: #31353D;*/ 
+}
+
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active { 
+    border: 1px solid #888DB4;
+    background: #5B5F87;
+    font-weight: 500; 
+    /*color: #31353D;*/ 
+}
+
+
+.ui-state-error, .ui-widget-content .ui-state-error, .ui-widget-header .ui-state-error {
+    border: 1px solid #a94442; 
+}
+
+
+.ui-inputfield.ui-state-focus {
+    -moz-box-shadow: 0px 0px 5px #888DB4, inset 0 2px 2px #dddddd !important;
+    -webkit-box-shadow: 0px 0px 5px #888DB4, inset 0 2px 2px #dddddd !important;
+    box-shadow: 0px 0px 5px #888DB4, inset 0 2px 2px #dddddd !important;
+}
+
+
+/*Menu*/
+.ui-menu {
+    width: 100%;
+    border: none;
+}
+
+.ui-menu .ui-menuitem-link {
+    font-size: 15px;
+    padding-bottom: 7px;
+    font-weight: 300;
+    color: #31353D;
+}
+
+/*DataTable*/
+.ui-datatable .ui-column-filter {
+    display: none;
+}
