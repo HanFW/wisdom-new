@@ -9,43 +9,92 @@
     <ui:define name="title">
         Wisdom - Overview
     </ui:define>
-    <ui:define name="section-title">
-        Overview
-    </ui:define>
     <ui:define name="content">
         <h:form>
-            <p:panelGrid id="personalInfo" style="border-style: none">
-                <p:row style="border-style: none">
-                    <p:column style="border-style: none">
-                        <img src="#{overviewManagedBean.profileImagePath}" style="width: 250px;height: 250px"/>
-                    </p:column>
-                    <p:column style="border-style: none">
-                        <p:outputLabel value="#{overviewManagedBean.username}"/>
-                        <br/>
-                        <p:outputLabel value="#{overviewManagedBean.introduction}"/>
-                    </p:column>
-                </p:row>
-            </p:panelGrid>
+            <div class="ui-g profile-panel">
+                <div class="ui-g-2">
+                    <img class="profile-image" src="#{overviewManagedBean.profileImagePath}"/>
+                </div>
+                <div class="ui-g-10">
+                    <p:outputLabel class="profile-name" value="#{overviewManagedBean.username}"/>
+                    <br/>
+                    <p:outputLabel class="profile-intro" value="#{overviewManagedBean.introduction}"/>
+                </div>
+            </div>
 
-            <p:panel style="border-style: none">
-                <p:outputLabel value="My Balance(S$): "/>
-                <p:outputLabel value="#{overviewManagedBean.balance}"/>
-                <br/><br/>
-                <p:outputLabel value="Today's Income(S$): "/>
-                <p:outputLabel value="#{overviewManagedBean.todayIncome}"/>
-                <br/><br/>
-                <p:outputLabel value="Followers: "/>
-                <p:outputLabel value="#{overviewManagedBean.numOfFollowers}"/>
-                <br/><br/>
-                <p:outputLabel value="New Followers: "/>
-                <p:outputLabel value="#{overviewManagedBean.todayNewFollowers}"/>
-                <br/><br/>
-                <p:outputLabel value="Reward Income(S$): "/>
-                <p:outputLabel value="#{overviewManagedBean.todayRewardIncome}"/>
-                <br/><br/>
-                <p:outputLabel value="Question Income(S$): "/>
-                <p:outputLabel value="#{overviewManagedBean.todayQuestionIncome}"/>
-            </p:panel>
+            <h4>Overview</h4>
+            <div class="ui-g">
+                <div class="ui-g-12 ui-md-4">
+                    <div class="ui-g data-colorbox data-colorbox-purple">
+                        <div class="ui-g-4">
+                            <img class="data-colorbox-icon" src="../resources/images/money-icon.png"/>
+                        </div>
+                        <div class="ui-g-8">
+                            <p:outputLabel class="data-colorbox-title" value="My Balance"/>
+                            <br/>
+                            <p:outputLabel class="data-colorbox-content" value="S$ #{overviewManagedBean.balance}"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui-g-12 ui-md-4">
+                    <div class="ui-g data-colorbox data-colorbox-purple">
+                        <div class="ui-g-4">
+                            <img class="data-colorbox-icon" src="../resources/images/income-icon.png"/>
+                        </div>
+                        <div class="ui-g-8">
+                            <p:outputLabel class="data-colorbox-title" value="Today's Income"/>
+                            <br/>
+                            <p:outputLabel class="data-colorbox-content" value="S$ #{overviewManagedBean.todayIncome}"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui-g-12 ui-md-4">
+                    <div class="ui-g data-colorbox data-colorbox-purple">
+                        <div class="ui-g-4">
+                            <img class="data-colorbox-icon" src="../resources/images/user-icon.png"/>
+                        </div>
+                        <div class="ui-g-8">
+                            <p:outputLabel class="data-colorbox-title" value="Followers"/>
+                            <br/>
+                            <p:outputLabel class="data-colorbox-content" value="#{overviewManagedBean.numOfFollowers}"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h4>Today's Details</h4>
+            <div class="ui-g data-details-panel">
+                <div class="ui-g-12 ui-md-4">
+                    <div class="ui-g data-grid">
+                        <div class="ui-g-7">
+                            <p:outputLabel class="data-grid-title" value="Article Income: "/>
+                        </div>
+                        <div class="ui-g-5">
+                            <p:outputLabel class="data-grid-content" value="S$ #{overviewManagedBean.todayRewardIncome}"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui-g-12 ui-md-4">
+                    <div class="ui-g data-grid">
+                        <div class="ui-g-7">
+                            <p:outputLabel class="data-grid-title" value="Question Income: "/>
+                        </div>
+                        <div class="ui-g-5">
+                            <p:outputLabel class="data-grid-content" value="S$ #{overviewManagedBean.todayQuestionIncome}"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui-g-12 ui-md-4">
+                    <div class="ui-g data-grid data-grid-last">
+                        <div class="ui-g-7">
+                            <p:outputLabel class="data-grid-title" value="New Followers: "/>
+                        </div>
+                        <div class="ui-g-5">
+                            <p:outputLabel class="data-grid-content" value="#{overviewManagedBean.todayNewFollowers}"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </h:form>
     </ui:define>
 

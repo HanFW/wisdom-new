@@ -30,6 +30,7 @@ h4 {
 
 .login-panel h3{
     padding-bottom: 10px;
+    color: #6E74A4;
 }
 
 .login-input {
@@ -44,7 +45,7 @@ h4 {
 }
 
 .login-panel a:link {
-  color: #636FB6;
+  color: #6E74A4;
   text-decoration: none;
 }
 
@@ -77,11 +78,100 @@ h4 {
     width: auto;
 }
 
-.ui-menu .ui-menuitem-link {
-    font-size: 15px;
-    padding-bottom: 7px;
+/*Overview*/
+.profile-panel {
+    padding-left: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #ebebeb; 
+    border-radius: 3px;
+    margin-bottom: 20px;
+}
+
+.profile-image {
+    width: 120px;
+    height: 120px;
+}
+
+.profile-name {
+    font-size: 30px;
+    font-weight: 500;
+    line-height: 1.8em;
+    /*text-shadow: 3px 3px #F8D04C;*/
+}
+
+.profile-intro {
+    font-size: 18px;
     font-weight: 300;
-    color: #31353D;
+}
+
+.data-colorbox {
+    padding: 0px;
+    text-align: center;
+    overflow: hidden;
+    border-radius: 2px;
+    margin-bottom: 10px;
+}
+
+.data-colorbox-purple div:first-child{
+    padding-top: 30px;
+    padding-bottom: 20px;
+    background-color: #6E74A4;
+}
+
+.data-colorbox-purple div:last-child {
+    padding-top: 30px;
+    padding-bottom: 20px;
+    background-color: #888DB4;
+}
+
+.data-colorbox-icon {
+    width: 60px;
+    height: 60px;
+    vertical-align: middle;
+}
+
+.data-colorbox-title {
+    font-size: 18px;
+    color: #ffffff;
+    display: inline-block;
+    margin-bottom: 7px;
+}
+
+.data-colorbox-content {
+    font-size: 40px;
+    color: #ffffff;
+    display: inline-block;
+    font-weight: 500;
+}
+
+.data-details-panel {
+    border: 1px solid #ebebeb;
+}
+
+.data-grid {
+    overflow: hidden;
+    border-right: 1px solid #ebebeb;
+    height: 100px;
+}
+
+.data-grid-last {
+    border: none;
+}
+
+.data-grid-title {
+    font-size: 15px;
+    font-weight: 300;
+    display: inline-block;
+    padding-left: 10px;
+    margin-top: 35px;
+    margin-right: 20px;
+}
+
+.data-grid-content {
+    font-size: 30px;
+    font-weight: 400;
+    display: inline-block;
+    margin-top: 25px;
 }
 
 /*Questions*/
@@ -96,7 +186,7 @@ h4 {
 }
 
 .summary-panel .update-button {
-    font-size: 10px;
+    font-size: 12px;
     margin-left: 10px;
     font-weight: 400;
 }
@@ -113,20 +203,4 @@ h4 {
 /*Primefaces CSS*/
 .ui-message{
     text-align: left;
-}
-
-.ui-widget-header {
-    background: none;
-}
-
-/*Datatable*/
-.ui-datatable .ui-column-filter {
-    width: 90%;
-    display: none;
-}
-
-.ui-datatable .ui-state-default {
-    background: none;
-    font-weight: 500;
-    color: #636FB6;
 }
