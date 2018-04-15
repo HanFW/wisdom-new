@@ -15,25 +15,25 @@
                 <h3>Sign up</h3>
                 <p:messages globalOnly="true"/>
                 <div class="ui-g">
-                    <div class="ui-g-6">
+                    <div class="ui-g-6 signup-inputbox">
                         <p:inputText placeholder="First name" type="text" id="firstName" value="#{signupManagedBean.firstName}" required="true" requiredMessage="Please enter your first name." />
                         <p:message for="firstName"/>
                     </div>
-                    <div class="ui-g-6">
+                    <div class="ui-g-6 signup-inputbox">
                         <p:inputText placeholder="Last name" type="text" id="lastName" value="#{signupManagedBean.lastName}" required="true" requiredMessage="Please enter your last name." />
                         <p:message for="lastName"/>
                     </div>
-                    <div class="ui-g-12">
+                    <div class="ui-g-12 signup-inputbox">
                         <p:inputText placeholder="Email" type="text" id="email" value="#{signupManagedBean.email}" required="true" requiredMessage="Please enter your email." validatorMessage="Please enter a correct email address.">
                             <f:validateRegex pattern="^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$" />
                         </p:inputText>
                         <p:message for="email"/>
                     </div>
                     <div class="ui-g-12">
-                        <p:inputTextarea placeholder="Please enter a short introduction of yourself (150 characters max)" id="selfIntro" counter="selfIntroDisplay" value="#{signupManagedBean.selfIntroduction}" rows="3" maxlength="150" counterTemplate="{0} characters remaining." required="true" requiredMessage="Please enter a self introduction.">
+                        <p:inputTextarea class="login-textarea" placeholder="Please enter a short introduction of yourself (150 characters max)" id="selfIntro" value="#{signupManagedBean.selfIntroduction}" maxlength="150" required="true" requiredMessage="Please enter a self introduction." autoResize="false">
                             <f:validateLength maximum="150"/>
                         </p:inputTextarea>
-                        <p:message id="selfIntroDisplay" for="selfIntro"/>
+                        <p:message for="selfIntro"/>
                     </div>
                     <div class="ui-g-12">
                         <p:fileUpload label="Profile Image"  id="profileImage" required="true" requiredMessage="Required Field" update="imageUploadMessage"

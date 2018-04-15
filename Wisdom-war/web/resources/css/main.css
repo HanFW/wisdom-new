@@ -19,6 +19,10 @@ h4 {
     margin-bottom: 10px;
 }
 
+::placeholder {
+    font-weight: 300;
+}
+
 /*Author Login*/
 .login-panel {
     margin: 190px auto 0 auto;
@@ -55,11 +59,19 @@ h4 {
 
 /*Author Signup*/
 .signup-panel{
-    margin: 80px auto 0 auto;
-    text-align: center;
-    width: 50%;
+    margin: 70px auto 0 auto;
+    width: 45%;
     min-height: 500px;
     font-size: 14px;
+}
+
+.signup-panel h3{
+    text-align: center;
+    color: #6E74A4;
+}
+
+.signup-panel button {
+    text-align: center;
 }
 
 .signup-panel .ui-inputfield {
@@ -67,8 +79,21 @@ h4 {
     height: 35px;
 }
 
+.signup-panel .signup-inputbox {
+    padding-bottom: 2px;
+}
+
+.signup-panel .login-textarea {
+    height: 100px;
+}
+
+.signup-panel .ui-fileupload {
+    width: 102%;
+}
+
 .signup-button{
-    width: 80%;
+    margin-top: 10px;
+    width: 102%;
     height: 45px;
 }
 
