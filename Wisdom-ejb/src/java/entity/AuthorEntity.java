@@ -17,6 +17,9 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
@@ -30,6 +33,8 @@ import javax.xml.bind.annotation.XmlTransient;
             + "AND f.reader.id = :readerId " + "AND f.status != 'DELETED'")
 })
 @Entity
+@XmlRootElement // @XmlRootElement is for Jersey to serialize entity to JSON
+@XmlAccessorType(XmlAccessType.FIELD)
 public class AuthorEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -75,6 +80,16 @@ public class AuthorEntity implements Serializable {
     public Long getId() {
         return id;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
+    
 
     public String getName() {
         return name;

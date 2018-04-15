@@ -122,6 +122,7 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
         Query q = entityManager.createQuery("select a from ArticleEntity a, FollowEntity f "
                 + "where f.reader.id = :readerId "
                 + "and f.author.id = a.author.id "
+                + "and f.status = 'ACTIVE' "
                 + "order by a.created DESC") // TODO: newest articles to oldest
                 .setParameter("readerId", readerId);
         List<ArticleEntity> articles = new ArrayList<>();
@@ -148,10 +149,11 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
 
         Query q = entityManager.createQuery("select a from ArticleEntity a "
                 + "where a.topic = :topic "
-                + "and a.created > :threeDaysAgo "
+//                + "and a.created > :threeDaysAgo "
                 + "order by a.numOfUpvotes DESC") // most upvotes to fewest
-                .setParameter("topic", topic)
-                .setParameter("threeDaysAgo", LocalDateTime.now().minusDays(3));
+                .setParameter("topic", topic);
+        // need to write a converter to convert b/w LocalDateTime & sql Date for date comparison in query
+//                .setParameter("threeDaysAgo", LocalDateTime.now().minusDays(3));
         List<ArticleEntity> articles = new ArrayList<>();
         try {
             articles = q.getResultList();
