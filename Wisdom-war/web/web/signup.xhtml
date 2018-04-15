@@ -24,7 +24,7 @@
                         <p:message for="lastName"/>
                     </div>
                     <div class="ui-g-12">
-                        <p:inputText placeholder="Email" type="text" id="email" value="#{signupManagedBean.email}" required="true" requiredMessage="Please enter your email.">
+                        <p:inputText placeholder="Email" type="text" id="email" value="#{signupManagedBean.email}" required="true" requiredMessage="Please enter your email." validatorMessage="Please enter a correct email address.">
                             <f:validateRegex pattern="^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$" />
                         </p:inputText>
                         <p:message for="email"/>

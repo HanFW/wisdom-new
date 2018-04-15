@@ -16,7 +16,7 @@
                 <p:messages globalOnly="true"/>
                 <div class="ui-g">
                     <div class="ui-g-12">
-                        <p:inputText class="login-input" placeholder="Email" id="email" value="#{loginManagedBean.email}" required="true" requiredMessage="Please enter your registered email." >
+                        <p:inputText class="login-input" placeholder="Email" id="email" value="#{loginManagedBean.email}" required="true" requiredMessage="Please enter your registered email." validatorMessage="Please enter a correct email address.">
                             <f:validateRegex pattern="^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$" />
                         </p:inputText>
                         <p:message for="email"/>
