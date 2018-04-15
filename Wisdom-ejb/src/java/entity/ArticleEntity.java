@@ -18,12 +18,18 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Yongxue
  */
 @Entity
+@XmlRootElement // @XmlRootElement is for Jersey to serialize entity to JSON
+@XmlAccessorType(XmlAccessType.FIELD)
 public class ArticleEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,9 +49,10 @@ public class ArticleEntity implements Serializable {
     private Double rewardIncomePerArticle;
     private Integer createdMonthValue;
     private Integer numOfRewards;
-
+//    @XmlTransient
     @ManyToOne(cascade = {CascadeType.DETACH})
     private AuthorEntity author;
+    @XmlTransient
     @OneToMany(cascade = {CascadeType.DETACH}, mappedBy = "article")
     private List<RewardEntity> rewards = new ArrayList<>();
 
@@ -70,6 +77,10 @@ public class ArticleEntity implements Serializable {
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTopic() {

@@ -24,6 +24,7 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -92,7 +93,7 @@ public class ArticleResource {
             if (articles != null) { // success
                 GenericEntity<List<ArticleEntity>> response = new GenericEntity<List<ArticleEntity>>(articles) {
                 };
-                return Response.ok().entity(articles).build();
+                return Response.ok().entity(response).build();
             } else {
                 return Response.status(Status.BAD_REQUEST).entity("missing data").build();
             }
@@ -110,7 +111,7 @@ public class ArticleResource {
         if (articles != null) { // success
             GenericEntity<List<ArticleEntity>> response = new GenericEntity<List<ArticleEntity>>(articles) {
             };
-            return Response.ok().entity(articles).build();
+            return Response.ok().entity(response).build();
         } else {
             return Response.status(Status.BAD_REQUEST).entity("missing data").build();
         }
@@ -132,6 +133,22 @@ public class ArticleResource {
             }
         } catch (RepeatActionException e) { // article already saved
             return Response.status(Status.CONFLICT).entity(e.getMessage()).build();
+        } catch (Exception e) { // invalid JsonArray, etc
+            return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
+        }
+    }
+    
+    @Path("{id}/like")
+    @POST
+    public Response upvoteArticle(@PathParam("id") final Long articleId) {
+        try {            
+            ArticleEntity article = articleSessionBean.likeArticle(articleId);
+            
+            if (article != null) { // success
+                return Response.ok().entity(article).build();
+            } else {
+                return Response.status(Status.NOT_FOUND).entity("entity not found").build();
+            }
         } catch (Exception e) { // invalid JsonArray, etc
             return Response.status(Status.BAD_REQUEST).entity(e.getMessage()).build();
         }

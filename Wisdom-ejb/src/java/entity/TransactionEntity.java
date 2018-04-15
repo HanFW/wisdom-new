@@ -16,12 +16,18 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
  * @author Yongxue
  */
 @Entity
+@XmlRootElement // @XmlRootElement is for Jersey to serialize entity to JSON
+@XmlAccessorType(XmlAccessType.FIELD)
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public abstract class TransactionEntity implements Serializable {
 
@@ -35,8 +41,10 @@ public abstract class TransactionEntity implements Serializable {
     private String transactionType;
     private Integer createdMonth;
 
+    @XmlTransient
     @ManyToOne(cascade = {CascadeType.DETACH})
     private ReaderEntity from;
+    @XmlTransient
     @ManyToOne(cascade = {CascadeType.DETACH})
     private AuthorEntity to;
 
