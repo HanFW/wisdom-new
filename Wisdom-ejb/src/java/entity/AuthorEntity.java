@@ -51,7 +51,9 @@ public class AuthorEntity implements Serializable {
     private Double balance; // received credit
     private Double qtnPrice;  // author-defined question price (default to 5)
     private LocalDateTime created;
-    private Double qtnIncome;
+    private Double todayQuestionIncome;
+    private Double todayRewardIncome;
+    private Integer today;
 
     @OneToOne(cascade = {CascadeType.PERSIST}, fetch = FetchType.EAGER)
     private FollowerAnalyticsEntity followerAnalytics;
@@ -60,7 +62,9 @@ public class AuthorEntity implements Serializable {
         this.picPath = null; // default to no pic
         this.balance = 0.0;
         this.qtnPrice = 5.0;
-        this.qtnIncome = 0.0;
+        this.todayQuestionIncome = 0.0;
+        this.todayRewardIncome = 0.0;
+        this.today = 0;
     }
 
     public AuthorEntity(String name, String description, String email, String pwd, String picPath) {
@@ -147,12 +151,28 @@ public class AuthorEntity implements Serializable {
         this.created = created;
     }
 
-    public Double getQtnIncome() {
-        return qtnIncome;
+    public Double getTodayQuestionIncome() {
+        return todayQuestionIncome;
     }
 
-    public void setQtnIncome(Double qtnIncome) {
-        this.qtnIncome = qtnIncome;
+    public void setTodayQuestionIncome(Double todayQuestionIncome) {
+        this.todayQuestionIncome = todayQuestionIncome;
+    }
+
+    public Double getTodayRewardIncome() {
+        return todayRewardIncome;
+    }
+
+    public void setTodayRewardIncome(Double todayRewardIncome) {
+        this.todayRewardIncome = todayRewardIncome;
+    }
+
+    public Integer getToday() {
+        return today;
+    }
+
+    public void setToday(Integer today) {
+        this.today = today;
     }
 
     public FollowerAnalyticsEntity getFollowerAnalytics() {

@@ -17,7 +17,12 @@ import javax.ejb.Local;
 public interface IncomeAnalyticsSessionBeanLocal {
 
     public Long addNewIncomeAnalytics(Integer currentYear, Integer monthValue,
-            Double monthlyRewardIncome, Double monthlyQuestionIncome);
+            Double monthlyRewardIncome, Double monthlyQuestionIncome, Long authorId);
 
     public List<IncomeAnalyticsEntity> getIncomeAnalyticsByAuthorId(Long authorId);
+
+    public String checkDuplicateIncomeAnalytics(Integer currentYear, Integer monthValue, Long authorId);
+
+    public void updateIncome(Integer currentYear, Integer monthValue, Long authorId,
+            Double monthlyRewardIncome, Double monthlyQuestionIncome);
 }

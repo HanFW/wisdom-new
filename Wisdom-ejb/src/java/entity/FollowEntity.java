@@ -37,7 +37,14 @@ import utility.Constants;
             query = "SELECT f FROM FollowEntity f, ReaderEntity r "
             + "WHERE f.reader.id = r.id "
             + "AND f.author.id = :authorId " + "AND f.status != 'DELETED' "
-            + "AND f.createdMonth = :monthValue")
+            + "AND f.createdMonth = :monthValue "
+            + "AND f.createdYear = :currentYear"),
+    @NamedQuery(name = "FollowEntity.findFollowersByAuthor_PerDay",
+            query = "SELECT f FROM FollowEntity f, ReaderEntity r "
+            + "WHERE f.reader.id = r.id "
+            + "AND f.author.id = :authorId " + "AND f.status != 'DELETED' "
+            + "AND f.createdDay = :dayValue "
+            + "AND f.createdYear = :currentYear")
 })
 @Entity
 public class FollowEntity implements Serializable {
@@ -54,11 +61,15 @@ public class FollowEntity implements Serializable {
     private ReaderEntity reader;
     private final LocalDateTime created;
     private Integer createdMonth;
+    private Integer createdDay;
+    private Integer createdYear;
 
     public FollowEntity() {
         this.created = LocalDateTime.now();
         this.status = Constants.STATUS_ACTIVE;
         this.createdMonth = created.getMonthValue();
+        this.createdDay = created.getDayOfYear();
+        this.createdYear = created.getYear();
     }
 
     public Long getId() {
@@ -95,6 +106,22 @@ public class FollowEntity implements Serializable {
 
     public void setCreatedMonth(Integer createdMonth) {
         this.createdMonth = createdMonth;
+    }
+
+    public Integer getCreatedDay() {
+        return createdDay;
+    }
+
+    public void setCreatedDay(Integer createdDay) {
+        this.createdDay = createdDay;
+    }
+
+    public Integer getCreatedYear() {
+        return createdYear;
+    }
+
+    public void setCreatedYear(Integer createdYear) {
+        this.createdYear = createdYear;
     }
 
     @Override

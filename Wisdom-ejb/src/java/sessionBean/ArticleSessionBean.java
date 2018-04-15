@@ -271,6 +271,16 @@ public class ArticleSessionBean implements ArticleSessionBeanLocal {
         article.setRewardIncomePerArticle(newRewardIncome);
         article.setNumOfRewards(newNumOfRewards);
 
+        Double todayRewardIncome = author.getTodayRewardIncome();
+        if (LocalDateTime.now().getDayOfYear() != author.getToday()) {
+            todayRewardIncome = amount;
+            author.setToday(LocalDateTime.now().getDayOfYear());
+            author.setTodayRewardIncome(todayRewardIncome);
+        } else {
+            todayRewardIncome = todayRewardIncome + amount;
+            author.setTodayRewardIncome(todayRewardIncome);
+        }
+
         entityManager.persist(reward);
         entityManager.merge(reader);
         entityManager.merge(author);

@@ -1,7 +1,10 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-                template="./templates/menuTemplate.xhtml">
+                template="./templates/menuTemplate.xhtml"
+                xmlns:h="http://xmlns.jcp.org/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
 
     <ui:define name="title">
         Wisdom - Overview
@@ -10,7 +13,40 @@
         Overview
     </ui:define>
     <ui:define name="content">
-        content
+        <h:form>
+            <p:panelGrid id="personalInfo" style="border-style: none">
+                <p:row style="border-style: none">
+                    <p:column style="border-style: none">
+                        <img src="#{overviewManagedBean.profileImagePath}" style="width: 250px;height: 250px"/>
+                    </p:column>
+                    <p:column style="border-style: none">
+                        <p:outputLabel value="#{overviewManagedBean.username}"/>
+                        <br/>
+                        <p:outputLabel value="#{overviewManagedBean.introduction}"/>
+                    </p:column>
+                </p:row>
+            </p:panelGrid>
+
+            <p:panel style="border-style: none">
+                <p:outputLabel value="My Balance(S$): "/>
+                <p:outputLabel value="#{overviewManagedBean.balance}"/>
+                <br/><br/>
+                <p:outputLabel value="Today's Income(S$): "/>
+                <p:outputLabel value="#{overviewManagedBean.todayIncome}"/>
+                <br/><br/>
+                <p:outputLabel value="Followers: "/>
+                <p:outputLabel value="#{overviewManagedBean.numOfFollowers}"/>
+                <br/><br/>
+                <p:outputLabel value="New Followers: "/>
+                <p:outputLabel value="#{overviewManagedBean.todayNewFollowers}"/>
+                <br/><br/>
+                <p:outputLabel value="Reward Income(S$): "/>
+                <p:outputLabel value="#{overviewManagedBean.todayRewardIncome}"/>
+                <br/><br/>
+                <p:outputLabel value="Question Income(S$): "/>
+                <p:outputLabel value="#{overviewManagedBean.todayQuestionIncome}"/>
+            </p:panel>
+        </h:form>
     </ui:define>
 
 </ui:composition>
