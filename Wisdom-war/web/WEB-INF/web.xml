@@ -28,7 +28,7 @@
     
     <context-param>
         <param-name>primefaces.THEME</param-name>
-        <param-value>flick</param-value>
+        <param-value>wisdom</param-value>
     </context-param>
     <context-param>
         <param-name>primefaces.UPLOADER</param-name>

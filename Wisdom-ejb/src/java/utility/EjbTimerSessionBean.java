@@ -38,8 +38,8 @@ public class EjbTimerSessionBean implements EjbTimerSessionBeanLocal {
     @EJB
     private QuestionSessionBeanLocal questionSessionBeanLocal;
 
-    private final String TIMER_EXPIRY = "EJB_TIMER_60000MS";
-    private final int EXPIRY_DURATION = 60000;
+    private final String TIMER_EXPIRY = "EJB_TIMER_10000MS";
+    private final int EXPIRY_DURATION = 10000;
     
     @Resource
     private SessionContext ctx;
@@ -53,6 +53,7 @@ public class EjbTimerSessionBean implements EjbTimerSessionBeanLocal {
     @Override
     public void createTimers()
     {
+        System.out.println("*** Expiry Timer started");
         TimerService timerService = ctx.getTimerService();
         Timer expiryTimer = timerService.createTimer(EXPIRY_DURATION, EXPIRY_DURATION, new String(TIMER_EXPIRY));
     }
@@ -77,7 +78,7 @@ public class EjbTimerSessionBean implements EjbTimerSessionBeanLocal {
     public void handleTimeout(javax.ejb.Timer timer) {
         if (timer.getInfo().toString().equals(TIMER_EXPIRY)) {
             handleTimeout_Expiry();
-            handleTimeout_Question();
+//            handleTimeout_Question();
         } else {
             System.out.println("*** Unknown timer timeout: " + timer.getInfo().toString());
         }
@@ -88,19 +89,19 @@ public class EjbTimerSessionBean implements EjbTimerSessionBeanLocal {
         questionSessionBeanLocal.checkExpiredQuestions();
     }
     
-    private void handleTimeout_Question() {
-        QuestionEntity question = new QuestionEntity("Title New", "Content new content new content new");
-        AuthorEntity author = authorSessionBeanLocal.retrieveAuthorById(Long.parseLong("1"));
-        question.setAuthor(author);
-        try {
-            question.setReader(readerSessionBeanLocal.authenticateReader("reader@gmail.com", "password"));
-            question.setPrice(author.getQtnPrice());
-        } catch (NoSuchEntityException ex) {
-            Logger.getLogger(InitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        em.persist(question);
-        em.flush();
-        em.refresh(question);
-        System.out.println("New question " + question.getId() + " created on " + question.getCreated());
-    }
+//    private void handleTimeout_Question() {
+//        QuestionEntity question = new QuestionEntity("Title New", "Content new content new content new");
+//        AuthorEntity author = authorSessionBeanLocal.retrieveAuthorById(Long.parseLong("1"));
+//        question.setAuthor(author);
+//        try {
+//            question.setReader(readerSessionBeanLocal.authenticateReader("reader@gmail.com", "password"));
+//            question.setPrice(author.getQtnPrice());
+//        } catch (NoSuchEntityException ex) {
+//            Logger.getLogger(InitSessionBean.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        em.persist(question);
+//        em.flush();
+//        em.refresh(question);
+//        System.out.println("New question " + question.getId() + " created on " + question.getCreated());
+//    }
 }

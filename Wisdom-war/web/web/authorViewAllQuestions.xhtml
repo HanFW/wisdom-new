@@ -121,20 +121,20 @@
                 </p:tab>
             </p:tabView>
             
-            <p:dialog header="Question" widgetVar="actionsDialog" resizable="false" responsive="true">
-                <h:outputText value="#{authorViewAllQuestionsManagedBean.question.reader.name}"/>
+            <p:dialog width="530px" class="question-dialog" header="Question" widgetVar="actionsDialog" resizable="false" responsive="true">
+                <h:outputText class="question-readername" value="#{authorViewAllQuestionsManagedBean.question.reader.name}"/>
                 <h:outputText value=" paid"/>
-                <h:outputText value=" #{authorViewAllQuestionsManagedBean.question.price}"/>
+                <h:outputText class="question-price" value=" S$ #{authorViewAllQuestionsManagedBean.question.price}"/>
                 <h:outputText value=" to ask about: "/>
                 <br/>
-                <h:outputText class="questionTitle" value="#{authorViewAllQuestionsManagedBean.question.title}"/>
                 <br/>
-                <h:outputText value="#{authorViewAllQuestionsManagedBean.question.content}"/>
+                <h:outputText class="question-title" value="#{authorViewAllQuestionsManagedBean.question.title}"/>
                 <br/>
-                <h:outputLabel value="Reply: " for="questionReply"/>
+                <h:outputText class="question-content" value="#{authorViewAllQuestionsManagedBean.question.content}"/>
+                <h:outputLabel class="question-reply-label" value="Reply: " for="questionReply"/>
                 <br/>
                 <p:messages for="questionReply" autoUpdate="true"/>
-                <p:inputTextarea placeholder="Please enter if you want to reply" rows="5" cols="50" id="questionReply" value="#{authorViewAllQuestionsManagedBean.reply}"/>
+                <p:inputTextarea style="margin-bottom: 3px;" placeholder="Please enter if you want to reply" rows="5" cols="68" id="questionReply" value="#{authorViewAllQuestionsManagedBean.reply}"/>
                 <br/>
                 <p:commandButton value="Reject" onclick="PF('rejectConfirmation').show();"/>
                 <p:commandButton value="Reply" actionListener="#{authorViewAllQuestionsManagedBean.validateReply}"/>
