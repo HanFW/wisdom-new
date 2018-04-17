@@ -8,6 +8,7 @@ package entity;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -16,6 +17,7 @@ import javax.persistence.OneToOne;
 @Entity
 public class CompensationEntity extends TransactionEntity {
 
+    @XmlTransient
     @OneToOne(cascade = {CascadeType.DETACH})
     private QuestionEntity question;
 

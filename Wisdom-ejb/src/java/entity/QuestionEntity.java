@@ -15,6 +15,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import utility.Constants;
 
 /**
@@ -22,6 +26,8 @@ import utility.Constants;
  * @author Yongxue
  */
 @Entity
+@XmlRootElement // @XmlRootElement is for Jersey to serialize entity to JSON
+@XmlAccessorType(XmlAccessType.FIELD)
 public class QuestionEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -38,10 +44,12 @@ public class QuestionEntity implements Serializable {
     private LocalDateTime created;
     private Double price;
     
+    @XmlTransient
     @OneToOne(cascade = {CascadeType.DETACH})
     private ReaderEntity reader; // raised the qtn
     @OneToOne(cascade = {CascadeType.DETACH})
     private AuthorEntity author; // asked to answer
+    @XmlTransient
     @OneToOne(cascade = {CascadeType.DETACH}, mappedBy = "question")
     private CompensationEntity compensation; 
 
