@@ -34,8 +34,8 @@ public class TimerManagedBean implements Serializable{
     
     @PostConstruct
     public void init() {
-        timerStarted = false;
-        timerCanceled = true;
+        timerStarted = true;
+        timerCanceled = false;
     }
     
     public void startTimer(ActionEvent event) {

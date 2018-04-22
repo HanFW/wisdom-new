@@ -38,8 +38,8 @@ public class EjbTimerSessionBean implements EjbTimerSessionBeanLocal {
     @EJB
     private QuestionSessionBeanLocal questionSessionBeanLocal;
 
-    private final String TIMER_EXPIRY = "EJB_TIMER_10000MS";
-    private final int EXPIRY_DURATION = 10000;
+    private final String TIMER_EXPIRY = "EJB_TIMER_60000MS";
+    private final int EXPIRY_DURATION = 60000;
     
     @Resource
     private SessionContext ctx;
